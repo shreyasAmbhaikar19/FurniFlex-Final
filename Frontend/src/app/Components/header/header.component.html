@@ -1,0 +1,33 @@
+<header class="text-gray-700 bg-white container relative mx-auto flex flex-col overflow-hidden px-4 py-4 lg:flex-row lg:items-center justify-between shadow-md">
+    <a href="#" class="flex items-center whitespace-nowrap text-xl font-bold">
+        <span class="mr-2 w-8">
+            <img src="/images/JOJj79gp_Djhwdp_ZOKLL.png" alt="FurniFlex Logo" />
+        </span>
+        FurniFlex
+    </a>
+    <input type="checkbox" class="peer hidden" id="navbar-open" />
+    <label for="navbar-open" class="absolute top-5 right-5 cursor-pointer lg:hidden">
+        <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </label>
+    <nav aria-label="Header Navigation" class="flex-grow peer-checked:pt-8 peer-checked:max-h-60 flex max-h-0 w-full items-center overflow-hidden transition-all lg:ml-24 lg:max-h-full">
+        <ul class="flex flex-grow flex-col items-center space-y-2 lg:flex-row lg:justify-center lg:space-y-0">
+            <li class="lg:mr-12"><a class="rounded text-gray-700 transition focus:outline-none focus:ring-1 focus:ring-sky-400 focus:ring-offset-2" href="#">Home</a></li>
+            <li class="lg:mr-12"><a class="rounded text-gray-700 transition focus:outline-none focus:ring-1 focus:ring-sky-400 focus:ring-offset-2" href="#">Rent</a></li>
+            <li class="lg:mr-12"><a class="rounded text-gray-700 transition focus:outline-none focus:ring-1 focus:ring-sky-400 focus:ring-offset-2" href="#">Wishlist</a></li>
+            <li class="lg:mr-12"><a class="rounded text-gray-700 transition focus:outline-none focus:ring-1 focus:ring-sky-400 focus:ring-offset-2" href="#">Cart</a></li>
+        </ul>
+        <div class="flex items-center space-x-4">
+            <!-- Search Icon and Input Field -->
+            <div class="relative">
+                <input type="text" class="pl-10 pr-3 py-2 rounded-lg border-2 border-gray-300 focus:border-sky-400 focus:outline-none transition-colors" placeholder="Search...">
+                <svg class="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <!-- SignUp Button -->
+            <a routerLink="/register" class="whitespace-nowrap rounded-xl bg-gradient-to-r from-lime-400 to-sky-400 px-5 py-3 font-medium text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 hover:bg-sky-500">SignUp</a>
+        </div>
+    </nav>
+  </header>
