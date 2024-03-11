@@ -1,6 +1,7 @@
 const express = require('express');
 const { getSearchPaginatedFilteredProducts, getSingleProduct, updateProduct, deleteProduct, getProductReviews, deleteReview, createProductReview, createProduct, getAdminProducts, getAllProducts } = require('../controllers/productController');
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
+const upload = require('../utils/multer'); 
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.route('/product/:id').get(getSingleProduct);
 
 router.route('/review').put(isAuthenticatedUser, createProductReview);
 
-router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles("admin"), createProduct);
+router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles("admin"),upload, createProduct);
 router.route('/admin/products').get(isAuthenticatedUser, authorizeRoles("admin"), getAdminProducts);
 
 router.route('/admin/product/:id')
@@ -24,3 +25,5 @@ router.route('/admin/product/:productId/review/:reviewId')
     .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteReview);
 
 module.exports = router;
+
+

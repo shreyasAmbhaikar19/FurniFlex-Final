@@ -23,7 +23,13 @@ app.use('/api/v1', wishlist);
 app.use('/api/v1', cart);
 // app.use('/api/v1', order);
 // app.use('/api/v1', payment);
+app.use('/uploads', express.static('uploads'));
 
 
 module.exports = app;
+
+
+
+
+
 

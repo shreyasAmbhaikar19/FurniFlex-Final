@@ -44,19 +44,22 @@ exports.getSearchPaginatedFilteredProducts = asyncErrorHandler(async (req, res, 
 });
 
 // Get Product Details
-exports.getSingleProduct = asyncErrorHandler(async (req, res, next) => {
+exports.getSingleProduct = async (req, res, next) => {
+    try {
+        const product = await Product.findById(req.params.id)
+                                     .populate('reviews.user', 'name');
 
-    const product = await Product.findById(req.params.id);
-
-    if (!product) {
-        return next(new ErrorHandler("Product Not Found", 404));
+        if (!product) {
+            return next(new ErrorHandler("Product Not Found", 404));
+        }
+        res.status(200).json({
+            success: true,
+            product,
+        });
+    } catch (error) {
+        return next(new ErrorHandler("Internal Server Error", 500));
     }
-
-    res.status(200).json({
-        success: true,
-        product,
-    });
-});
+};
 
 // Create OR Update Reviews
 exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
@@ -106,32 +109,15 @@ exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
 
 // Create Product ---ADMIN
 exports.createProduct = asyncErrorHandler(async (req, res, next) => {
-
-    // let images = [];
-    // if (typeof req.body.images === "string") {
-    //     images.push(req.body.images);
-    // } else {
-    //     images = req.body.images;
-    // }
-
-    // const imagesLink = [];
-
-    // for (let i = 0; i < images.length; i++) {
-    //     const result = await cloudinary.v2.uploader.upload(images[i], {
-    //         folder: "products",
-    //     });
-
-    //     imagesLink.push({
-    //         public_id: result.public_id,
-    //         url: result.secure_url,
-    //     });
-    // }
-
-    // req.body.images = imagesLink;
+    const imagePaths = req.files.map(file => file.path);
     
-    req.body.user = req.user.id;
+    const productData = {
+        ...req.body,
+        user: req.user.id,
+        images: imagePaths 
+    };
 
-    const product = await Product.create(req.body);
+    const product = await Product.create(productData);
 
     res.status(201).json({
         success: true,

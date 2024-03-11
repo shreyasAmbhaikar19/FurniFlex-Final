@@ -18,34 +18,30 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please enter product category"]
     },
-    price: {
+    discountPercentage: {
         type: Number,
-        required: [true, "Please enter product price"]
+        required: [false, "Please enter discount percentage"], // Made required false assuming not all products may have a discount
+        min: [0, "Discount percentage cannot be less than 0"],
+        max: [100, "Discount percentage cannot exceed 100"]
     },
-    discountPrice: {
+    rentDuration: {
         type: Number,
-        required: [true, "Please enter Discounted price"]
     },
-    isAvailableForRent: {
-        type: Boolean,
-        required: [true, "Please enter if product is available for rent"]
-    },
-    rentDuration:{
-        type: Number,
-        required: [true, "Please enter rent duration"]
-    },
-    images: [
+    subscriptions: [
         {
-            public_id: {
-                type: String,
+            duration: {
+                type: Number,
                 required: true
             },
-            url: {
-                type: String,
+            monthlyPrice: {
+                type: Number,
                 required: true
             }
         }
     ],
+    images: [{ 
+        type: String
+    }],
     stock: {
         type: Number,
         required: [true, "Please enter product stock"],
