@@ -63,8 +63,14 @@
       </a>
 
       <div class="flex justify-around pb-4">
-        <button class="px-4 py-2 text-white bg-blue-500 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+        <!-- <button class="px-4 py-2 text-white bg-blue-500 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
           Add to Wishlist
+        </button> -->
+        <button *ngIf="!addedToWishlist[product._id]" (click)="addToWishlist(product._id)" class="px-4 py-2 text-white bg-blue-500 rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+          Add to Wishlist
+        </button>
+        <button *ngIf="addedToWishlist[product._id]" disabled class="px-4 py-2 text-white bg-gray-500 rounded-lg shadow">
+          Added
         </button>
         <button (click)="viewProduct(product._id)" class="px-4 py-2 text-white bg-green-500 rounded-lg shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50">
           Buy Now

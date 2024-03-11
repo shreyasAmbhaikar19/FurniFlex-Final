@@ -159,6 +159,7 @@
 // src/app/components/products.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../Services/products.service';
+import { WishlistService } from '../../Services/wishlist.service';
 import { Product } from '../../Models/product';
 import { Router } from '@angular/router';
 
@@ -169,10 +170,13 @@ import { Router } from '@angular/router';
 })
 export class ProductsComponent implements OnInit {
   products: Product[] = [];
+  addedToWishlist: { [key: string]: boolean } = {};
   baseUrl: string = 'http://localhost:3000/';
   keyword: string = '';
 
-  constructor(private productService: ProductService, private router: Router) { }
+  constructor( private productService: ProductService, 
+    private wishlistService: WishlistService, 
+    private router: Router) { }
 
   ngOnInit(): void {
     this.fetchProducts();
@@ -203,6 +207,19 @@ export class ProductsComponent implements OnInit {
 
   viewProduct(productId: string): void {
     this.router.navigate(['/product', productId]);
+  }
+
+  addToWishlist(productId: string): void {
+    this.wishlistService.addToWishlist(productId).subscribe({
+      next: (response) => {
+        this.addedToWishlist[productId] = true; // Mark as added
+        alert('Product added to your wishlist!'); // Display status message
+      },
+      error: (error) => {
+        console.error('Error adding product to wishlist:', error);
+        alert('Failed to add product to wishlist. Please try again.');
+      }
+    });
   }
 }
 

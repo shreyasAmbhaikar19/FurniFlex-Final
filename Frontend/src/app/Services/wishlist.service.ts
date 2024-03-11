@@ -4,11 +4,13 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
+
 export class WishlistService {
+  baseUrl: string = 'http://localhost:3000/api/v1';
+
   constructor(private http: HttpClient) {}
 
   addToWishlist(productId: string) {
-    const url = `http://localhost:3000/api/v1/wishlist`;
-    return this.http.post(url, { product: productId });
+    return this.http.post(`${this.baseUrl}/wishlist`, { product: productId });
   }
 }

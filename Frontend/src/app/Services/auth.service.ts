@@ -197,3 +197,45 @@
 //   }
 // }
 
+
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthService {
+  constructor(private http: HttpClient, private cookieService: CookieService) {}
+
+  login(email: string, password: string) {
+    return this.http.post('http://localhost:3000/api/v1/login', { email, password });
+  }
+
+  saveToken(token: string) {
+    this.cookieService.set('token', token);
+  }
+
+  getToken(): string {
+    return this.cookieService.get('token');
+  }
+
+  saveUserRole(role: string) {
+    this.cookieService.set('userRole', role);
+  }
+
+  getUserRole(): string {
+    return this.cookieService.get('userRole');
+  }
+
+  isLoggedIn(): boolean {
+    return this.getToken() !== '';
+  }
+
+  logout() {
+    this.cookieService.delete('token');
+    this.cookieService.delete('userRole');
+    // Redirect to login or home page
+  }
+}

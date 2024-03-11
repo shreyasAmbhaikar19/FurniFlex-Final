@@ -6,19 +6,20 @@ import { AppComponent } from './app.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { CookieService } from 'ngx-cookie-service';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { HomeComponent } from './Components/home/home.component';
 import { FooterComponent } from './Components/footer/footer.component';
 import { HeaderComponent } from './Components/header/header.component';
 // import { RegisterComponent } from './Components/register/register.component';
-// import { LoginComponent } from './Components/login/login.component';
+import { LoginComponent } from './Components/login/login.component';
 import { ProductsComponent } from './Components/products/products.component';
 import { SingleProductComponent } from './Components/single-product/single-product.component';
 import { CartComponent } from './Components/cart/cart.component';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
 import { FeedbackComponent } from './Components/feedback/feedback.component';
 import { NotFoundComponent } from './Components/not-found/not-found.component';
+import { AdminComponent } from './Components/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -27,13 +28,14 @@ import { NotFoundComponent } from './Components/not-found/not-found.component';
     FooterComponent,
     HeaderComponent,
     // RegisterComponent,
-    // LoginComponent,
+    LoginComponent,
     ProductsComponent,
     SingleProductComponent,
     CartComponent,
     WishlistComponent,
     FeedbackComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
