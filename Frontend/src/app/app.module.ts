@@ -11,7 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './Components/home/home.component';
 import { FooterComponent } from './Components/footer/footer.component';
 import { HeaderComponent } from './Components/header/header.component';
-// import { RegisterComponent } from './Components/register/register.component';
+import { RegisterComponent } from './Components/register/register.component';
 import { LoginComponent } from './Components/login/login.component';
 import { ProductsComponent } from './Components/products/products.component';
 import { SingleProductComponent } from './Components/single-product/single-product.component';
@@ -27,7 +27,7 @@ import { AdminComponent } from './Components/admin/admin.component';
     HomeComponent,
     FooterComponent,
     HeaderComponent,
-    // RegisterComponent,
+    RegisterComponent,
     LoginComponent,
     ProductsComponent,
     SingleProductComponent,

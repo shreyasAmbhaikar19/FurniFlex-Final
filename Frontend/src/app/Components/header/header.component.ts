@@ -64,64 +64,45 @@
 // }
 
 
-// // src/app/components/header/header.component.ts
-// import { Component, OnInit, OnDestroy } from '@angular/core';
-// import { AuthService } from '../../Services/auth.service';
-// import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
+import { AuthService } from '../../Services/auth.service'; 
+
+@Component({
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css'],
+})
+export class HeaderComponent {
+  constructor(public authService: AuthService) {}
+}
+
+
+
+// import { Component, OnInit } from '@angular/core';
+// // import { AuthService } from '../../Services/auth.service';
 
 // @Component({
 //   selector: 'app-header',
 //   templateUrl: './header.component.html',
 //   styleUrls: ['./header.component.css']
 // })
-// export class HeaderComponent implements OnInit, OnDestroy {
+// export class HeaderComponent implements OnInit {
 //   isLoggedIn: boolean = false;
-//   private authListenerSubs!: Subscription;
+//   userRole: string = '';
 
-//   constructor(private authService: AuthService) {}
+//   // constructor(private authService: AuthService) {}
 
-//   ngOnInit() {
-//     this.authListenerSubs = this.authService.getIsAuth().subscribe(isAuthenticated => {
-//       this.isLoggedIn = isAuthenticated;
-//     });
+//   ngOnInit(): void {
+//     // this.authService.isLoggedIn.subscribe((status) => {
+//     //   this.isLoggedIn = status;
+//     // });
+
+//     // this.authService.getUserRole().subscribe((role) => {
+//     //   this.userRole = role;
+//     // });
 //   }
 
-//   onLogout() {
-//     this.authService.logout();
-//   }
-
-//   ngOnDestroy() {
-//     this.authListenerSubs.unsubscribe();
+//   logout(): void {
+//     // this.authService.logout();
 //   }
 // }
-
-
-
-import { Component, OnInit } from '@angular/core';
-// import { AuthService } from '../../Services/auth.service';
-
-@Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
-})
-export class HeaderComponent implements OnInit {
-  isLoggedIn: boolean = false;
-  userRole: string = '';
-
-  // constructor(private authService: AuthService) {}
-
-  ngOnInit(): void {
-    // this.authService.isLoggedIn.subscribe((status) => {
-    //   this.isLoggedIn = status;
-    // });
-
-    // this.authService.getUserRole().subscribe((role) => {
-    //   this.userRole = role;
-    // });
-  }
-
-  logout(): void {
-    // this.authService.logout();
-  }
-}

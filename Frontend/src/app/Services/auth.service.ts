@@ -202,15 +202,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {}
 
   login(email: string, password: string) {
     return this.http.post('http://localhost:3000/api/v1/login', { email, password });
+  }
+
+  register(userData: any): Observable<any> {
+    return this.http.post('http://localhost:3000/api/v1/register', userData);
   }
 
   saveToken(token: string) {
@@ -236,6 +242,6 @@ export class AuthService {
   logout() {
     this.cookieService.delete('token');
     this.cookieService.delete('userRole');
-    // Redirect to login or home page
+    this.router.navigate(['/login']);
   }
 }

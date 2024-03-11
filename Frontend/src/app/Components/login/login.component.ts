@@ -49,7 +49,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router'; // Import Router
+import { Router } from '@angular/router';
 import { AuthService } from '../../Services/auth.service';
 
 @Component({
@@ -84,11 +84,10 @@ export class LoginComponent implements OnInit {
             if (response.user.role === 'admin') {
               this.router.navigate(['/admin']);
             } else {
-              this.router.navigate(['/home']);
+              this.router.navigate(['/products']);
             }
           },
           error: (err) => {
-            // Handle login error
           }
         });
     }
