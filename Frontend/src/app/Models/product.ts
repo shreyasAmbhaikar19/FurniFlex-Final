@@ -1,4 +1,5 @@
 export interface Product {
+subscriptions: any;
   _id: string;
   name: string;
   description: string;

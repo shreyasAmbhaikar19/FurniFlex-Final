@@ -17,14 +17,13 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' }, 
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent, canActivate: [authGuard] },
+  { path: 'home', component: HomeComponent},
   { path: 'admin', component: AdminComponent, canActivate: [adminGuard] },
   { path: 'products', component: ProductsComponent },
   { path: 'product/:id', component: SingleProductComponent },
-  { path: 'carts', component: CartComponent },
-  { path: 'wishlist', component: WishlistComponent },
-  { path: 'feedback', component: FeedbackComponent },
-  { path: 'products', component: ProductsComponent},
+  { path: 'carts', component: CartComponent, canActivate: [authGuard] },
+  { path: 'wishlist', component: WishlistComponent, canActivate: [authGuard]  },
+  { path: 'feedback', component: FeedbackComponent, canActivate: [authGuard]  },
   { path: '**', component: NotFoundComponent }
 ];
 

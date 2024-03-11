@@ -180,6 +180,7 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchProducts();
+    this.checkWishlistStatus();
   }
 
   fetchProducts(): void {
@@ -209,18 +210,43 @@ export class ProductsComponent implements OnInit {
     this.router.navigate(['/product', productId]);
   }
 
-  addToWishlist(productId: string): void {
-    this.wishlistService.addToWishlist(productId).subscribe({
+  checkWishlistStatus(): void {
+    this.wishlistService.getWishlist().subscribe({
       next: (response) => {
-        this.addedToWishlist[productId] = true; // Mark as added
-        alert('Product added to your wishlist!'); // Display status message
+        response.wishlist.forEach((item: any) => {
+          this.addedToWishlist[item.product._id] = true;
+        });
       },
       error: (error) => {
-        console.error('Error adding product to wishlist:', error);
-        alert('Failed to add product to wishlist. Please try again.');
+        console.error('Error fetching wishlist:', error);
       }
     });
   }
+
+  addToWishlist(productId: string): void {
+    this.wishlistService.addToWishlist(productId).subscribe({
+      next: () => {
+        this.addedToWishlist[productId] = true;
+        alert('Product added to your wishlist!');
+      },
+      error: () => {
+        alert('Failed to add product to wishlist. Please try again.');
+      },
+    });
+  }
+
+  removeFromWishlist(productId: string): void {
+    this.wishlistService.removeFromWishlist(productId).subscribe({
+      next: () => {
+        this.addedToWishlist[productId] = false;
+        alert('Product removed from your wishlist!');
+      },
+      error: () => {
+        alert('Failed to remove product from wishlist. Please try again.');
+      },
+    });
+  }
+
 }
 
 

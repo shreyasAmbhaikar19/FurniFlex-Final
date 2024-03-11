@@ -73,6 +73,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../Services/products.service';
 import { CartService } from '../../Services/cart.service';
+import { AuthService } from '../../Services/auth.service';
 
 @Component({
   selector: 'app-single-product',
@@ -90,7 +91,8 @@ export class SingleProductComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
@@ -147,7 +149,12 @@ export class SingleProductComponent implements OnInit {
       return;
     }
 
-    const userId = '65ed1af2de41ddfbbfadb575';
+    const userId = this.authService.getUserId();
+
+    if (!userId) {
+      alert('Please log in to add items to the cart.');
+      return;
+    }
 
     const cartItem = {
       user: userId,

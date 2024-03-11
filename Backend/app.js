@@ -12,7 +12,10 @@ const cart = require('./routes/cartRoute');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:4200', 
+    credentials: true, 
+  }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
