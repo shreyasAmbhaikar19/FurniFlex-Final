@@ -10,7 +10,6 @@ import { CartComponent } from './Components/cart/cart.component';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
 import { FeedbackComponent } from './Components/feedback/feedback.component';
 import { NotFoundComponent } from './Components/not-found/not-found.component';
-import { AdminComponent } from './Components/admin/admin.component';
 import { authGuard, adminGuard } from './Services/auth-guard.service';
 
 const routes: Routes = [
@@ -18,12 +17,12 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent},
-  { path: 'admin', component: AdminComponent, canActivate: [adminGuard] },
   { path: 'products', component: ProductsComponent },
   { path: 'product/:id', component: SingleProductComponent },
   { path: 'carts', component: CartComponent, canActivate: [authGuard] },
   { path: 'wishlist', component: WishlistComponent, canActivate: [authGuard]  },
   { path: 'feedback', component: FeedbackComponent, canActivate: [authGuard]  },
+  { path: 'admin', loadChildren: () => import('./Components/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule) },
   { path: '**', component: NotFoundComponent }
 ];
 

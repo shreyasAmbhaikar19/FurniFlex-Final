@@ -15,3 +15,8 @@ subscriptions: any;
   user?: string; 
   reviews?: any[];
 }
+
+export interface ProductsResponse {
+  success: boolean;
+  products: Product[];
+}

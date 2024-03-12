@@ -258,14 +258,14 @@
             <label class="cursor-pointer">
               <input type="radio" name="subscription" [(ngModel)]="selectedSubscriptionId" [value]="subscription._id" class="peer sr-only" (change)="ngOnChanges()" />
               <div class="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                {{subscription.duration}} Month{{subscription.duration > 1 ? 's' : ''}} - ${{subscription.monthlyPrice}}/mo
+                {{subscription.duration}} Month{{subscription.duration > 1 ? 's' : ''}} - ₹{{subscription.monthlyPrice}}/mo
               </div>
             </label>
           </ng-container>
         </div>
         <!-- Display the monthly price for the selected subscription -->
         <div class="flex items-end mt-4" *ngIf="selectedSubscriptionMonthlyPrice">
-          <h1 class="text-3xl font-bold">${{selectedSubscriptionMonthlyPrice}}</h1>
+          <h1 class="text-3xl font-bold">₹{{selectedSubscriptionMonthlyPrice}}</h1>
           <span class="text-base">/month</span>
         </div>
         <!-- Action Buttons -->

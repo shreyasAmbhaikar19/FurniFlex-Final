@@ -19,6 +19,10 @@ export class CartService {
   getUserCartItems(userId: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/carts/user/${userId}`);
   }
+
+  removeCartItem(cartId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/cart/${cartId}`);
+  }
 }
 
  

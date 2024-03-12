@@ -41,25 +41,6 @@ exports.createCartItems = asyncErrorHandler(async (req, res, next) => {
     }
 };
 
-// Update Cart Item Quantity
-exports.updateCartItem = asyncErrorHandler(async (req, res, next) => {
-  const cartId = req.params.cartId;
-  const { quantity } = req.body; // Only allow updating quantity
-
-  try {
-      const updatedCartItem = await Cart.findByIdAndUpdate(cartId, { quantity }, { new: true }); // Update quantity only
-      if (!updatedCartItem) {
-          return next(new ErrorHandler("Cart Item Not Found", 404));
-      }
-      res.status(200).json({
-          success: true,
-          updatedCartItem
-      });
-  } catch (error) {
-      next(new ErrorHandler("Error updating cart item", 500));
-  }
-});
-
 // Delete Cart Item
 exports.deleteCartItem = asyncErrorHandler(async (req, res, next) => {
     const cartId = req.params.cartId;

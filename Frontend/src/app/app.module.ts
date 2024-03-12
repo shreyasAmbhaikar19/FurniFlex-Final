@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,8 +21,6 @@ import { CartComponent } from './Components/cart/cart.component';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
 import { FeedbackComponent } from './Components/feedback/feedback.component';
 import { NotFoundComponent } from './Components/not-found/not-found.component';
-import { AdminComponent } from './Components/admin/admin.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +35,6 @@ import { AdminComponent } from './Components/admin/admin.component';
     WishlistComponent,
     FeedbackComponent,
     NotFoundComponent,
-    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +42,7 @@ import { AdminComponent } from './Components/admin/admin.component';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
+    CommonModule,
   ],
   providers: [
     CookieService,

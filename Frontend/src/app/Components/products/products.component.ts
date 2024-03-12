@@ -189,7 +189,6 @@ export class ProductsComponent implements OnInit {
       this.productService.getAllProducts();
 
     fetchObservable.subscribe(data => {
-      // Assuming the response for getAllProducts also has a 'success' property
       const fetchedProducts = 'success' in data ? data.products : data; 
       this.products = fetchedProducts.map((product: Product) => ({
         ...product,
