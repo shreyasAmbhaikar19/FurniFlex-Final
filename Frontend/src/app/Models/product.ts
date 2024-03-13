@@ -1,4 +1,5 @@
 export interface Product {
+createdAt: string|number|Date;
 subscriptions: any;
   _id: string;
   name: string;

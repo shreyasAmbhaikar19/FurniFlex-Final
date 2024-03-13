@@ -1,13 +1,28 @@
-<div *ngIf="isLoading">Loading products...</div>
+<!-- <div *ngIf="isLoading">Loading products...</div>
 <div *ngIf="!isLoading && products.length">
   <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
       <tr>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Image
+        </th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           Name
         </th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          Price
+          Brand
+        </th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Category
+        </th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Subscriptions
+        </th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Stock
+        </th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Created At
         </th>
         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           Actions
@@ -17,12 +32,27 @@
     <tbody class="bg-white divide-y divide-gray-200">
       <tr *ngFor="let product of products">
         <td class="px-6 py-4 whitespace-nowrap">
-          <div class="flex items-center">
-            <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
-          </div>
+          <img [src]="getImageUrl(product.images)" alt="{{product.name}}" class="h-20 w-20 object-cover rounded-full">
         </td>
         <td class="px-6 py-4 whitespace-nowrap">
-          <div class="text-sm text-gray-900">₹{{ product.price }}</div>
+          <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm text-gray-500">{{ product.brand }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm text-gray-500">{{ product.category }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <ul>
+            <li *ngFor="let subscription of product.subscriptions">{{subscription.duration}} months: ₹{{subscription.monthlyPrice}}</li>
+          </ul>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm text-gray-900">{{ product.stock }}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm text-gray-500">{{ product.createdAt | date }}</div>
         </td>
         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
           <a href="#" (click)="updateProduct(product._id, product)" class="text-indigo-600 hover:text-indigo-900">Edit</a>
@@ -34,4 +64,349 @@
 </div>
 <div *ngIf="!isLoading && !products.length">
   No products found.
+</div> -->
+
+
+<!-- <div *ngIf="isEditing && currentEditingProduct; else productList">
+  <div class="flex items-center justify-center p-12">
+    <div class="mx-auto w-full max-w-[550px]">
+      <form [formGroup]="editForm" (ngSubmit)="updateProduct()">
+        <div class="mb-5">
+          <label class="mb-3 block text-base font-medium text-[#07074D]">Name</label>
+          <input formControlName="name" type="text" placeholder="Name"
+            class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+        </div>
+
+        <div class="mb-5">
+          <label class="mb-3 block text-base font-medium text-[#07074D]">Brand</label>
+          <input formControlName="brand" type="text" placeholder="Brand"
+            class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+        </div>
+
+        <div class="mb-5">
+          <label class="mb-3 block text-base font-medium text-[#07074D]">Category</label>
+          <input formControlName="category" type="text" placeholder="Category"
+            class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+        </div>
+
+        <div class="mb-5">
+          <label class="mb-3 block text-base font-medium text-[#07074D]">Image URL</label>
+          <input formControlName="image" type="text" placeholder="Image URL"
+            class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+        </div>
+
+        <div formArrayName="subscriptions" class="mb-5">
+          <div *ngFor="let subscription of subscriptionsFormArray.controls; let i=index" [formGroupName]="i">
+            <label class="block text-base font-medium text-[#07074D]">Subscription {{ i + 1 }}</label>
+            <input formControlName="duration" type="text" placeholder="Duration in months"
+              class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+            <input formControlName="monthlyPrice" type="text" placeholder="Monthly Price"
+              class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+        </div>
+
+        <div class="mb-5">
+          <label class="mb-3 block text-base font-medium text-[#07074D]">Stock</label>
+          <input formControlName="stock" type="number" placeholder="Stock"
+            class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+        </div>
+
+        <div class="flex justify-between">
+          <button type="button" (click)="cancelEdit()" class="hover:shadow-form py-3 px-8 text-base font-semibold text-[#6B7280] outline-none">
+            Cancel
+          </button>
+          <button type="submit"
+            class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none">
+            Update Product
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<ng-template #productList>
+  
+  <div *ngFor="let product of products; let i = index">
+   
+    <div class="flex justify-between items-center">
+
+      <button (click)="editProduct(product)"
+        class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none">
+        Edit
+      </button>
+    </div>
+  </div>
+</ng-template> 
+
+-->
+
+
+
+<!-- <div *ngIf="isLoading">Loading products...</div>
+<div *ngIf="!isLoading">
+  <ng-container *ngIf="isEditing && currentEditingProduct; else productList">
+    <div class="flex items-center justify-center p-12">
+      <div class="mx-auto w-full max-w-[550px]">
+        <form [formGroup]="editForm" (ngSubmit)="updateProduct()">
+          <div class="mb-5">
+            <label class="mb-3 block text-base font-medium text-[#07074D]">Name</label>
+            <input formControlName="name" type="text" placeholder="Name"
+              class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label class="mb-3 block text-base font-medium text-[#07074D]">Brand</label>
+            <input formControlName="brand" type="text" placeholder="Brand"
+              class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label class="mb-3 block text-base font-medium text-[#07074D]">Category</label>
+            <input formControlName="category" type="text" placeholder="Category"
+              class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label class="mb-3 block text-base font-medium text-[#07074D]">Image URL</label>
+            <input formControlName="image" type="text" placeholder="Image URL"
+              class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div formArrayName="subscriptions" class="mb-5">
+            <div *ngFor="let subscription of subscriptionsFormArray.controls; let i=index" [formGroupName]="i">
+              <label class="block text-base font-medium text-[#07074D]">Subscription {{ i + 1 }}</label>
+              <input formControlName="duration" type="text" placeholder="Duration in months"
+                class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+              <input formControlName="monthlyPrice" type="text" placeholder="Monthly Price"
+                class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <label class="mb-3 block text-base font-medium text-[#07074D]">Stock</label>
+            <input formControlName="stock" type="number" placeholder="Stock"
+              class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="flex justify-between">
+            <button type="button" (click)="cancelEdit()" class="hover:shadow-form py-3 px-8 text-base font-semibold text-[#6B7280] outline-none">
+              Cancel
+            </button>
+            <button type="submit"
+              class="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none">
+              Update Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #productList>
+    <div *ngIf="products.length; else noProducts">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Image
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Brand
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Category
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Subscriptions
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Stock
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Created At
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let product of products">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <img [src]="getImageUrl(product.images)" alt="{{product.name}}" class="h-20 w-20 object-cover rounded-full">
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.brand }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.category }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <ul>
+                <li *ngFor="let subscription of product.subscriptions">{{subscription.duration}} months: ₹{{subscription.monthlyPrice}}</li>
+              </ul>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">{{ product.stock }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.createdAt }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <button (click)="editProduct(product)" class="text-indigo-600 hover:text-indigo-900">Edit</button>
+              <button (click)="deleteProduct(product._id)" class="text-red-600 hover:text-red-900 ml-4">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noProducts>
+      <div>No products found.</div>
+    </ng-template>
+  </ng-template>
+</div> -->
+
+
+
+
+<div *ngIf="isLoading">Loading products...</div>
+<div *ngIf="!isLoading">
+  <ng-container *ngIf="!isEditing && !isAddMode; else editOrAddProductForm">
+    <div *ngIf="products.length; else noProducts">
+      <div class="flex justify-end mb-4">
+        <button (click)="prepareAddProduct()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Add Product
+        </button>
+      </div>
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Image
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Brand
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Category
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Subscriptions
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Stock
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Created At
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let product of products">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <img [src]="getImageUrl(product.images)" alt="{{product.name}}" class="h-20 w-20 object-cover rounded-full">
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.brand }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.category }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <ul>
+                <li *ngFor="let subscription of product.subscriptions">{{subscription.duration}} months: ₹{{subscription.monthlyPrice}}</li>
+              </ul>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">{{ product.stock }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.createdAt }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <button (click)="editProduct(product)" class="text-indigo-600 hover:text-indigo-900">Edit</button>
+              <button (click)="deleteProduct(product._id)" class="text-red-600 hover:text-red-900 ml-4">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noProducts>
+      <div>No products found.</div>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #editOrAddProductForm>
+    <!-- Product Add/Edit Form -->
+    <div class="flex items-center justify-center p-12">
+      <div class="mx-auto w-full max-w-[550px]">
+        <form [formGroup]="editForm" (ngSubmit)="submitForm()">
+          <div class="mb-5">
+            <label class="mb-3 block text-base font-medium text-[#07074D]">Name</label>
+            <input formControlName="name" type="text" placeholder="Name" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label class="mb-3 block text-base font-medium text-[#07074D]">Brand</label>
+            <input formControlName="brand" type="text" placeholder="Brand" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label class="mb-3 block text-base font-medium text-[#07074D]">Category</label>
+            <input formControlName="category" type="text" placeholder="Category" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label class="mb-3 block text-base font-medium text-[#07074D]">Image</label>
+            <input type="file" (change)="handleFileInput($event)" name="images" multiple class="w-full rounded-md border py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+
+
+          </div>
+
+          <div formArrayName="subscriptions" class="mb-5">
+            <div *ngFor="let subscription of subscriptionsFormArray.controls; let i=index" [formGroupName]="i">
+              <label class="block text-base font-medium text-[#07074D]">Subscription {{ i + 1 }}</label>
+              <input formControlName="duration" type="text" placeholder="Duration in months"
+                class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+              <input formControlName="monthlyPrice" type="text" placeholder="Monthly Price"
+                class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+              <button type="button" (click)="removeSubscription(i)" class="mt-2 mb-4 text-red-500">Remove Subscription</button>
+            </div>
+            <button type="button" (click)="addSubscription()" class="py-2 px-4 bg-blue-500 text-white rounded">Add Subscription</button>
+          </div>
+
+          <!-- Stock -->
+          <div class="mb-5">
+            <label class="mb-3 block text-base font-medium text-[#07074D]">Stock</label>
+            <input formControlName="stock" type="number" placeholder="Stock" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="flex justify-between">
+            <button type="button" (click)="cancelEdit()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+              Cancel
+            </button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              {{ isAddMode ? 'Add' : 'Update' }} Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
 </div>

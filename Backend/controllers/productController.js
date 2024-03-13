@@ -2,7 +2,6 @@ const Product = require('../models/productModel');
 const asyncErrorHandler = require('../middlewares/asyncErrorHandler');
 const SearchFeatures = require('../utils/searchFeatures');
 const ErrorHandler = require('../utils/errorHandler');
-const cloudinary = require('cloudinary');
 
 // Get All Products
 exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
@@ -107,8 +106,9 @@ exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
     });
 });
 
-// Create Product ---ADMIN
+// Create Product ---ADMIN  
 exports.createProduct = asyncErrorHandler(async (req, res, next) => {
+    console.log(req.files)
     const imagePaths = req.files.map(file => file.path);
     
     const productData = {
@@ -138,67 +138,40 @@ exports.getAdminProducts = asyncErrorHandler(async (req, res, next) => {
 
 // Update Product ---ADMIN
 exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
-
     let product = await Product.findById(req.params.id);
 
     if (!product) {
-        return next(new ErrorHandler("Product Not Found", 404));
+        return next(new ErrorHandler('Product not found', 404));
     }
 
-    // if (req.body.images !== undefined) {
-    //     let images = [];
-    //     if (typeof req.body.images === "string") {
-    //         images.push(req.body.images);
-    //     } else {
-    //         images = req.body.images;
-    //     }
-    //     for (let i = 0; i < product.images.length; i++) {
-    //         await cloudinary.v2.uploader.destroy(product.images[i].public_id);
-    //     }
+    let imagePaths = [];
+    if (req.files) {
+        imagePaths = req.files.map(file => file.path);
+    }
 
-    //     const imagesLink = [];
+    const productData = {
+        ...req.body,
+        images: imagePaths.length > 0 ? imagePaths : product.images
+    };
 
-    //     for (let i = 0; i < images.length; i++) {
-    //         const result = await cloudinary.v2.uploader.upload(images[i], {
-    //             folder: "products",
-    //         });
-
-    //         imagesLink.push({
-    //             public_id: result.public_id,
-    //             url: result.secure_url,
-    //         });
-    //     }
-    //     req.body.images = imagesLink;
-    // }
-
-
-    req.body.user = req.user.id;
-
-    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    product = await Product.findByIdAndUpdate(req.params.id, productData, {
         new: true,
-        runValidators: true,
-        useFindAndModify: false,
+        runValidators: true
     });
 
-    res.status(201).json({
+    res.status(200).json({
         success: true,
         product
     });
 });
 
-
 // Delete Product ---ADMIN
 exports.deleteProduct = asyncErrorHandler(async (req, res, next) => {
-
     const product = await Product.findById(req.params.id);
 
     if (!product) {
         return next(new ErrorHandler(`Product doesn't exist with id: ${req.params.id}`, 404));
     }
-
-     // for (let i = 0; i < product.images.length; i++) {
-    //     await cloudinary.v2.uploader.destroy(product.images[i].public_id);
-    // }
 
     await Product.deleteOne({ _id: req.params.id });
 

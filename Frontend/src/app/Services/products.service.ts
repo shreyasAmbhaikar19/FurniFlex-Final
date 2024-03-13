@@ -19,6 +19,11 @@ export class ProductService {
     );
   }
 
+  createProduct(productData: any): Observable<Product> {
+    console.log(productData)
+    return this.http.post<Product>(`${this.baseUrl}admin/product/new`, productData, { withCredentials: true });
+  }
+
   searchProducts(keyword: string): Observable<any> {
     return this.http.get(`${this.baseUrl}products/?keyword=${keyword}`);
   }
@@ -27,11 +32,11 @@ export class ProductService {
     return this.http.get(`${this.baseUrl}/product/${id}`);
   }
 
-  updateProduct(productId: string, productData: Product): Observable<Product> {
-    return this.http.put<Product>(`${this.baseUrl}/${productId}`, productData);
+  updateProductAdmin(productId: string, productData: FormData): Observable<Product> {
+    return this.http.put<Product>(`${this.baseUrl}admin/product/${productId}`, productData, { withCredentials: true });
   }
 
   deleteProduct(productId: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${productId}`);
+    return this.http.delete(`${this.baseUrl}admin/product/${productId}`, { withCredentials: true });
   }
 }

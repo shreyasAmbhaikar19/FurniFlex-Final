@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminRoutingModule } from './admin-dashboard-routing.module'; // Make sure this path is correct
+import { AdminRoutingModule } from './admin-dashboard-routing.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // Import all the components used in the admin dashboard
 import { AdminDashboardComponent } from './admin-dashboard.component';
@@ -17,7 +18,8 @@ import { OrdersComponent } from './tabs/orders/orders.component';
   ],
   imports: [
     CommonModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    ReactiveFormsModule,
   ],
 })
 export class AdminDashboardModule { }
