@@ -23,14 +23,14 @@ const productSchema = new mongoose.Schema({
     },
     subscriptions: [{
         
-        duration: {
-          type: String,
-          required: true
-        },
-        monthlyPrice: {
-          type: String,
-          required: true
-        }
+        // duration: {
+        //   type: String,
+        //   required: true
+        // },
+        // monthlyPrice: {
+        //   type: String,
+        //   required: true
+        // }
       }],
     images: [{ 
         type: String

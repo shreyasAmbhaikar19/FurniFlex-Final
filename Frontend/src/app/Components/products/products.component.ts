@@ -173,6 +173,7 @@ export class ProductsComponent implements OnInit {
   addedToWishlist: { [key: string]: boolean } = {};
   baseUrl: string = 'http://localhost:3000/';
   keyword: string = '';
+  price:any;
 
   constructor( private productService: ProductService, 
     private wishlistService: WishlistService, 
@@ -181,6 +182,8 @@ export class ProductsComponent implements OnInit {
   ngOnInit(): void {
     this.fetchProducts();
     this.checkWishlistStatus();
+   
+    
   }
 
   fetchProducts(): void {
@@ -190,11 +193,20 @@ export class ProductsComponent implements OnInit {
 
     fetchObservable.subscribe(data => {
       const fetchedProducts = 'success' in data ? data.products : data; 
+      console.log(fetchedProducts);
+      
+      // this.price=JSON.parse(fetchedProducts.subscription);
       this.products = fetchedProducts.map((product: Product) => ({
         ...product,
         images: product.images.map((image: string) => this.baseUrl + image.replace(/\\/g, '/'))
       }));
+      for(let i=0;i<this.products.length;i++){
+        this.products[i].subscriptions=JSON.parse(this.products[i].subscriptions)
+        console.log(this.products[i].subscriptions);
+      }
     });
+    
+    
   }
 
   onSearch(): void {

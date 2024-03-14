@@ -19,20 +19,20 @@ const userSchema = new mongoose.Schema({
         unique: true,
         validate: [validator.isEmail, "Please enter a valid email address"],
     },
-    // password: {
-    //     type: String,
-    //     minLength: [8, "Password should have at least 8 chars"],
-    //     select: false,
-    // },
+    password: {
+        type: String,
+        minLength: [8, "Password should have at least 8 chars"],
+        select: false,
+    },
     phoneNumber: {
         type: String,
         required: [true, "Please Enter Your Phone Number"],
-        // validate: {
-        //     validator: function(v) {
-        //         return /^\+?[1-9]\d{1,14}$/.test(v);
-        //     },
-        //     message: props => `${props.value} is not a valid phone number! Please enter a valid international phone number.`,
-        // },
+        validate: {
+            validator: function(v) {
+                return /^\+?[1-9]\d{1,14}$/.test(v);
+            },
+            message: props => `${props.value} is not a valid phone number! Please enter a valid international phone number.`,
+        },
     },
     address: {
         type: String, 

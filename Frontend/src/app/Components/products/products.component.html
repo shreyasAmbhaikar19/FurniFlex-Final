@@ -27,7 +27,7 @@
           <span *ngIf="product.brand" class="text-gray-400 mr-3 uppercase text-xs">{{product.brand}}</span>
           <p class="text-lg font-bold text-black truncate block capitalize">{{product.name}}</p>
           <div class="flex items-center">
-            <p class="text-lg font-semibold text-black cursor-auto my-3">₹{{product.price}}</p>
+            <p class="text-lg font-semibold text-black cursor-auto my-3">₹{{product.subscriptions.monthlyPrice}}</p>
             
             <del *ngIf="product.discountPrice"><p class="text-sm text-gray-600 cursor-auto ml-2">₹{{product.discountPrice}}</p></del>
           </div>

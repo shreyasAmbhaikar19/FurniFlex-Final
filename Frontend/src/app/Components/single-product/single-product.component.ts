@@ -86,7 +86,7 @@ export class SingleProductComponent implements OnInit {
   baseUrl: string = 'http://localhost:3000/';
   selectedSubscriptionId: string | null = null;
   selectedSubscriptionMonthlyPrice: number | null = null;
-
+  selectedSubscription1: any;
   constructor(
     private productService: ProductService,
     private cartService: CartService,
@@ -103,8 +103,11 @@ export class SingleProductComponent implements OnInit {
           if (data.success) {
             this.product = data.product;
             if (data.product.subscriptions && data.product.subscriptions.length > 0) {
-              this.selectedSubscriptionId = data.product.subscriptions[0]._id;
-              this.selectedSubscriptionMonthlyPrice = data.product.subscriptions[0].monthlyPrice; // Set default subscription price
+              this.selectedSubscriptionId = productId
+            
+              this.selectedSubscriptionMonthlyPrice = JSON.parse(data.product.subscriptions[0]).monthlyPrice;
+              this.selectedSubscription1 = JSON.parse(data.product.subscriptions[0])
+               // Set default subscription price
             }
           } else {
             // Handle "Product Not Found" or other errors
@@ -117,8 +120,8 @@ export class SingleProductComponent implements OnInit {
 
   ngOnChanges(): void {
     if (this.product?.subscriptions && this.selectedSubscriptionId) {
-      const selectedSubscription = this.product.subscriptions.find((subscription: any) => subscription._id === this.selectedSubscriptionId);
-      this.selectedSubscriptionMonthlyPrice = selectedSubscription ? selectedSubscription.monthlyPrice : null;
+      // const selectedSubscription = this.product.subscriptions.find((subscription: any) => subscription._id === this.selectedSubscriptionId);
+      // this.selectedSubscriptionMonthlyPrice = selectedSubscription ? selectedSubscription.monthlyPrice : null;
     }
   }
 
@@ -137,17 +140,17 @@ export class SingleProductComponent implements OnInit {
   }
 
   addToCart(): void {
-    if (!this.selectedSubscriptionId) {
-      alert('Please select a subscription.');
-      return;
-    }
+    // if (!this.selectedSubscriptionId) {
+    //   alert('Please select a subscription.');
+    //   return;
+    // }
 
-    const selectedSubscription = this.product.subscriptions.find((subscription: any) => subscription._id === this.selectedSubscriptionId);
+    // const selectedSubscription = this.product.subscriptions.find((subscription: any) => subscription._id === this.selectedSubscriptionId);
 
-    if (!selectedSubscription) {
-      alert('Invalid subscription selected.');
-      return;
-    }
+    // if (!selectedSubscription) {
+    //   alert('Invalid subscription selected.');
+    //   return;
+    // }
 
     const userId = this.authService.getUserId();
 
@@ -160,12 +163,10 @@ export class SingleProductComponent implements OnInit {
       user: userId,
       product: this.product._id,
       quantity: this.quantity,
-      subscription: {
-        duration: selectedSubscription.duration,
-        monthlyPrice: selectedSubscription.monthlyPrice
-      }
+      subscription: this.selectedSubscription1
+    
     };
-
+    console.log(cartItem)
     this.cartService.addToCart(cartItem).subscribe({
       next: (response) => {
         console.log('Added to cart', response);

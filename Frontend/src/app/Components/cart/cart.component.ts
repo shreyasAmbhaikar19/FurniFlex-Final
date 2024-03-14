@@ -70,7 +70,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
-  totalCartPrice = 0;
+  totalCartPrice:number = 0;
   baseUrl: string = 'http://localhost:3000/';
   addressForm: FormGroup;
 
@@ -114,6 +114,7 @@ export class CartComponent implements OnInit {
   }
 
   calculateTotalCartPrice(): void {
+   
     this.totalCartPrice = this.cartItems.reduce((acc, item) => acc + item.totalPrice, 0);
   }
 

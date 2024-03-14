@@ -256,9 +256,9 @@
         <div class="mt-3 flex select-none flex-wrap items-center gap-1">
           <ng-container *ngFor="let subscription of product?.subscriptions">
             <label class="cursor-pointer">
-              <input type="radio" name="subscription" [(ngModel)]="selectedSubscriptionId" [value]="subscription._id" class="peer sr-only" (change)="ngOnChanges()" />
+              <input type="radio" name="subscription" [(ngModel)]="selectedSubscriptionId" [value]="product._id" class="peer sr-only" (change)="ngOnChanges()" />
               <div class="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
-                {{subscription.duration}} Month{{subscription.duration > 1 ? 's' : ''}} - ₹{{subscription.monthlyPrice}}/mo
+                {{subscription.duration}} Month{{subscription.duration > 1 ? 's' : ''}} - ₹{{selectedSubscriptionMonthlyPrice}}/mo
               </div>
             </label>
           </ng-container>

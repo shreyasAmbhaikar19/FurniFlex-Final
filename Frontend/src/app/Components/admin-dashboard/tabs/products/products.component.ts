@@ -573,6 +573,7 @@ import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ProductService } from '../../../../Services/products.service';
 import { Product } from '../../../../Models/product';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -582,6 +583,7 @@ import { Product } from '../../../../Models/product';
 export class ProductsTabComponent implements OnInit {
   isLoading: boolean = true;
   products: Product[] = [];
+  subscriptionArr: any = [];
   editForm!: FormGroup;
   isEditing: boolean = false;
   isAddMode: boolean = false;
@@ -605,9 +607,21 @@ export class ProductsTabComponent implements OnInit {
       next: (products) => {
         this.products = products.map(product => ({
           ...product,
+         
           images: product.images.map(image => `${this.baseUrl}${image.replace(/\\/g, '/')}`),
         }));
+        // this.products[2].subscriptions[0] = JSON.parse(products[2].subscriptions);
+      
+        // console.log(products[2].subscriptions)
         this.isLoading = false;
+
+        for(let i =0; i < this.products.length; i++){
+          this.subscriptionArr[i] = JSON.parse(products[i].subscriptions) 
+          this.products[i].subscriptions[0] = this.subscriptionArr[i];
+          console.log(this.subscriptionArr[i])
+        }
+        
+    
       },
       error: (error) => {
         console.error('Error fetching products:', error);
@@ -683,14 +697,11 @@ export class ProductsTabComponent implements OnInit {
     if (this.selectedFile) {
       formData.append('images', this.selectedFile);
     }
-    // Append subscriptions as JSON
-    const subtemp = [{
-      duration: '2',
-      monthlyPrice: '200'
-    }]
-    
-    formData.append('subscriptions', subtemp);
-    console.log(typeof(this.editForm.value.subscriptions[0]));
+  
+   
+   
+    formData.append('subscriptions',JSON.stringify(this.editForm.value.subscriptions[0]));
+    // console.log(this.editForm.value.subscriptions[0]);
       //  formData.append('subscriptions', this.editForm.value.subscriptions);
     if (this.isAddMode) {
       console.log(formData)
