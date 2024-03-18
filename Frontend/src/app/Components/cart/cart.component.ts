@@ -1,6 +1,8 @@
 // import { Component, OnInit } from '@angular/core';
-// import { CartService } from '../../Services/cart.service'; 
+// import { CartService } from '../../Services/cart.service';
 // import { AuthService } from '../../Services/auth.service';
+// import { UserService } from '../../Services/user.service';
+// import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // @Component({
 //   selector: 'app-cart',
@@ -8,19 +10,28 @@
 //   styleUrls: ['./cart.component.css']
 // })
 // export class CartComponent implements OnInit {
-//   cartItems: any[] = []; 
-//   totalCartPrice = 0;
-//   baseUrl: string = 'http://localhost:3000/'; // Base URL for images
+//   cartItems: any[] = [];
+//   totalCartPrice:number = 0;
+//   baseUrl: string = 'http://localhost:3000/';
+//   addressForm: FormGroup;
 
-//   constructor(private cartService: CartService, private authService: AuthService) {}
+//   constructor(
+//     private cartService: CartService,
+//     private authService: AuthService,
+//     private userService: UserService,
+//     private fb: FormBuilder
+//   ) {
+//     this.addressForm = this.fb.group({
+//       address: ['', Validators.required]
+//     });
+//   }
 
 //   ngOnInit(): void {
 //     this.loadCartItems();
 //   }
 
 //   loadCartItems(): void {
-    
-//     const userId = this.authService.getUserId();
+//     const userId = this.authService.getUserId(); 
 //     this.cartService.getUserCartItems(userId).subscribe({
 //       next: (response) => {
 //         if (response.success) {
@@ -39,22 +50,33 @@
 //         this.calculateTotalCartPrice();
 //         alert('Product removed from cart successfully');
 //       },
-//       error: (error) => console.error('Error removing cart item:', error),
+//       error: (error) => console.error('Error removing cart item:', error)
 //     });
 //   }
 
 //   calculateTotalCartPrice(): void {
+   
 //     this.totalCartPrice = this.cartItems.reduce((acc, item) => acc + item.totalPrice, 0);
 //   }
 
-//   // Method for generating full image URLs
 //   getImageUrl(relativePath: string): string {
-//     return `${this.baseUrl}${relativePath.replace(/\\/g, '/')}`; 
+//     return `${this.baseUrl}${relativePath.replace(/\\/g, '/')}`;
+//   }
+
+//   checkout(): void {
+//     if (this.addressForm.valid) {
+//       const address = this.addressForm.get('address')?.value;
+//       this.userService.updateAddress(address).subscribe({
+//         next: () => {
+//           alert('Address updated and checkout successful');
+//         },
+//         error: (error) => console.error('Error during checkout:', error)
+//       });
+//     } else {
+//       alert('Please fill in your address.');
+//     }
 //   }
 // }
-
-
-
 
 
 import { Component, OnInit } from '@angular/core';
@@ -63,6 +85,9 @@ import { AuthService } from '../../Services/auth.service';
 import { UserService } from '../../Services/user.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+// Declare Razorpay to avoid TypeScript errors
+declare var Razorpay: any;
+
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
@@ -70,7 +95,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
-  totalCartPrice:number = 0;
+  totalCartPrice: number = 0;
   baseUrl: string = 'http://localhost:3000/';
   addressForm: FormGroup;
 
@@ -81,7 +106,7 @@ export class CartComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.addressForm = this.fb.group({
-      address: ['', Validators.required]
+      address: ['', Validators.required] // Validators can be more specific if needed
     });
   }
 
@@ -90,7 +115,7 @@ export class CartComponent implements OnInit {
   }
 
   loadCartItems(): void {
-    const userId = this.authService.getUserId(); // Implement this method in your AuthService
+    const userId = this.authService.getUserId(); 
     this.cartService.getUserCartItems(userId).subscribe({
       next: (response) => {
         if (response.success) {
@@ -114,7 +139,6 @@ export class CartComponent implements OnInit {
   }
 
   calculateTotalCartPrice(): void {
-   
     this.totalCartPrice = this.cartItems.reduce((acc, item) => acc + item.totalPrice, 0);
   }
 
@@ -125,87 +149,40 @@ export class CartComponent implements OnInit {
   checkout(): void {
     if (this.addressForm.valid) {
       const address = this.addressForm.get('address')?.value;
-      // Call UserService to update the address
-      // You might want to pass the userId or use it from the AuthService
-      this.userService.updateAddress(address).subscribe({
-        next: () => {
-          alert('Address updated and checkout successful');
-          // Handle successful checkout here (e.g., clear cart, navigate to confirmation page)
+      // Placeholder: Implement Razorpay payment integration here
+      // This should typically open Razorpay's checkout modal
+      // The following lines are placeholders for actual Razorpay integration
+      // You'll need to replace 'RAZORPAY_OPTIONS' with the actual options
+      
+      const options = {
+        "key": "YOUR_RAZORPAY_KEY", // Replace with your Razorpay API key
+        "amount": (this.totalCartPrice + 120) * 100, // Razorpay expects the amount in paise
+        "currency": "INR",
+        "name": "Your Company Name",
+        "description": "Transaction Description",
+        "handler": function (response: any){
+            // handler function to handle payment success
+            // Verify payment on server-side
+            // Update the UI after payment verification
         },
-        error: (error) => console.error('Error during checkout:', error)
-      });
+        "prefill": {
+            "name": "Your Name",
+            "email": "email@example.com",
+            "contact": "9999999999"
+        },
+        "notes": {
+            "address": address
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+      };
+
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+      
     } else {
       alert('Please fill in your address.');
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// import { Component, OnInit } from '@angular/core';
-// import { CartService } from '../../Services/cart.service'; 
-// import { AuthService } from '../../Services/auth.service';
-
-// @Component({
-//   selector: 'app-cart',
-//   templateUrl: './cart.component.html',
-//   styleUrls: ['./cart.component.css']
-// })
-// export class CartComponent implements OnInit {
-//   cartItems: any[] = [];
-//   totalCartPrice = 0;
-//   baseUrl: string = 'http://localhost:3000/';
-
-//   constructor(private cartService: CartService, private authService: AuthService) {}
-
-//   ngOnInit(): void {
-//     this.loadCartItems();
-//   }
-
-//   loadCartItems(): void {
-//     const userId = this.authService.getUserId();
-//     this.cartService.getUserCartItems(userId).subscribe({
-//       next: (response) => {
-//         if (response.success) {
-//           this.cartItems = response.cartItems.map((item:any) => ({
-//             ...item,
-//             product: item.product ? {
-//               ...item.product,
-//               images: item.product.images && item.product.images.length ? item.product.images : ['path/to/default/image.jpg'] 
-//             } : undefined
-//           }));
-//           this.calculateTotalCartPrice();
-//         }
-//       },
-//       error: (error) => console.error('Error fetching cart items:', error)
-//     });
-//   }
-
-//   removeCartItem(cartId: string): void {
-//     this.cartService.removeCartItem(cartId).subscribe({
-//       next: () => {
-//         this.cartItems = this.cartItems.filter(item => item._id !== cartId);
-//         this.calculateTotalCartPrice();
-//         alert('Product removed from cart successfully');
-//       },
-//       error: (error) => console.error('Error removing cart item:', error),
-//     });
-//   }
-
-//   calculateTotalCartPrice(): void {
-//     this.totalCartPrice = this.cartItems.reduce((acc, item) => acc + (item.totalPrice || 0), 0);
-//   }
-
-//   getImageUrl(relativePath: string | undefined): string {
-//     return relativePath ? `${this.baseUrl}${relativePath.replace(/\\/g, '/')}` : 'path/to/default/image.jpg'; // Adjust as per your default image path
-//   }
-// }

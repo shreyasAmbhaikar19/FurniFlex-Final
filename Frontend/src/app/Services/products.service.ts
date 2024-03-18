@@ -20,7 +20,7 @@ export class ProductService {
   }
 
   createProduct(productData: any): Observable<Product> {
-    console.log(productData)
+    console.log(productData);
     return this.http.post<Product>(`${this.baseUrl}admin/product/new`, productData, { withCredentials: true });
   }
 
@@ -29,11 +29,18 @@ export class ProductService {
   }
 
   getProductById(id: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/product/${id}`);
+    return this.http.get(`${this.baseUrl}product/${id}`);
   }
 
-  updateProductAdmin(productId: string, productData: FormData): Observable<Product> {
-    return this.http.put<Product>(`${this.baseUrl}admin/product/${productId}`, productData, { withCredentials: true });
+  // updateProductAdmin(productId: string, productData: FormData): Observable<Product> {
+  //   console.log(productId, productData);
+  //   return this.http.put<Product>(`${this.baseUrl}admin/product/${productId}`, productData, { withCredentials: true });
+  // }
+
+  updateProductAdmin(productId: string, productData: FormData): Observable<any> {
+    return this.http.put(`${this.baseUrl}admin/product/${productId}`, productData, {
+      withCredentials: true
+    });
   }
 
   deleteProduct(productId: string): Observable<any> {

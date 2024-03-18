@@ -8,7 +8,7 @@ const productSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        // required: [true, "Please enter product description"]
+        required: [true, "Please enter product description"]
     },
     brand: {
         type: String,
@@ -21,17 +21,18 @@ const productSchema = new mongoose.Schema({
     rentDuration: {
         type: Number,
     },
-    subscriptions: [{
-        
-        // duration: {
-        //   type: String,
-        //   required: true
-        // },
-        // monthlyPrice: {
-        //   type: String,
-        //   required: true
-        // }
-      }],
+    subscriptions: [
+        {
+            duration: {
+                type: String,
+                required: true
+            },
+            monthlyPrice: {
+                type: String,
+                required: true
+            }
+      }
+    ],
     images: [{ 
         type: String
     }],
@@ -51,29 +52,29 @@ const productSchema = new mongoose.Schema({
     },
     reviews: [
         {
-            // user: {
-            //     type: mongoose.Schema.ObjectId,
-            //     ref: "User",
-            //     required: true
-            // },
-            // name: {
-            //     type: String,
-            //     required: true
-            // },
-            // rating: {
-            //     type: Number,
-            //     required: true
-            // },
-            // comment: {
-            //     type: String,
-            //     required: true
-            // }
+            user: {
+                type: mongoose.Schema.ObjectId,
+                ref: "User",
+                required: true
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            rating: {
+                type: Number,
+                required: true
+            },
+            comment: {
+                type: String,
+                required: true
+            }
         }
     ],
     user: {
         type: mongoose.Schema.ObjectId,
         ref: "User",
-        // required: true
+        required: true
     },
     createdAt: {
         type: Date,

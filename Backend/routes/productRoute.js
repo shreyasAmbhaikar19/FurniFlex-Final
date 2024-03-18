@@ -15,8 +15,8 @@ router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles("adm
 router.route('/admin/products').get(isAuthenticatedUser, authorizeRoles("admin"), getAdminProducts);
 
 router.route('/admin/product/:id')
-.put(isAuthenticatedUser, authorizeRoles("admin"), updateProduct)
-.delete(isAuthenticatedUser, authorizeRoles("admin"), deleteProduct);
+  .put(isAuthenticatedUser, authorizeRoles("admin"), upload, updateProduct)
+  .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteProduct);
 
 // router.route('/admin/product/:productId/reviews')
 //     .get(isAuthenticatedUser, authorizeRoles("admin"), getProductReviews)

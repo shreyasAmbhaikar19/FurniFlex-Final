@@ -1,37 +1,4 @@
-<!-- <div class="flex h-screen w-full items-center justify-center bg-gray-100">
-    <div class="max-w-md w-full overflow-hidden rounded-lg bg-white shadow-lg">
-      <div class="p-8">
-        <h1 class="text-3xl font-black text-slate-700">Login</h1>
-        <p class="mt-2 mb-5 text-base leading-tight text-gray-600">Access your account</p>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mt-8">
-          <div class="relative mt-2 w-full">
-            <input type="email" formControlName="email" class="peer block w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0" placeholder="Email" />
-            <label class="absolute top-2 left-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-2 text-sm text-gray-500 duration-300 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600">Email</label>
-            <div *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].invalid" class="text-red-500 text-sm mt-1">
-              <div *ngIf="loginForm.controls['email'].errors?.['required']">Email is required.</div>
-              <div *ngIf="loginForm.controls['email'].errors?.['email']">Please enter a valid email address.</div>
-            </div>
-          </div>
-          <div class="relative mt-2 w-full">
-            <input type="password" formControlName="password" class="peer block w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0" placeholder="Password" />
-            <label class="absolute top-2 left-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-2 text-sm text-gray-500 duration-300 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600">Password</label>
-            <div *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].invalid" class="text-red-500 text-sm mt-1">
-              <div *ngIf="loginForm.controls['password'].errors?.['required']">Password is required.</div>
-              <div *ngIf="loginForm.controls['password'].errors?.['pattern']">Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.</div>
-            </div>
-          </div>
-          <input class="mt-4 w-full cursor-pointer rounded-lg bg-blue-600 pt-3 pb-3 text-white shadow-lg hover:bg-blue-400" type="submit" value="Log in" />
-        </form>
-        <div class="mt-4 text-center">
-          <p class="text-sm text-gray-600">Don't have an account? <a href="#" class="font-bold text-blue-600 no-underline hover:text-blue-400">Sign up</a></p>
-        </div>
-      </div>
-    </div>
-  </div>
-   -->
-
-
-   <div class="flex h-screen w-full items-center justify-center bg-gray-100">
+<div class="flex h-screen w-full items-center justify-center bg-gray-100">
     <div class="max-w-md w-full overflow-hidden rounded-lg bg-white shadow-lg">
       <div class="p-8">
         <h1 class="text-3xl font-black text-slate-700">Login</h1>
