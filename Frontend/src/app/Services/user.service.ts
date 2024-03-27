@@ -18,13 +18,10 @@ export class UserService {
     return this.http.put(`${this.baseUrl}/me/update`, { address });
   }
 
-  createUser(userData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/admin/user/new`, userData, { withCredentials: true });
+  updateUserRole(userId: string, role: string): Observable<any> {
+    return this.http.put(`${this.baseUrl}/admin/user/${userId}`, { role }, { withCredentials: true });
   }
 
-  updateUser(userId: string, userData: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/admin/user/${userId}`, userData, { withCredentials: true });
-  }
 
   deleteUser(userId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/admin/user/${userId}`, { withCredentials: true });

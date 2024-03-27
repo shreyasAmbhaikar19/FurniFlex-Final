@@ -1,7 +1,6 @@
-// users.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { UserService } from '../../../../Services/user.service'; // Adjust the path as necessary
+import { UserService } from '../../../../Services/user.service';
 
 @Component({
   selector: 'app-users',
@@ -10,14 +9,12 @@ import { UserService } from '../../../../Services/user.service'; // Adjust the p
 })
 export class UsersComponent implements OnInit {
   isLoading = true;
-  users : any = [];
+  users: any = [];
   userForm!: FormGroup;
-  addUserForm!: FormGroup;
-  isEditing = false;
-  isAdding = false;
+  isEditingUser = false;
   currentUser: any | null = null;
 
-  constructor(private userService: UserService, private fb: FormBuilder) { }
+  constructor(private userService: UserService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.fetchUsers();
@@ -26,20 +23,6 @@ export class UsersComponent implements OnInit {
 
   initForm(): void {
     this.userForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
-      address: [''],
-      role: ['', Validators.required]
-    });
-
-    this.addUserForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
-      address: [''],
       role: ['', Validators.required]
     });
   }
@@ -60,30 +43,16 @@ export class UsersComponent implements OnInit {
 
   onEdit(user: any): void {
     this.currentUser = user;
-    this.isEditing = true;
-    this.isAdding = false;
-    this.userForm.patchValue(user);
+    this.isEditingUser = true;
+    this.userForm.patchValue({ role: user.role });
   }
 
-  onAdd(): void {
-    this.isAdding = true;
-    this.isEditing = false;
-  }
-
-  onSubmitAdd(): void {
-
-    console.log(this.addUserForm.value);
-    if (this.addUserForm.valid) {
-      this.userService.createUser(this.addUserForm.value).subscribe({
-        next: () => this.afterSubmit(),
-        error: error => console.error('Error creating user:', error)
-      });
-    }
-  }
-
-  onSubmitEdit(): void {
+  onSubmit(): void {
     if (this.userForm.valid && this.currentUser) {
-      this.userService.updateUser(this.currentUser._id, this.userForm.value).subscribe({
+      const formData = new FormData();
+      formData.append('role', this.userForm.value.role);
+      
+      this.userService.updateUserRole(this.currentUser._id, this.userForm.value.role).subscribe({
         next: () => this.afterSubmit(),
         error: error => console.error('Error updating user:', error)
       });
@@ -91,25 +60,14 @@ export class UsersComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.isEditing = false;
-    this.isAdding = false;
+    this.isEditingUser = false;
     this.currentUser = null;
   }
 
   afterSubmit(): void {
     this.fetchUsers();
-    this.isEditing = false;
-    this.isAdding = false;
+    this.isEditingUser = false;
     this.currentUser = null;
-  }
-
-  updateUser(userId: string, userData: any): void {
-    this.userService.updateUser(userId, userData).subscribe({
-      next: () => {
-        this.fetchUsers(); // Reload users to reflect the update
-      },
-      error: (error) => console.error('Error updating user:', error)
-    });
   }
 
   deleteUser(userId: string): void {
@@ -125,3 +83,4 @@ export class UsersComponent implements OnInit {
     }
   }
 }
+

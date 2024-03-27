@@ -24,18 +24,22 @@ export class ProductService {
     return this.http.post<Product>(`${this.baseUrl}admin/product/new`, productData, { withCredentials: true });
   }
 
-  searchProducts(keyword: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}products/?keyword=${keyword}`);
-  }
-
   getProductById(id: string): Observable<any> {
     return this.http.get(`${this.baseUrl}product/${id}`);
   }
 
-  // updateProductAdmin(productId: string, productData: FormData): Observable<Product> {
-  //   console.log(productId, productData);
-  //   return this.http.put<Product>(`${this.baseUrl}admin/product/${productId}`, productData, { withCredentials: true });
-  // }
+  // Update the methods to include page and limit parameters
+searchProducts(keyword: string, page: number, limit: number): Observable<any> {
+  let query = `products?page=${page}&limit=${limit}`;
+  if (keyword) {
+    query += `&keyword=${keyword}`;
+  }
+  return this.http.get(`${this.baseUrl}${query}`);
+}
+
+getPaginatedProducts(page: number, limit: number): Observable<any> {
+  return this.http.get(`${this.baseUrl}products?page=${page}&limit=${limit}`);
+}
 
   updateProductAdmin(productId: string, productData: FormData): Observable<any> {
     return this.http.put(`${this.baseUrl}admin/product/${productId}`, productData, {

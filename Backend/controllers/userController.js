@@ -3,7 +3,6 @@ const asyncErrorHandler = require('../middlewares/asyncErrorHandler');
 const ErrorHandler = require('../utils/errorHandler');
 const sendToken = require('../utils/sendToken');
 const sendEmail = require('../utils/sendEmail');
-const cloudinary = require('cloudinary');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs')
 
@@ -252,38 +251,6 @@ exports.deleteUser = asyncErrorHandler(async (req, res, next) => {
         message: 'User deleted successfully',
     });
 });
-
-
-exports.createUser = asyncErrorHandler(async (req, res, next) => {
-    const { firstName, lastName, email, phoneNumber, address, role } = req.body;
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-        return res.status(400).json({
-            success: false,
-            message: "User with the given email already exists",
-        });
-    }
-
-    // Hash the password
-    // const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        address,
-        role,
-        // password: "hashedPassword", // Use the hashed password
-    });
-
-    res.status(201).json({
-        success: true,
-        user: newUser,
-    });
-});
-
 
 // Update User Profile
 exports.updateProfile = asyncErrorHandler(async (req, res, next) => {

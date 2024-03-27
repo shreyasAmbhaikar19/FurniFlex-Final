@@ -1,3 +1,4 @@
+
 <div class="pt-24 pb-8 bg-white">
   <h1 class="text-center text-2xl font-bold text-gray-800">Wishlist</h1>
 </div>
@@ -18,7 +19,7 @@
         </p>
         <div class="flex items-center justify-between">
           <p class="text-lg font-semibold text-black my-3">
-            ₹{{ item.product.subscriptions.monthlyPrice }}
+            ₹{{ item.product.monthlyPrice }}
           </p>
           <button (click)="removeFromWishlist(item.product._id)"
             class="flex items-center px-4 py-2 space-x-1.5 text-white bg-red-500 rounded-lg shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50">

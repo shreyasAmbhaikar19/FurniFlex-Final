@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-dashboard-routing.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Import all the components used in the admin dashboard
 import { AdminDashboardComponent } from './admin-dashboard.component';
@@ -14,12 +14,13 @@ import { OrdersComponent } from './tabs/orders/orders.component';
     AdminDashboardComponent,
     ProductsTabComponent,
     UsersComponent,
-    OrdersComponent
+    OrdersComponent,
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     ReactiveFormsModule,
+    FormsModule
   ],
 })
 export class AdminDashboardModule { }

@@ -11,6 +11,7 @@ import { WishlistComponent } from './Components/wishlist/wishlist.component';
 import { FeedbackComponent } from './Components/feedback/feedback.component';
 import { NotFoundComponent } from './Components/not-found/not-found.component';
 import { authGuard, adminGuard } from './Services/auth-guard.service';
+import { ProfileComponent } from './Components/profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' }, 
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'carts', component: CartComponent, canActivate: [authGuard] },
   { path: 'wishlist', component: WishlistComponent, canActivate: [authGuard]  },
   { path: 'feedback', component: FeedbackComponent, canActivate: [authGuard]  },
+  { path: 'profile', component: ProfileComponent, canActivate: [authGuard]  },
   { path: 'admin', loadChildren: () => import('./Components/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule) },
   { path: '**', component: NotFoundComponent }
 ];

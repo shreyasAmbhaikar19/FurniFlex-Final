@@ -1,4 +1,4 @@
-<div *ngIf="isLoading">Loading products...</div>
+<!-- <div *ngIf="isLoading">Loading products...</div>
 <div *ngIf="!isLoading">
   <div class="flex justify-end mb-4">
     <button (click)="prepareAddProduct()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -134,4 +134,321 @@
   </ng-template>
 </div>
 
+ -->
 
+
+
+
+<!-- <div *ngIf="isLoading">Loading products...</div>
+<div *ngIf="!isLoading">
+  <div class="flex justify-end mb-4">
+    <button (click)="prepareAddProduct()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Add Product
+    </button>
+  </div>
+  <ng-container *ngIf="!isEditing && !isAddMode; else editOrAddProductForm">
+    <div *ngIf="products.length; else noProducts">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Image
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Brand
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Category
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Subscriptions
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Stock
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Created At
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let product of products">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <img [src]="getImageUrl(product.images)" alt="{{product.name}}" class="h-20 w-20 object-cover rounded-full">
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.brand }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.category }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <ul>
+                <li *ngFor="let subscription of product.subscriptions">{{subscription.duration}} months: ₹{{subscription.monthlyPrice}}</li>
+              </ul>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">{{ product.stock }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.createdAt | date:'medium' }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <button (click)="editProduct(product)" class="text-indigo-600 hover:text-indigo-900">Edit</button>
+              <button (click)="deleteProduct(product._id)" class="text-red-600 hover:text-red-900 ml-4">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noProducts>
+      <div>No products found.</div>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #editOrAddProductForm>
+    <div class="flex items-center justify-center p-12">
+      <div class="mx-auto w-full max-w-[550px]">
+        <form [formGroup]="editForm" (ngSubmit)="submitForm()">
+          <div class="mb-5">
+            <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">Name</label>
+            <input id="name" formControlName="name" type="text" placeholder="Name" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label for="description" class="mb-3 block text-base font-medium text-[#07074D]">Description</label>
+            <textarea id="description" formControlName="description" rows="4" placeholder="Description" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"></textarea>
+          </div>
+
+          <div class="mb-5">
+            <label for="brand" class="mb-3 block text-base font-medium text-[#07074D]">Brand</label>
+            <input id="brand" formControlName="brand" type="text" placeholder="Brand" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label for="category" class="mb-3 block text-base font-medium text-[#07074D]">Category</label>
+            <input id="category" formControlName="category" type="text" placeholder="Category" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label for="images" class="mb-3 block text-base font-medium text-[#07074D]">Image</label>
+            <div *ngFor="let image of imagePreviews; let i = index" class="image-preview-container">
+              <div class="image-wrapper">
+                <img [src]="image" class="image-preview">
+                <button (click)="removeImage(i)" class="remove-image-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+     
+            <input id="images" type="file" (change)="handleFileInput($event)" name="images" multiple class="w-full rounded-md border py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+          </div>
+
+          <div formArrayName="subscriptions" class="mb-5">
+            <div *ngFor="let subscription of subscriptionsFormArray.controls; let i=index" [formGroupName]="i">
+              <label class="block text-base font-medium text-[#07074D]">Subscription {{ i + 1 }}</label>
+              <input formControlName="duration" type="text" placeholder="Duration in months"
+                class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+              <input formControlName="monthlyPrice" type="text" placeholder="Monthly Price"
+                class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+              <button type="button" (click)="removeSubscription(i)" class="mt-2 mb-4 text-red-500">Remove Subscription</button>
+            </div>
+            <button type="button" (click)="addSubscription()" class="py-2 px-4 bg-blue-500 text-white rounded">Add Subscription</button>
+          </div>
+
+          <div class="mb-5">
+            <label for="stock" class="mb-3 block text-base font-medium text-[#07074D]">Stock</label>
+            <input id="stock" formControlName="stock" type="number" placeholder="Stock" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="flex justify-between">
+            <button type="button" (click)="cancelEdit()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+              Cancel
+            </button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              {{ isAddMode ? 'Add' : 'Update' }} Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+</div> -->
+
+
+
+
+
+
+<div *ngIf="isLoading">Loading products...</div>
+<div *ngIf="!isLoading">
+  <ng-container *ngIf="!isEditing && !isAddMode; else editOrAddProductForm">
+    <div class="flex w-full flex-col items-center justify-between space-y-2 sm:flex-row sm:space-y-0 mb-4">
+      <form class="relative flex w-full max-w-2xl items-center" (submit)="searchProducts()">
+        <svg class="absolute left-2 block h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" name="search" [(ngModel)]="keyword" class="h-12 w-full border-b-gray-400 bg-transparent py-4 pl-12 text-sm outline-none focus:border-b-2" placeholder="Search by Name, Brand, Category" (keyup)="search(keyword)">
+      </form>
+      <button (click)="prepareAddProduct()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Add Product
+      </button>
+    </div>
+    <div *ngIf="products.length; else noProducts">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Image
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Name
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Brand
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Category
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Subscriptions
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Stock
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Created At
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let product of products">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <img [src]="getImageUrl(product.images)" alt="{{product.name}}" class="h-20 w-20 object-cover rounded-full">
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-gray-900">{{ product.name }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.brand }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.category }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <ul>
+                <li *ngFor="let subscription of product.subscriptions">{{subscription.duration}} months: ₹{{subscription.monthlyPrice}}</li>
+              </ul>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">{{ product.stock }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ product.createdAt | date:'medium' }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <button (click)="editProduct(product)" class="text-indigo-600 hover:text-indigo-900">Edit</button>
+              <button (click)="deleteProduct(product._id)" class="text-red-600 hover:text-red-900 ml-4">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="flex flex-col items-center border-t bg-white px-5 py-5 sm:flex-row sm:justify-between">
+        <nav class="flex justify-center items-center gap-4 my-8 w-full">
+          <button *ngIf="currentPage > 1" (click)="changePage(currentPage - 1)" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Previous</button>
+          <button *ngFor="let number of paginationNumbers; let i = index" (click)="changePage(i + 1)" [class.bg-blue-500]="i + 1 === currentPage" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">{{ i + 1 }}</button>
+          <button *ngIf="currentPage < totalPages" (click)="changePage(currentPage + 1)" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Next</button>
+        </nav>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noProducts>
+    <div>No products found.</div>
+  </ng-template>
+
+  <ng-template #editOrAddProductForm>
+    <div class="flex items-center justify-center p-12">
+      <div class="mx-auto w-full max-w-[550px]">
+        <form [formGroup]="editForm" (ngSubmit)="submitForm()">
+          <div class="mb-5">
+            <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">Name</label>
+            <input id="name" formControlName="name" type="text" placeholder="Name" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label for="description" class="mb-3 block text-base font-medium text-[#07074D]">Description</label>
+            <textarea id="description" formControlName="description" rows="4" placeholder="Description" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"></textarea>
+          </div>
+
+          <div class="mb-5">
+            <label for="brand" class="mb-3 block text-base font-medium text-[#07074D]">Brand</label>
+            <input id="brand" formControlName="brand" type="text" placeholder="Brand" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label for="category" class="mb-3 block text-base font-medium text-[#07074D]">Category</label>
+            <input id="category" formControlName="category" type="text" placeholder="Category" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label for="images" class="mb-3 block text-base font-medium text-[#07074D]">Image</label>
+            <div *ngFor="let image of imagePreviews; let i = index" class="image-preview-container">
+              <div class="image-wrapper">
+                <img [src]="image" class="image-preview">
+                <button (click)="removeImage(i)" class="remove-image-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <!-- Existing form fields -->
+            <input id="images" type="file" (change)="handleFileInput($event)" name="images" multiple class="w-full rounded-md border py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+          </div>
+
+          <div formArrayName="subscriptions" class="mb-5">
+            <div *ngFor="let subscription of subscriptionsFormArray.controls; let i=index" [formGroupName]="i">
+              <label class="block text-base font-medium text-[#07074D]">Subscription {{ i + 1 }}</label>
+              <input formControlName="duration" type="text" placeholder="Duration in months"
+                class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+              <input formControlName="monthlyPrice" type="text" placeholder="Monthly Price"
+                class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+              <button type="button" (click)="removeSubscription(i)" class="mt-2 mb-4 text-red-500">Remove Subscription</button>
+            </div>
+            <button type="button" (click)="addSubscription()" class="py-2 px-4 bg-blue-500 text-white rounded">Add Subscription</button>
+          </div>
+
+          <div class="mb-5">
+            <label for="stock" class="mb-3 block text-base font-medium text-[#07074D]">Stock</label>
+            <input id="stock" formControlName="stock" type="number" placeholder="Stock" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="flex justify-between">
+            <button type="button" (click)="cancelEdit()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+              Cancel
+            </button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              {{ isAddMode ? 'Add' : 'Update' }} Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>  
+</div>

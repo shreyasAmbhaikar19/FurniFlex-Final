@@ -92,6 +92,27 @@ export class WishlistComponent implements OnInit {
   }
 
   fetchWishlistItems(): void {
+    // this.wishlistService.getWishlist().subscribe({
+    //   next: (response) => {
+    //     const fetchedWishlistItems = response.wishlist;
+    //     console.log(fetchedWishlistItems);
+        
+    //     this.wishlistItems = fetchedWishlistItems.map((item: any) => ({
+    //       ...item,
+    //       product: {
+    //         ...item.product,
+    //         images: item.product.images.map((image: string) => this.baseUrl + image.replace(/\\/g, '/')),
+    //       },
+    //     }));
+
+    //     for (let i = 0; i < this.wishlistItems.length; i++) {
+    //       this.wishlistItems[i].product.subscriptions = JSON.parse(this.wishlistItems[i].product.subscriptions[0]);
+    //       console.log(this.wishlistItems[i].product.subscriptions);
+    //     }
+    //   },
+    //   error: (error) => console.error('Error fetching wishlist items:', error),
+    // });
+
     this.wishlistService.getWishlist().subscribe({
       next: (response) => {
         const fetchedWishlistItems = response.wishlist;
@@ -102,13 +123,9 @@ export class WishlistComponent implements OnInit {
           product: {
             ...item.product,
             images: item.product.images.map((image: string) => this.baseUrl + image.replace(/\\/g, '/')),
+            monthlyPrice: item.product.subscriptions[0]?.monthlyPrice ?? 'N/A', 
           },
         }));
-
-        for (let i = 0; i < this.wishlistItems.length; i++) {
-          this.wishlistItems[i].product.subscriptions = JSON.parse(this.wishlistItems[i].product.subscriptions[0]);
-          console.log(this.wishlistItems[i].product.subscriptions);
-        }
       },
       error: (error) => console.error('Error fetching wishlist items:', error),
     });

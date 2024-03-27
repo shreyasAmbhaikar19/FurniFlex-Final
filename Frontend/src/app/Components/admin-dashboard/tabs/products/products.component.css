@@ -1,0 +1,36 @@
+.image-preview-container {
+    display: inline-block;
+    margin-right: 10px; /* Space between images */
+  }
+  
+  .image-wrapper {
+    position: relative;
+    width: 100px; /* Size of the image container */
+    height: 100px;
+  }
+  
+  .image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image covers the area, keeping aspect ratio */
+  }
+  
+  .remove-image-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: white;
+    border-radius: 50%;
+    width: 24px; /* Size of the remove button */
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .remove-image-btn:hover {
+    background-color: #f3f3f3; /* Slight background color change on hover for feedback */
+  }
+  

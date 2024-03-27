@@ -14,31 +14,85 @@ exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
 });
 
 // Get Products by Search, Filter, Pagination
+// exports.getSearchPaginatedFilteredProducts = asyncErrorHandler(async (req, res, next) => {
+
+//     // const resultPerPage = 3;
+//     const resultPerPage = Number(req.query.limit) || 3;
+
+//     const productsCount = await Product.countDocuments();
+//     // console.log(req.query);
+
+//     const searchFeature = new SearchFeatures(Product.find(), req.query)
+//         .search()
+//         .filter();
+
+//     let products = await searchFeature.query;
+//     let filteredProductsCount = products.length;
+
+//     searchFeature.pagination(resultPerPage);
+
+//     products = await searchFeature.query.clone();
+
+//     res.status(200).json({
+//         success: true,
+//         products,
+//         productsCount,
+//         resultPerPage,
+//         filteredProductsCount,
+//     });
+// });
+
+// exports.getSearchPaginatedFilteredProducts = asyncErrorHandler(async (req, res, next) => {
+//     const resultPerPage = Number(req.query.limit) || 4; // Set a default limit
+//     const currentPage = Number(req.query.page) || 1;
+
+//     const productsCount = await Product.countDocuments();
+//     const totalPages = Math.ceil(productsCount / resultPerPage);
+
+//     const searchFeature = new SearchFeatures(Product.find(), req.query)
+//         .search()
+//         .filter()
+//         .pagination(resultPerPage);
+
+//     let products = await searchFeature.query;
+
+//     res.status(200).json({
+//         success: true,
+//         products,
+//         productsCount,
+//         resultPerPage,
+//         totalPages,
+//         currentPage
+//     });
+// });
+
+
 exports.getSearchPaginatedFilteredProducts = asyncErrorHandler(async (req, res, next) => {
+    const resultPerPage = Number(req.query.limit) || 4;
+    const currentPage = Number(req.query.page) || 1;
+    const keyword = req.query.keyword ? {
+        name: {
+            $regex: req.query.keyword,
+            $options: "i",
+        },
+    } : {};
 
-    // const resultPerPage = 3;
-    const resultPerPage = Number(req.query.limit) || 3;
-
-    const productsCount = await Product.countDocuments();
-    // console.log(req.query);
-
-    const searchFeature = new SearchFeatures(Product.find(), req.query)
-        .search()
-        .filter();
+    const productCount = await Product.countDocuments({ ...keyword });
+    const searchFeature = new SearchFeatures(Product.find(keyword), req.query)
+        .filter()
+        .pagination(resultPerPage);
 
     let products = await searchFeature.query;
     let filteredProductsCount = products.length;
 
-    searchFeature.pagination(resultPerPage);
-
-    products = await searchFeature.query.clone();
-
     res.status(200).json({
         success: true,
         products,
-        productsCount,
+        productCount,
         resultPerPage,
+        currentPage,
         filteredProductsCount,
+        totalPages: Math.ceil(productCount / resultPerPage),
     });
 });
 
@@ -108,13 +162,30 @@ exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
 
 // // Create Product ---ADMIN  
 // exports.createProduct = asyncErrorHandler(async (req, res, next) => {
+//     console.log(req.files);
 //     const imagePaths = req.files.map(file => file.path);
-    
+
+//     // Parse subscriptions if it's a string to an array of objects
+//     let subscriptions = [];
+//     if (typeof req.body.subscriptions === 'string') {
+//         try {
+//             subscriptions = JSON.parse(req.body.subscriptions);
+//         } catch (error) {
+//             return next(new ErrorHandler("Invalid 'subscriptions' format", 404));
+//         }
+//     } else {
+//         subscriptions = req.body.subscriptions;
+//     }
+
 //     const productData = {
 //         ...req.body,
 //         user: req.user.id,
-//         images: imagePaths 
+//         images: imagePaths,
+//         subscriptions // Add the parsed subscriptions here
 //     };
+
+//     // Delete the subscriptions string from productData to avoid conflicts
+//     delete productData.subscriptionsString;
 
 //     const product = await Product.create(productData);
 
@@ -123,40 +194,6 @@ exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
 //         product
 //     });
 // });
-
-exports.createProduct = asyncErrorHandler(async (req, res, next) => {
-    console.log(req.files);
-    const imagePaths = req.files.map(file => file.path);
-
-    // Parse subscriptions if it's a string to an array of objects
-    let subscriptions = [];
-    if (typeof req.body.subscriptions === 'string') {
-        try {
-            subscriptions = JSON.parse(req.body.subscriptions);
-        } catch (error) {
-            return next(new ErrorHandler("Invalid 'subscriptions' format", 404));
-        }
-    } else {
-        subscriptions = req.body.subscriptions;
-    }
-
-    const productData = {
-        ...req.body,
-        user: req.user.id,
-        images: imagePaths,
-        subscriptions // Add the parsed subscriptions here
-    };
-
-    // Delete the subscriptions string from productData to avoid conflicts
-    delete productData.subscriptionsString;
-
-    const product = await Product.create(productData);
-
-    res.status(201).json({
-        success: true,
-        product
-    });
-});
 
 
 // Get All Products ---ADMIN
@@ -169,145 +206,30 @@ exports.getAdminProducts = asyncErrorHandler(async (req, res, next) => {
     });
 });
 
+exports.createProduct = asyncErrorHandler(async (req, res, next) => {
+    let imagePaths = [];
+    if (req.files) {
+        imagePaths = req.files.map(file => file.path);
+    }
 
-// Update Product ---ADMIN
-// exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
-//     let product = await Product.findById(req.params.id);
+    // Directly parse subscriptions if provided in the request
+    let subscriptions = req.body.subscriptions ? JSON.parse(req.body.subscriptions) : [];
 
-//     if (!product) {
-//         return next(new ErrorHandler('Product not found', 404));
-//     }
+    const productData = {
+        ...req.body,
+        user: req.user.id,
+        images: imagePaths,
+        subscriptions: subscriptions // Adding parsed subscriptions here
+    };
 
-//     let imagePaths = [];
-//     if (req.files) {
-//         imagePaths = req.files.map(file => file.path);
-//     }
+    // Create product with the parsed data
+    const product = await Product.create(productData);
 
-//     const productData = {
-//         ...req.body,
-//         images: imagePaths.length > 0 ? imagePaths : product.images
-//     };
-
-//     product = await Product.findByIdAndUpdate(req.params.id, productData, {
-//         new: true,
-//         runValidators: true
-//     });
-
-//     res.status(200).json({
-//         success: true,
-//         product
-//     });
-// });
-
-// exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
-//     let product = await Product.findById(req.params.id);
-
-//     if (!product) {
-//         return next(new ErrorHandler('Product not found', 404));
-//     }
-
-//     let imagePaths = product.images;
-//     if (req.files && req.files.length > 0) {
-//         imagePaths = req.files.map(file => file.path);
-//     }
-
-//     let subscriptions = product.subscriptions;
-//     if (req.body.subscriptions) {
-//         try {
-//             subscriptions = JSON.parse(req.body.subscriptions);
-//         } catch (e) {
-//             return next(new ErrorHandler('Error parsing subscriptions', 400));
-//         }
-//     }
-
-//     const updateData = {
-//         ...req.body,
-//         images: imagePaths,
-//         subscriptions: subscriptions
-//     };
-
-//     product = await Product.findByIdAndUpdate(req.params.id, updateData, {
-//         new: true,
-//         runValidators: true
-//     });
-
-//     res.status(200).json({
-//         success: true,
-//         product
-//     });
-// });
-
-// exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
-//     let product = await Product.findById(req.params.id);
-
-//     if (!product) {
-//         return next(new ErrorHandler('Product not found', 404));
-//     }
-
-//     // Image handling: Replace existing images if new ones are uploaded
-//     let imagePaths = product.images;
-//     if (req.files && req.files.length > 0) {
-//         imagePaths = req.files.map(file => file.path);
-//     }
-
-//     // Parse subscriptions if it's a string to an array of objects
-//     let subscriptions = product.subscriptions;
-//     if (req.body.subscriptions && typeof req.body.subscriptions === 'string') {
-//         try {
-//             subscriptions = JSON.parse(req.body.subscriptions);
-//         } catch (error) {
-//             return next(new ErrorHandler("Invalid 'subscriptions' format", 400));
-//         }
-//     }
-
-//     // Prepare the updated data, ensuring we're not mutating the original product directly
-//     const updateData = {
-//         ...req.body,
-//         images: imagePaths,
-//         subscriptions
-//     };
-
-//     // Update the product in the database
-//     product = await Product.findByIdAndUpdate(req.params.id, updateData, {
-//         new: true,
-//         runValidators: true
-//     });
-
-//     if (!product) {
-//         return next(new ErrorHandler('Product not found', 404));
-//     }
-
-//     res.status(200).json({
-//         success: true,
-//         product
-//     });
-// });
-
-// exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
-//     const { id } = req.params;
-//     let updateData = req.body;
-  
-//     // Handle imagePaths and subscriptions if necessary
-//     if (req.files && req.files.length > 0) {
-//       const imagePaths = req.files.map(file => file.path);
-//       updateData.images = imagePaths;
-//     }
-  
-//     if (typeof updateData.subscriptions === 'string') {
-//       updateData.subscriptions = JSON.parse(updateData.subscriptions);
-//     }
-  
-//     const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
-  
-//     if (!updatedProduct) {
-//       return next(new ErrorHandler('Product not found', 404));
-//     }
-  
-//     res.status(200).json({
-//       success: true,
-//       product: updatedProduct
-//     });
-//   });
+    res.status(201).json({
+        success: true,
+        product
+    });
+});
 
 exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
     const product = await Product.findById(req.params.id);
@@ -315,20 +237,22 @@ exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
       return next(new ErrorHandler('Product not found', 404));
     }
   
-    // Update image handling logic if necessary
-    const imagePaths = req.files.map(file => file.path);
+    let imagePaths = req.files.map(file => file.path);
+    
+    // Parse existing images from the request
+    const existingImages = req.body.existingImages ? JSON.parse(req.body.existingImages) : [];
+    const updatedImagePaths = existingImages.concat(imagePaths);
   
-    // Parse subscriptions if it's a string
-    let subscriptions = req.body.subscriptions;
-    if (typeof subscriptions === 'string') {
-      subscriptions = JSON.parse(subscriptions);
-    }
+    // Directly parse subscriptions if provided in the request
+    let subscriptions = req.body.subscriptions ? JSON.parse(req.body.subscriptions) : product.subscriptions;
   
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
+    const updatedProductData = {
       ...req.body,
-      images: imagePaths, 
-      subscriptions
-    }, { new: true, runValidators: true });
+      images: updatedImagePaths,
+      subscriptions: subscriptions
+    };
+  
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, updatedProductData, { new: true, runValidators: true });
   
     res.status(200).json({
       success: true,

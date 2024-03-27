@@ -1,12 +1,7 @@
-<div *ngIf="isLoading" class="text-center">Loading users...</div>
-<div *ngIf="!isLoading">
-  <ng-container *ngIf="!isEditing && !isAdding; else userFormTemplate">
+<div *ngIf="!isEditingUser">
+  <div *ngIf="isLoading" class="text-center">Loading users...</div>
+  <div *ngIf="!isLoading">
     <div *ngIf="users.length; else noUsersFound">
-      <div class="flex justify-end mb-4">
-        <button (click)="onAdd()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Add User
-        </button>
-      </div>
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
           <tr>
@@ -21,14 +16,14 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
           <tr *ngFor="let user of users">
-            <td class="px-6 py-4 whitespace-nowrap text-center">{{ user.firstName }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-center">{{ user.lastName }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-center">{{ user.email }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-center">{{ user.phoneNumber }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-center">{{ user.address || 'N/A' }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-center">{{ user.role }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ user.firstName }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ user.lastName }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ user.email }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ user.phoneNumber }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ user.address }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ user.role }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <button (click)="onEdit(user)" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
+              <button (click)="onEdit(user)" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit Role</button>
               <button (click)="deleteUser(user._id)" class="text-red-600 hover:text-red-900">Delete</button>
             </td>
           </tr>
@@ -38,46 +33,24 @@
     <ng-template #noUsersFound>
       <div class="text-center">No users found.</div>
     </ng-template>
-  </ng-container>
+  </div>
+</div>
 
-  <ng-template #userFormTemplate>
-    <div class="flex items-center justify-center p-12">
-      <div class="mx-auto w-full max-w-[550px] bg-white p-6 rounded-lg shadow">
-        <h2 class="text-center mb-4">{{ isEditing ? 'Edit User' : 'Add User' }}</h2>
-        <form [formGroup]="isEditing ? userForm : addUserForm" (ngSubmit)="isEditing ? onSubmitEdit() : onSubmitAdd()">
-          <div class="mb-5">
-            <label for="firstName" class="mb-3 block text-base font-medium text-[#07074D]">First Name</label>
-            <input formControlName="firstName" type="text" placeholder="First Name" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-          </div>
-          <div class="mb-5">
-            <label for="lastName" class="mb-3 block text-base font-medium text-[#07074D]">Last Name</label>
-            <input formControlName="lastName" type="text" placeholder="Last Name" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-          </div>
-          <div class="mb-5">
-            <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">Email Address</label>
-            <input formControlName="email" type="email" placeholder="Email" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-          </div>
-          <div class="mb-5">
-            <label for="phoneNumber" class="mb-3 block text-base font-medium text-[#07074D]">Phone Number</label>
-            <input formControlName="phoneNumber" type="text" placeholder="Phone Number" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-          </div>
-          <div class="mb-5">
-            <label for="address" class="mb-3 block text-base font-medium text-[#07074D]">Address</label>
-            <input formControlName="address" type="text" placeholder="Address" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-          </div>
-          <div class="mb-5">
-            <label for="role" class="mb-3 block text-base font-medium text-[#07074D]">Role</label>
-            <select formControlName="role" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-              <option value="admin">Admin</option>
-              <option value="user">User</option>
-            </select>
-          </div>
-          <div class="flex justify-between">
-            <button type="button" (click)="onCancel()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">{{ isEditing ? 'Update' : 'Add' }} User</button>
-          </div>
-        </form>
+<div *ngIf="isEditingUser" class="flex items-center justify-center p-12">
+  <div class="mx-auto w-full max-w-[550px] bg-white p-6 rounded-lg shadow">
+    <h2 class="text-center mb-4">Edit User Role</h2>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="mb-5">
+        <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+        <select formControlName="role" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
       </div>
-    </div>
-  </ng-template>
+      <div class="flex items-center justify-between">
+        <button type="button" (click)="onCancel()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</button>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update Role</button>
+      </div>
+    </form>
+  </div>
 </div>

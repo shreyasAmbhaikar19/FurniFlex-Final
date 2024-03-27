@@ -21,6 +21,8 @@ import { CartComponent } from './Components/cart/cart.component';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
 import { FeedbackComponent } from './Components/feedback/feedback.component';
 import { NotFoundComponent } from './Components/not-found/not-found.component';
+import { ProfileComponent } from './Components/profile/profile.component';
+import { NumberToArrayPipe } from './Pipes/number-to-array.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,6 +37,8 @@ import { NotFoundComponent } from './Components/not-found/not-found.component';
     WishlistComponent,
     FeedbackComponent,
     NotFoundComponent,
+    ProfileComponent,
+    NumberToArrayPipe,
   ],
   imports: [
     BrowserModule,
