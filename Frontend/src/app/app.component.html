@@ -1,5 +1,15 @@
-<div class="flex flex-col justify-between min-h-screen">
+<div class="flex flex-col justify-between min-h-screen bg-gray-50">
   <app-header></app-header>
+
   <router-outlet></router-outlet>
+  
+  <div *ngIf="showLoader" class="loading-spinner-overlay">
+    <div class="flex flex-col h-screen justify-center items-center bg-white">
+      <div class="flex flex-col items-center">
+        <img [src]="loaderGifUrl" alt="Loading...">
+      </div>
+    </div>
+  </div>
+
   <app-footer></app-footer>
 </div>

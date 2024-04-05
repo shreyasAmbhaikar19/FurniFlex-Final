@@ -20,17 +20,18 @@ const CartSchema = new mongoose.Schema({
     duration: Number,
     monthlyPrice: Number,
   },
-  totalPrice: { // New field to store the total price
+  totalPrice: { 
     type: Number,
     required: true
   }
 });
 
 CartSchema.pre('save', function(next) {
-  if (this.subscription && this.subscription.monthlyPrice) {
-    this.totalPrice = this.quantity * this.subscription.monthlyPrice;
+  if (this.subscription && this.subscription.monthlyPrice && this.subscription.duration) {
+    this.totalPrice = this.quantity * this.subscription.monthlyPrice * this.subscription.duration;
   }
   next();
 });
+
 
 module.exports = mongoose.model("Cart", CartSchema);

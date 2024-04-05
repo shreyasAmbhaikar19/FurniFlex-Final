@@ -23,7 +23,7 @@ const routes: Routes = [
   { path: 'carts', component: CartComponent, canActivate: [authGuard] },
   { path: 'wishlist', component: WishlistComponent, canActivate: [authGuard]  },
   { path: 'feedback', component: FeedbackComponent, canActivate: [authGuard]  },
-  { path: 'profile', component: ProfileComponent, canActivate: [authGuard]  },
+  { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'admin', loadChildren: () => import('./Components/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule) },
   { path: '**', component: NotFoundComponent }
 ];

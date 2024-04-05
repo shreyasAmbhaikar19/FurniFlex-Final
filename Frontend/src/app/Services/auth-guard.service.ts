@@ -7,7 +7,7 @@ export const authGuard = (): Observable<boolean | UrlTree> | Promise<boolean | U
   const authService = inject(AuthService);
   const router = inject(Router);
   
-  if (!authService.isLoggedIn()) {
+  if (!authService.isLoggedIn() || authService.getUserRole() !== 'user') {
     return router.parseUrl('/login');
   }
   

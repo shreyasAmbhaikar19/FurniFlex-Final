@@ -43,46 +43,61 @@ exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
 // });
 
 // exports.getSearchPaginatedFilteredProducts = asyncErrorHandler(async (req, res, next) => {
-//     const resultPerPage = Number(req.query.limit) || 4; // Set a default limit
+//     const resultPerPage = Number(req.query.limit) || 4;
 //     const currentPage = Number(req.query.page) || 1;
 
-//     const productsCount = await Product.countDocuments();
-//     const totalPages = Math.ceil(productsCount / resultPerPage);
+//     const keyword = req.query.keyword
+//     ? {
+//           $or: [
+//               { name: { $regex: req.query.keyword, $options: "i" } },
+//               { brand: { $regex: req.query.keyword, $options: "i" } },
+//               { category: { $regex: req.query.keyword, $options: "i" } }
+//           ]
+//       }
+//     : {};
 
-//     const searchFeature = new SearchFeatures(Product.find(), req.query)
-//         .search()
+//     const productCount = await Product.countDocuments({ ...keyword });
+//     const searchFeature = new SearchFeatures(Product.find(keyword), req.query)
 //         .filter()
 //         .pagination(resultPerPage);
 
 //     let products = await searchFeature.query;
+//     let filteredProductsCount = products.length;
 
 //     res.status(200).json({
 //         success: true,
 //         products,
-//         productsCount,
+//         productCount,
 //         resultPerPage,
-//         totalPages,
-//         currentPage
+//         currentPage,
+//         filteredProductsCount,
+//         totalPages: Math.ceil(productCount / resultPerPage),
 //     });
 // });
 
 
 exports.getSearchPaginatedFilteredProducts = asyncErrorHandler(async (req, res, next) => {
-    const resultPerPage = Number(req.query.limit) || 4;
+    const resultPerPage = Number(req.query.limit) || 8;
     const currentPage = Number(req.query.page) || 1;
-    const keyword = req.query.keyword ? {
-        name: {
-            $regex: req.query.keyword,
-            $options: "i",
-        },
-    } : {};
+    const category = req.query.category ? { category: req.query.category } : {};
 
-    const productCount = await Product.countDocuments({ ...keyword });
-    const searchFeature = new SearchFeatures(Product.find(keyword), req.query)
-        .filter()
-        .pagination(resultPerPage);
+    const keyword = req.query.keyword
+        ? {
+            $or: [
+                { name: { $regex: req.query.keyword, $options: "i" } },
+                { brand: { $regex: req.query.keyword, $options: "i" } },
+                { category: { $regex: req.query.keyword, $options: "i" } }
+            ]
+        }
+        : {};
 
-    let products = await searchFeature.query;
+    const productCount = await Product.countDocuments({ ...keyword, ...category });
+
+    const searchFeature = new SearchFeatures(Product.find({ ...keyword, ...category }), req.query)
+    .filter()
+    .pagination(resultPerPage);
+
+    const products = await searchFeature.query;
     let filteredProductsCount = products.length;
 
     res.status(200).json({
@@ -95,6 +110,8 @@ exports.getSearchPaginatedFilteredProducts = asyncErrorHandler(async (req, res, 
         totalPages: Math.ceil(productCount / resultPerPage),
     });
 });
+
+
 
 // Get Product Details
 exports.getSingleProduct = async (req, res, next) => {

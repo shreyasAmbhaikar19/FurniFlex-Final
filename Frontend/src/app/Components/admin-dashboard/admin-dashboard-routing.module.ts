@@ -6,6 +6,7 @@ import { ProductsTabComponent } from './tabs/products/products.component';
 import { UsersComponent } from './tabs/users/users.component';
 import { OrdersComponent } from './tabs/orders/orders.component';
 import { adminGuard } from '../../Services/auth-guard.service';
+import { CategoriesComponent } from './tabs/categories/categories.component';
 
 const adminRoutes: Routes = [
   {
@@ -16,6 +17,7 @@ const adminRoutes: Routes = [
       { path: '', redirectTo: 'products', pathMatch: 'full' },
       { path: 'products', component: ProductsTabComponent, canActivate: [adminGuard] },
       { path: 'users', component: UsersComponent, canActivate: [adminGuard] },
+      { path: 'categories', component: CategoriesComponent, canActivate: [adminGuard] },
       { path: 'orders', component: OrdersComponent, canActivate: [adminGuard] },
     ]
   }

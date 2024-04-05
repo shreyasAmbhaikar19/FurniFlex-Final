@@ -1,6 +1,6 @@
-<section class="py-12 sm:py-16 mt-12">
+<!-- <section class="py-12 sm:py-16 mt-12">
   <div class="container mx-auto px-4">
-    <!-- Breadcrumb navigation -->
+ 
     <nav class="flex mb-8"> 
       <ol role="list" class="flex items-center">
         <li>
@@ -17,20 +17,20 @@
 
     <div class="grid grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
       <div class="lg:col-span-2">
-        <!-- Main product image -->
+       
         <img [src]="getImageUrl(product?.images[0])" alt="{{product?.name}}" class="rounded-lg" />
       </div>
 
       <div class="lg:col-span-3">
         <h1 class="text-2xl font-bold text-gray-900">{{product?.name}}</h1>
         <p class="mt-4">{{product?.description}}</p>
-        <!-- Quantity Counter -->
+     
         <div class="mt-8 flex items-center">
           <button (click)="decreaseQuantity()" class="px-2 py-1 text-lg font-semibold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-l">-</button>
           <input type="text" [(ngModel)]="quantity" class="w-12 text-center border-t border-b border-gray-300" readonly>
           <button (click)="increaseQuantity()" class="px-2 py-1 text-lg font-semibold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-r">+</button>
         </div>
-        <!-- Subscription Options -->
+      
         <h2 class="mt-8 text-base text-gray-900">Choose Subscription</h2>
         <div class="mt-3 flex select-none flex-wrap items-center gap-1">
           <ng-container *ngFor="let subscription of product?.subscriptions">
@@ -42,12 +42,12 @@
             </label>
           </ng-container>
         </div>
-        <!-- Display the monthly price for the selected subscription -->
+      
         <div class="flex items-end mt-4" *ngIf="selectedSubscriptionMonthlyPrice">
           <h1 class="text-3xl font-bold">₹{{selectedSubscriptionMonthlyPrice}}</h1>
           <span class="text-base">/month</span>
         </div>
-        <!-- Action Buttons -->
+      
         <div class="mt-8 flex gap-4">
           <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500" (click)="addToCart()">Add to Cart</button>
         </div>
@@ -56,4 +56,169 @@
   </div>
 </section>
 
+ -->
 
+
+ <!-- <section class="py-12 sm:py-16">
+  <div class="container mx-auto px-4">
+    <nav class="flex mb-8">
+      <ol class="flex items-center">
+        <li class="text-left">
+          <div class="-m-1">
+            <a href="/" class="rounded-md p-1 text-sm font-medium text-gray-600 hover:text-gray-900">Home</a>
+          </div>
+        </li>
+        <li class="text-left">
+          <div class="flex items-center">
+            <span class="mx-2 text-gray-400">/</span>
+            <div class="-m-1">
+              <a href="/products" class="rounded-md p-1 text-sm font-medium text-gray-600 hover:text-gray-900">Products</a>
+            </div>
+          </div>
+        </li>
+        <li class="text-left">
+          <div class="flex items-center">
+            <span class="mx-2 text-gray-400">/</span>
+            <div class="-m-1">
+              <a href="#" class="rounded-md p-1 text-sm font-medium text-gray-600 hover:text-gray-900" aria-current="page">{{product?.name}}</a>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-3 lg:row-end-1">
+        <div class="lg:flex lg:items-start">
+          <div class="lg:order-2 lg:ml-5">
+            <div class="max-w-xl overflow-hidden rounded-lg">
+              <img [src]="getImageUrl(product?.images[0])" alt="{{product?.name}}" class="h-full w-full max-w-full object-cover" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2 lg:row-span-2 lg:row-end-2">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{product?.name}}</h1>
+        <div class="mt-4">{{product?.description}}</div>
+        <div class="mt-8 flex items-center">
+          <button (click)="decreaseQuantity()" class="px-2 py-1 text-lg font-semibold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-l">-</button>
+          <input type="text" [(ngModel)]="quantity" class="w-12 text-center border-t border-b border-gray-300" readonly>
+          <button (click)="increaseQuantity()" class="px-2 py-1 text-lg font-semibold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-r">+</button>
+        </div>
+      
+        <h2 class="mt-8 text-base text-gray-900">Choose Subscription</h2>
+        <div class="mt-3 flex select-none flex-wrap items-center gap-1">
+          <ng-container *ngFor="let subscription of product?.subscriptions">
+            <label class="cursor-pointer">
+              <input type="radio" name="subscription" [(ngModel)]="selectedSubscriptionId" [value]="product._id" class="peer sr-only" (change)="ngOnChanges()" />
+              <div class="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
+                {{subscription.duration}} Month{{subscription.duration > 1 ? 's' : ''}} - ₹{{selectedSubscriptionMonthlyPrice}}/mo
+              </div>
+            </label>
+          </ng-container>
+        </div>
+      
+        <div class="flex items-end mt-4" *ngIf="selectedSubscriptionMonthlyPrice">
+          <h1 class="text-3xl font-bold">₹{{selectedSubscriptionMonthlyPrice}}</h1>
+          <span class="text-base">/month</span>
+        </div>
+
+        <div class="mt-8">
+          <button type="button" (click)="addToCart()" class="inline-flex items-center justify-center rounded-md bg-gray-900 px-12 py-3 text-base font-bold text-white hover:bg-gray-800">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+
+<section class="py-12 sm:py-16">
+  <div class="container mx-auto py-16 px-4">
+    <nav class="flex mb-8">
+      <ol class="flex items-center">
+        <li class="text-left">
+          <div class="-m-1">
+            <a routerLink="/" class="rounded-md p-1 text-sm font-medium text-gray-600 hover:text-gray-900">Home</a>
+          </div>
+        </li>
+        <li class="text-left">
+          <div class="flex items-center">
+            <span class="mx-2 text-gray-400">/</span>
+            <div class="-m-1">
+              <a routerLink="/products" class="rounded-md p-1 text-sm font-medium text-gray-600 hover:text-gray-900">Rent</a>
+            </div>
+          </div>
+        </li>
+        <li class="text-left">
+          <div class="flex items-center">
+            <span class="mx-2 text-gray-400">/</span>
+            <div class="-m-1">
+              <a href="#" class="rounded-md p-1 text-sm font-medium text-gray-600 hover:text-gray-900" aria-current="page">{{product?.name}}</a>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
+      <div class="lg:col-span-3 lg:row-end-1">
+        <div class="lg:flex lg:items-start">
+          <div class="lg:order-2 lg:ml-5">
+            <div class="lg:order-2 lg:ml-5 max-w-xl overflow-hidden rounded-lg">
+              <img [src]="mainImageUrl" alt="{{product?.name}}" class="h-full w-full max-w-full object-cover" />
+            </div>
+          </div>
+          <div class="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
+            <div class="flex flex-row items-start lg:flex-col">
+              <button *ngFor="let image of product?.images" type="button" class="flex-0 aspect-square mb-3 mr-3 h-20 overflow-hidden rounded-lg text-center" (click)="updateMainImage(image)">
+                <img [src]="getImageUrl(image)" alt="Thumbnail of {{product?.name}}" class="h-full w-full object-cover" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2 lg:row-span-2 lg:row-end-2">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{{product?.name}}</h1>
+        <div class="mt-4">{{product?.description}}</div>
+        <div class="mt-8 flex items-center">
+          <button (click)="decreaseQuantity()" class="px-2 py-1 text-lg font-semibold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-l">-</button>
+          <input type="text" [(ngModel)]="quantity" class="w-12 text-center border-t border-b border-gray-300" readonly>
+          <button (click)="increaseQuantity()" class="px-2 py-1 text-lg font-semibold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-r">+</button>
+        </div>
+      
+        <h2 class="mt-8 text-base text-gray-900">Choose Subscription</h2>
+        <div class="mt-3 flex select-none flex-wrap items-center gap-4">
+          <ng-container *ngFor="let subscription of product?.subscriptions; let i = index">
+            <label class="cursor-pointer">
+              <input type="radio" name="subscription" [(ngModel)]="selectedSubscriptionId" [value]="subscription._id" 
+                    class="peer sr-only" (change)="updateSubscription(subscription)" [checked]="i === 0" />
+              <div class="peer-checked:bg-black peer-checked:text-white rounded-lg border border-black px-6 py-2 font-bold">
+                {{subscription.duration}} Month{{subscription.duration > 1 ? 's' : ''}} - ₹{{subscription.monthlyPrice}}/mo
+              </div>
+            </label>
+          </ng-container>
+        </div>
+      
+        <div class="flex items-end mt-4" *ngIf="selectedSubscriptionMonthlyPrice">
+          <h1 class="text-3xl font-bold">₹{{selectedSubscriptionMonthlyPrice}}</h1>
+          <span class="text-base">/month</span>
+        </div>
+        
+        <div class="mt-8">
+          <button type="button" (click)="addToCart()" class="inline-flex items-center justify-center rounded-md bg-gray-900 px-12 py-3 text-base font-bold text-white hover:bg-gray-800">
+            Add to Cart
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+            </svg>
+            
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -3,6 +3,7 @@ const asyncErrorHandler = require('../middlewares/asyncErrorHandler');
 const ErrorHandler = require('../utils/errorHandler');
 const sendToken = require('../utils/sendToken');
 const sendEmail = require('../utils/sendEmail');
+const SearchFeatures = require('../utils/searchFeatures');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs')
 
@@ -134,48 +135,31 @@ exports.resetPassword = asyncErrorHandler(async (req, res, next) => {
 
 // Update Password
 exports.updatePassword = asyncErrorHandler(async (req, res, next) => {
+    const { currentPassword, newPassword } = req.body;
 
     const user = await User.findById(req.user.id).select("+password");
 
-    const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
+    const isPasswordMatched = await user.comparePassword(currentPassword);
 
-    if(!isPasswordMatched) {
-        return next(new ErrorHandler("Old Password is Invalid", 400));
+    if (!isPasswordMatched) {
+        return next(new ErrorHandler("Current Password is Invalid", 400));
     }
 
-    user.password = req.body.newPassword;
+    user.password = newPassword;
     await user.save();
     sendToken(user, 201, res);
 });
 
-
 // Update User Profile
 exports.updateProfile = asyncErrorHandler(async (req, res, next) => {
 
-    const newUserData = {
+    const newUserData = {   
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
+        phoneNumber: req.body.phoneNumber,
+        address: req.body.address,
     }
-
-    // if(req.body.avatar !== "") {
-    //     const user = await User.findById(req.user.id);
-
-    //     const imageId = user.avatar.public_id;
-
-    //     await cloudinary.v2.uploader.destroy(imageId);
-
-    //     const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    //         folder: "avatars",
-    //         width: 150,
-    //         crop: "scale",
-    //     });
-
-    //     newUserData.avatar = {
-    //         public_id: myCloud.public_id,
-    //         url: myCloud.secure_url,
-    //     }
-    // }
 
     await User.findByIdAndUpdate(req.user.id, newUserData, {
         new: true,
@@ -191,13 +175,36 @@ exports.updateProfile = asyncErrorHandler(async (req, res, next) => {
 // ADMIN DASHBOARD
 
 // Get All Users --ADMIN
-exports.getAllUsers = asyncErrorHandler(async (req, res, next) => {
+exports.getPaginatedFilteredUsers = asyncErrorHandler(async (req, res, next) => {
+    const resultPerPage = Number(req.query.limit) || 5;
+    const currentPage = Number(req.query.page) || 1;
+    const keyword = req.query.keyword
+        ? {
+              $or: [
+                  { firstName: { $regex: req.query.keyword, $options: "i" } },
+                  { lastName: { $regex: req.query.keyword, $options: "i" } },
+                  { email: { $regex: req.query.keyword, $options: "i" } },
+                  { role: { $regex: req.query.keyword, $options: "i" } }
+              ]
+          }
+        : {};
 
-    const users = await User.find();
+    const userCount = await User.countDocuments({ ...keyword });
+    const searchFeature = new SearchFeatures(User.find(keyword), req.query)
+        .filter()
+        .pagination(resultPerPage);
+
+    let users = await searchFeature.query;
+    let filteredUsersCount = users.length;
 
     res.status(200).json({
         success: true,
         users,
+        userCount,
+        resultPerPage,
+        currentPage,
+        filteredUsersCount,
+        totalPages: Math.ceil(userCount / resultPerPage),
     });
 });
 
@@ -249,25 +256,5 @@ exports.deleteUser = asyncErrorHandler(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: 'User deleted successfully',
-    });
-});
-
-// Update User Profile
-exports.updateProfile = asyncErrorHandler(async (req, res, next) => {
-
-    const newUserData = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-    }
-
-    await User.findByIdAndUpdate(req.user.id, newUserData, {
-        new: true,
-        runValidators: true,
-        useFindAndModify: true,
-    });
-
-    res.status(200).json({
-        success: true,
     });
 });

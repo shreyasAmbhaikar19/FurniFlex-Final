@@ -28,18 +28,31 @@ export class ProductService {
     return this.http.get(`${this.baseUrl}product/${id}`);
   }
 
-  // Update the methods to include page and limit parameters
-searchProducts(keyword: string, page: number, limit: number): Observable<any> {
-  let query = `products?page=${page}&limit=${limit}`;
-  if (keyword) {
-    query += `&keyword=${keyword}`;
-  }
-  return this.http.get(`${this.baseUrl}${query}`);
-}
+  // // Update the methods to include page and limit parameters
+  // searchProducts(keyword: string, page: number, limit: number): Observable<any> {
+  //   let query = `products?page=${page}&limit=${limit}`;
+  //   if (keyword) {
+  //     query += `&keyword=${keyword}`;
+  //   }
+  //   return this.http.get(`${this.baseUrl}${query}`);
+  // }
 
-getPaginatedProducts(page: number, limit: number): Observable<any> {
-  return this.http.get(`${this.baseUrl}products?page=${page}&limit=${limit}`);
-}
+  searchProducts(keyword: string, page: number, limit: number): Observable<any> {
+    let query = `products?page=${page}&limit=${limit}`;
+    if (keyword) {
+      query += `&keyword=${keyword}`;
+    }
+    return this.http.get(`${this.baseUrl}${query}`);
+  }
+
+  getProductsByCategory(category: string, page: number, limit: number): Observable<any> {
+    let query = `products?category=${category}&page=${page}&limit=${limit}`;
+    return this.http.get(`${this.baseUrl}${query}`);
+  }
+
+  getPaginatedProducts(page: number, limit: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}products?page=${page}&limit=${limit}`);
+  }
 
   updateProductAdmin(productId: string, productData: FormData): Observable<any> {
     return this.http.put(`${this.baseUrl}admin/product/${productId}`, productData, {

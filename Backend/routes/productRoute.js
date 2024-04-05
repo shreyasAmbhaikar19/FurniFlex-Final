@@ -11,11 +11,11 @@ router.route('/product/:id').get(getSingleProduct);
 
 // router.route('/review').put(isAuthenticatedUser, createProductReview);
 
-router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles("admin"), upload, createProduct);
+router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles("admin"), upload.array('images', 10), createProduct);
 router.route('/admin/products').get(isAuthenticatedUser, authorizeRoles("admin"), getAdminProducts);
 
 router.route('/admin/product/:id')
-  .put(isAuthenticatedUser, authorizeRoles("admin"), upload, updateProduct)
+  .put(isAuthenticatedUser, authorizeRoles("admin"), upload.array('images', 10), updateProduct)
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteProduct);
 
 // router.route('/admin/product/:productId/reviews')

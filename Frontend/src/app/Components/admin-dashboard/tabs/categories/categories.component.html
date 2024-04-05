@@ -1,0 +1,153 @@
+<!-- <div *ngIf="isLoading" class="text-center">Loading categories...</div>
+<div *ngIf="!isLoading">
+  <div *ngIf="!isEditingCategory">
+    <div *ngIf="categories.length; else noCategoriesFound" class="overflow-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let category of categories">
+            <td class="px-6 py-4 whitespace-nowrap">{{ category.name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ category.description }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <img [src]="category.image" alt="Category Image" class="h-10 w-10 rounded-full">
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <button (click)="onEdit(category)" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
+              <button (click)="onDelete(category._id)" class="text-red-600 hover:text-red-900">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noCategoriesFound>
+      <div class="text-center">No categories found.</div>
+    </ng-template>
+  </div>
+
+  <div *ngIf="isEditingCategory" class="flex items-center justify-center p-12">
+ 
+  </div>
+</div> -->
+
+
+<!-- <div class="mx-auto max-w-screen-lg px-4 py-8 sm:px-8">
+  <div class="flex justify-end pb-6">
+    <div class="flex items-end">
+      <button class="flex items-end gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75" />
+        </svg>
+        Add Category
+      </button>
+    </div>
+  </div>
+  <div class="overflow-auto rounded-lg border">
+    <table class="min-w-full">
+      <thead>
+        <tr class="bg-blue-600 text-left text-xs font-semibold uppercase tracking-widest text-white">
+          <th class="px-5 py-3">Name</th> 
+          <th class="px-5 py-3">Image</th>
+          <th class="px-5 py-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-500">
+        <tr *ngFor="let category of categories">
+          <td class="border-b border-gray-200 bg-white px-5 py-4 whitespace-no-wrap">{{ category.name }}</td>
+          <td class="border-b border-gray-200 bg-white px-5 py-4 whitespace-no-wrap">
+            <img [src]="category.image" alt="Category Image" class="h-10 w-10 rounded-full">
+          </td>
+          <td class="flex justify-start border-gray-200 bg-white px-5 py-4 whitespace-no-wrap text-right">
+            <button (click)="onDelete(category._id)" class="text-red-600 hover:text-red-900"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
+            </svg></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="categories.length === 0" class="text-center px-5 py-4 bg-white">No categories found.</div>
+  </div>
+</div>
+ -->
+
+
+<div *ngIf="isLoading">Loading categories...</div>
+<div *ngIf="!isLoading">
+  <ng-container *ngIf="!isAddMode; else AddCategoryForm">
+    <div class=" px-4 py-2 sm:px-8">
+      <div class="flex items-center justify-end pb-3">
+        <button (click)="prepareAddCategory()" class="ml-4 flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:outline-none focus:ring hover:bg-blue-700">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          Add Category
+        </button>
+      </div>
+      <div class="overflow-y-hidden rounded-lg border">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-blue-600 text-left text-xs font-semibold uppercase tracking-widest text-white">
+              <tr>
+                <th class="px-5 py-3">Image</th>
+                <th class="px-5 py-3">Name</th>
+                <th class="px-5 py-3">Action</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-500">
+              <tr *ngFor="let category of categories">
+                <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                  <img [src]="getImageUrl(category.image)" alt="{{category.name}}" class="h-14 w-14 object-cover rounded-full">
+                </td>
+                <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                  {{ category.name }}
+                </td>
+                <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                  <button (click)="onDelete(category._id)" class="text-red-600 hover:text-red-900 ml-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                    <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
+                  </svg></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #noCategories>
+    <div>No products found.</div>
+  </ng-template>
+
+  <ng-template #AddCategoryForm>
+    <div class="flex items-center justify-center p-12 mb-20">
+      <div class="mx-auto w-full max-w-[550px]">
+        <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+          <div class="mb-5">
+            <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">Name</label>
+            <input id="name" formControlName="name" type="text" placeholder="Name" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+          </div>
+
+          <div class="mb-5">
+            <label for="images" class="mb-3 block text-base font-medium text-[#07074D]">Image</label>
+            <input id="images" type="file" (change)="handleFileInput($event)" name="images" multiple class="w-full rounded-md border py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+          </div>
+
+          <div class="flex justify-between">
+            <button type="button" (click)="cancelAdding()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+              Cancel
+            </button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Add Category
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>  
+</div>

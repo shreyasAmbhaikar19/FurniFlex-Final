@@ -23,6 +23,8 @@ import { FeedbackComponent } from './Components/feedback/feedback.component';
 import { NotFoundComponent } from './Components/not-found/not-found.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { NumberToArrayPipe } from './Pipes/number-to-array.pipe';
+import { CarouselComponent } from './Components/carousel/carousel.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,6 +41,7 @@ import { NumberToArrayPipe } from './Pipes/number-to-array.pipe';
     NotFoundComponent,
     ProfileComponent,
     NumberToArrayPipe,
+    CarouselComponent,
   ],
   imports: [
     BrowserModule,

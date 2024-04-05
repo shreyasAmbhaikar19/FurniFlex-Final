@@ -337,7 +337,7 @@
 
 
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ProductService } from '../../../../Services/products.service'; 
 import { Product } from '../../../../Models/product';
@@ -347,7 +347,7 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.css']
+  styleUrls: ['./products.component.css'], 
 })
 export class ProductsTabComponent implements OnInit {
   isLoading: boolean = true;
@@ -375,8 +375,8 @@ export class ProductsTabComponent implements OnInit {
   ngOnInit(): void {
     this.loadProducts();
      this.searchTerms.pipe(
-      debounceTime(500),        // Wait for 500ms pause in events
-      distinctUntilChanged()   // Ignore if next search term is same as previous
+      debounceTime(500),      
+      distinctUntilChanged()  
     ).subscribe(keyword => {
       this.keyword = keyword;
       this.loadProducts(true);
@@ -458,7 +458,7 @@ export class ProductsTabComponent implements OnInit {
     const files: FileList = event.target.files;
     this.selectedFiles = Array.from(files);
   
-    Array.from(files).forEach((file: File) => { // Explicitly typing `file` as `File`
+    Array.from(files).forEach((file: File) => { 
       const reader = new FileReader();
       reader.onload = (e: any) => this.imagePreviews.push(e.target.result as string); // Assuring `e.target.result` is a string
       reader.readAsDataURL(file);

@@ -42,16 +42,34 @@ export class AuthService {
     return this.cookieService.get('token');
   }
 
+  isLoggedIn(): boolean {
+    return this.getToken() !== '';
+  }
+
+  // getToken(): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     setTimeout(() => {
+  //       const token = this.cookieService.get('token');
+  //       if (token) {
+  //         resolve(token);
+  //       } else {
+  //         reject('Token not found');
+  //       }
+  //     }, 100); 
+  //   });
+  // }
+
+  // isLoggedIn(): boolean {
+  //   const token = this.cookieService.get('token');
+  //   return !!token; 
+  // }
+
   saveUserRole(role: string) {
     this.cookieService.set('userRole', role);
   }
 
   getUserRole(): string {
     return this.cookieService.get('userRole');
-  }
-
-  isLoggedIn(): boolean {
-    return this.getToken() !== '';
   }
 
   logout() {
@@ -61,3 +79,4 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 }
+

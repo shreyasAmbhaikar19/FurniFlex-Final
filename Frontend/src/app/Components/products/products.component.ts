@@ -306,13 +306,171 @@
 
 
 
+// import { Component, OnInit } from '@angular/core';
+// import { ProductService } from '../../Services/products.service';
+// import { WishlistService } from '../../Services/wishlist.service';
+// import { Product } from '../../Models/product';
+// import { Router } from '@angular/router';
+// import { Subject } from 'rxjs';
+// import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+// import { CategoryService } from '../../Services/category.service';
+
+// @Component({
+//   selector: 'app-products',
+//   templateUrl: './products.component.html',
+//   styleUrls: ['./products.component.css']
+// })
+// export class ProductsComponent implements OnInit {
+//   products: Product[] = [];
+//   categories: any[] = [];
+//   addedToWishlist: { [key: string]: boolean } = {};
+//   baseUrl: string = 'http://localhost:3000/';
+//   keyword: string = '';
+//   totalPages: number = 0;
+//   currentPage: number = 1;
+//   limit: number = 4; 
+//   paginationNumbers: number[] = [];
+//   private searchTerms = new Subject<string>();
+
+//   constructor(private productService: ProductService, 
+//               private wishlistService: WishlistService, 
+//               private categoryService: CategoryService,
+//               private router: Router) { }
+
+//   ngOnInit(): void {
+//     this.fetchProducts();
+//     this.checkWishlistStatus(); 
+//     this.setupSearch();
+//     this.fetchCategories();
+//   }
+
+//   setupSearch(): void {
+//     this.searchTerms.pipe(
+//       debounceTime(500),       
+//       distinctUntilChanged() 
+//     ).subscribe(keyword => {
+//       this.keyword = keyword;
+//       this.onSearch();
+//     });
+//   }
+
+//   search(term: string): void {
+//     this.searchTerms.next(term);
+//   } 
+  
+//   fetchProducts(): void {
+//     const fetchObservable = this.keyword.trim() ?
+//     this.productService.searchProducts(this.keyword, this.currentPage, this.limit) :
+//     this.productService.getPaginatedProducts(this.currentPage, this.limit);
+
+//     fetchObservable.subscribe({
+//       next: (data) => {
+//         this.products = data.products;
+//         this.totalPages = data.totalPages;
+//         this.updatePaginationNumbers();
+//         this.products = this.products.map((product: any) => ({
+//           ...product,
+//           images: product.images.map((image: string) => 'http://localhost:3000/' + image.replace(/\\/g, '/')),
+//           subscriptions: product.subscriptions.length ? product.subscriptions : [{ monthlyPrice: 'N/A', duration: 'N/A' }]
+//         }));
+//       },
+//       error: (error) => console.error('Error fetching products:', error)
+//     });
+//   }
+
+//   fetchCategories(): void {
+//     this.categoryService.getAllCategories().subscribe({
+//       next: (data) => {
+//         this.categories = data.categories;
+//       },
+//       error: (error) => {
+//         console.error('Error fetching categories:', error);
+//       }
+//     });
+//   }
+
+//   updatePaginationNumbers(): void {
+//     this.paginationNumbers = Array.from({ length: this.totalPages }, (_, index) => index + 1);
+//   }
+  
+//   onSearch(): void {
+//     this.currentPage = 1; // Reset to the first page on new search
+//     this.fetchProducts();
+//   }
+
+//   changePage(page: number): void {
+//     if (page < 1 || page > this.totalPages) {
+//       return; // Out of range
+//     }
+//     this.currentPage = page;
+//     this.fetchProducts();
+//   }
+
+//   getImageUrl(images: string[]): string {
+//     return images && images.length > 0 ? images[0] : 'path/to/your/default/image.jpg';
+//   }
+
+//   getCategoryImageUrl(image: string): string {
+//     if (image) {
+//       const correctedPath = image.replace(/\\/g, '/');
+//       return `${this.baseUrl}${correctedPath}`;
+//     }
+//     return 'https://via.placeholder.com/150';
+//   }
+
+//   viewProduct(productId: string): void {
+//     this.router.navigate(['/product', productId]);
+//   }
+
+//   checkWishlistStatus(): void {
+//     this.wishlistService.getWishlist().subscribe({
+//       next: (response) => {
+//         response.wishlist.forEach((item: any) => {
+//           this.addedToWishlist[item.product._id] = true;
+//         });
+//       },
+//       error: (error) => {
+//         console.error('Error fetching wishlist:', error);
+//       }
+//     });
+//   }
+
+//   addToWishlist(productId: string): void {
+//     this.wishlistService.addToWishlist(productId).subscribe({
+//       next: () => {
+//         this.addedToWishlist[productId] = true;
+//         alert('Product added to your wishlist!');
+//       },
+//       error: () => {
+//         alert('Failed to add product to wishlist. Please try again.');
+//       },
+//     });
+//   }
+
+//   removeFromWishlist(productId: string): void {
+//     this.wishlistService.removeFromWishlist(productId).subscribe({
+//       next: () => {
+//         this.addedToWishlist[productId] = false;
+//         alert('Product removed from your wishlist!');
+//       },
+//       error: () => {
+//         alert('Failed to remove product from wishlist. Please try again.');
+//       },
+//     });
+//   }
+// }
+
+
+
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../Services/products.service';
 import { WishlistService } from '../../Services/wishlist.service';
 import { Product } from '../../Models/product';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { CategoryService } from '../../Services/category.service';
+import { initFlowbite } from 'flowbite';
 
 @Component({
   selector: 'app-products',
@@ -321,29 +479,34 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class ProductsComponent implements OnInit {
   products: Product[] = [];
+  categories: any[] = [];
   addedToWishlist: { [key: string]: boolean } = {};
   baseUrl: string = 'http://localhost:3000/';
+  selectedCategory: string = ''; 
   keyword: string = '';
   totalPages: number = 0;
   currentPage: number = 1;
-  limit: number = 4; 
+  limit: number = 8; 
   paginationNumbers: number[] = [];
   private searchTerms = new Subject<string>();
 
   constructor(private productService: ProductService, 
               private wishlistService: WishlistService, 
+              private categoryService: CategoryService,
               private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
+    initFlowbite();
     this.fetchProducts();
     this.checkWishlistStatus(); 
     this.setupSearch();
+    this.fetchCategories();
   }
 
   setupSearch(): void {
     this.searchTerms.pipe(
-      debounceTime(300),       // wait 300ms after each keystroke before considering the term
-      distinctUntilChanged()   // ignore if next search term is same as previous
+      debounceTime(500),       
+      distinctUntilChanged() 
     ).subscribe(keyword => {
       this.keyword = keyword;
       this.onSearch();
@@ -354,11 +517,37 @@ export class ProductsComponent implements OnInit {
     this.searchTerms.next(term);
   } 
   
-  fetchProducts(): void {
-    const fetchObservable = this.keyword.trim() ?
-    this.productService.searchProducts(this.keyword, this.currentPage, this.limit) :
-    this.productService.getPaginatedProducts(this.currentPage, this.limit);
+  // fetchProducts(): void {
+  //   const fetchObservable = this.keyword.trim() ?
+  //   this.productService.searchProducts(this.keyword, this.currentPage, this.limit, this.selectedCategory) :
+  //   this.productService.getPaginatedProducts(this.currentPage, this.limit);
 
+  //   fetchObservable.subscribe({
+  //     next: (data) => {
+  //       this.products = data.products;
+  //       this.totalPages = data.totalPages;
+  //       this.updatePaginationNumbers();
+  //       this.products = this.products.map((product: any) => ({
+  //         ...product,
+  //         images: product.images.map((image: string) => 'http://localhost:3000/' + image.replace(/\\/g, '/')),
+  //         subscriptions: product.subscriptions.length ? product.subscriptions : [{ monthlyPrice: 'N/A', duration: 'N/A' }]
+  //       }));
+  //     },
+  //     error: (error) => console.error('Error fetching products:', error)
+  //   });
+  // }
+
+  fetchProducts(): void {
+    let fetchObservable: Observable<any>;
+    if (this.selectedCategory) {
+      fetchObservable = this.productService.getProductsByCategory(this.selectedCategory, this.currentPage, this.limit);
+      this.selectedCategory = ''; 
+    } else {
+      fetchObservable = this.keyword.trim() ?
+        this.productService.searchProducts(this.keyword, this.currentPage, this.limit) :
+        this.productService.getPaginatedProducts(this.currentPage, this.limit);
+    }
+  
     fetchObservable.subscribe({
       next: (data) => {
         this.products = data.products;
@@ -373,12 +562,24 @@ export class ProductsComponent implements OnInit {
       error: (error) => console.error('Error fetching products:', error)
     });
   }
+
+  fetchCategories(): void {
+    this.categoryService.getAllCategories().subscribe({
+      next: (data) => {
+        this.categories = data.categories;
+      },
+      error: (error) => {
+        console.error('Error fetching categories:', error);
+      }
+    });
+  }
+
   updatePaginationNumbers(): void {
     this.paginationNumbers = Array.from({ length: this.totalPages }, (_, index) => index + 1);
   }
   
   onSearch(): void {
-    this.currentPage = 1; // Reset to the first page on new search
+    this.currentPage = 1; 
     this.fetchProducts();
   }
 
@@ -392,6 +593,14 @@ export class ProductsComponent implements OnInit {
 
   getImageUrl(images: string[]): string {
     return images && images.length > 0 ? images[0] : 'path/to/your/default/image.jpg';
+  }
+
+  getCategoryImageUrl(image: string): string {
+    if (image) {
+      const correctedPath = image.replace(/\\/g, '/');
+      return `${this.baseUrl}${correctedPath}`;
+    }
+    return 'https://via.placeholder.com/150';
   }
 
   viewProduct(productId: string): void {
@@ -433,5 +642,17 @@ export class ProductsComponent implements OnInit {
         alert('Failed to remove product from wishlist. Please try again.');
       },
     });
+  }
+
+   // Method to filter products by category
+  //  filterByCategory(categoryName: string): void {
+  //   this.selectedCategory = categoryName;
+  //   this.fetchProducts();
+  // }
+
+  // Method to filter products by category
+  filterByCategory(categoryName: string): void {
+    this.selectedCategory = categoryName;
+    this.fetchProducts();
   }
 }

@@ -29,9 +29,10 @@ export class LoginComponent implements OnInit {
       this.authService.login(this.loginForm.value.email, this.loginForm.value.password)
         .subscribe({
           next: (response: any) => {
+            console.log(response);
             this.authService.saveToken(response.token);
             this.authService.saveUserRole(response.user.role);
-  
+            
             if (response.user.role === 'admin') {
               this.router.navigate(['/admin']);
             } else {
@@ -43,5 +44,4 @@ export class LoginComponent implements OnInit {
         });
     }
   }
-  
 }

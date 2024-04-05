@@ -8,6 +8,7 @@ import { AdminDashboardComponent } from './admin-dashboard.component';
 import { ProductsTabComponent } from './tabs/products/products.component';
 import { UsersComponent } from './tabs/users/users.component';
 import { OrdersComponent } from './tabs/orders/orders.component';
+import { CategoriesComponent } from './tabs/categories/categories.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { OrdersComponent } from './tabs/orders/orders.component';
     ProductsTabComponent,
     UsersComponent,
     OrdersComponent,
+    CategoriesComponent,
   ],
   imports: [
     CommonModule,
