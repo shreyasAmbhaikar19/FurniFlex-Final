@@ -1,467 +1,3 @@
-// // src/app/components/products.component.ts
-// import { Component, OnInit } from '@angular/core';
-// import { ProductService } from '../../Services/products.service';
-// import { WishlistService } from '../../Services/wishlist.service';
-// import { Product } from '../../Models/product';
-// import { Router } from '@angular/router';
-
-// @Component({
-//   selector: 'app-products',
-//   templateUrl: './products.component.html',
-//   styleUrls: ['./products.component.css']
-// })
-// export class ProductsComponent implements OnInit {
-//   products: Product[] = [];
-//   addedToWishlist: { [key: string]: boolean } = {};
-//   baseUrl: string = 'http://localhost:3000/';
-//   keyword: string = '';
-//   price:any;
-
-//   constructor( private productService: ProductService, 
-//     private wishlistService: WishlistService, 
-//     private router: Router) { }
-
-//   ngOnInit(): void {
-//     this.fetchProducts();
-//     this.checkWishlistStatus(); 
-//   }
-
-//   fetchProducts(): void {
-//     const fetchObservable = this.keyword.trim() ?
-//       this.productService.searchProducts(this.keyword) :
-//       this.productService.getAllProducts();
-
-//     fetchObservable.subscribe(data => {
-//       const fetchedProducts = 'success' in data ? data.products : data; 
-//       console.log(fetchedProducts);
-      
-//       // this.price=JSON.parse(fetchedProducts.subscription);
-//       this.products = fetchedProducts.map((product: Product) => ({
-//         ...product,
-//         images: product.images.map((image: string) => this.baseUrl + image.replace(/\\/g, '/'))
-//       }));
-//       for(let i=0;i<this.products.length;i++){
-//         this.products[i].subscriptions=JSON.parse(this.products[i].subscriptions)
-//         console.log(this.products[i].subscriptions);
-//       }
-//     });
-//   }
-
-//   onSearch(): void {
-//     this.fetchProducts();
-//   }
-
-//   getImageUrl(images: string[]): string {
-//     return images && images.length > 0 ? images[0] : 'path/to/your/default/image.jpg';
-//   }
-
-//   viewProduct(productId: string): void {
-//     this.router.navigate(['/product', productId]);
-//   }
-
-//   checkWishlistStatus(): void {
-//     this.wishlistService.getWishlist().subscribe({
-//       next: (response) => {
-//         response.wishlist.forEach((item: any) => {
-//           this.addedToWishlist[item.product._id] = true;
-//         });
-//       },
-//       error: (error) => {
-//         console.error('Error fetching wishlist:', error);
-//       }
-//     });
-//   }
-
-//   addToWishlist(productId: string): void {
-//     this.wishlistService.addToWishlist(productId).subscribe({
-//       next: () => {
-//         this.addedToWishlist[productId] = true;
-//         alert('Product added to your wishlist!');
-//       },
-//       error: () => {
-//         alert('Failed to add product to wishlist. Please try again.');
-//       },
-//     });
-//   }
-
-//   removeFromWishlist(productId: string): void {
-//     this.wishlistService.removeFromWishlist(productId).subscribe({
-//       next: () => {
-//         this.addedToWishlist[productId] = false;
-//         alert('Product removed from your wishlist!');
-//       },
-//       error: () => {
-//         alert('Failed to remove product from wishlist. Please try again.');
-//       },
-//     });
-//   }
-
-// }
-
-
-// import { Component, OnInit } from '@angular/core';
-// import { ProductService } from '../../Services/products.service';
-// import { WishlistService } from '../../Services/wishlist.service';
-// import { Product } from '../../Models/product';
-// import { Router } from '@angular/router';
-
-// @Component({
-//   selector: 'app-products',
-//   templateUrl: './products.component.html',
-//   styleUrls: ['./products.component.css']
-// })
-// export class ProductsComponent implements OnInit {
-//   products: Product[] = [];
-//   addedToWishlist: { [key: string]: boolean } = {};
-//   baseUrl: string = 'http://localhost:3000/';
-//   keyword: string = '';
-
-//   constructor(private productService: ProductService, 
-//               private wishlistService: WishlistService, 
-//               private router: Router) { }
-
-//   ngOnInit(): void {
-//     this.fetchProducts();
-//     this.checkWishlistStatus(); 
-//   }
-
-//   fetchProducts(): void {
-//     const fetchObservable = this.keyword.trim() ?
-//     this.productService.searchProducts(this.keyword) :
-//     this.productService.getAllProducts();
-
-//   fetchObservable.subscribe(data => {
-//     const fetchedProducts = 'success' in data ? data.products : data;
-//     this.products = fetchedProducts.map((product: any) => ({
-//       ...product,
-//       images: product.images.map((image: string) => this.baseUrl + image.replace(/\\/g, '/')),
-//       // Ensure subscriptions array is correctly handled if empty
-//       subscriptions: product.subscriptions.length ? product.subscriptions : [{ monthlyPrice: 'N/A' }]
-//     }));
-//   });
-//   }
-
-//   onSearch(): void {
-//     this.fetchProducts();
-//   }
-
-//   getImageUrl(images: string[]): string {
-//     return images && images.length > 0 ? images[0] : 'path/to/your/default/image.jpg';
-//   }
-
-//   viewProduct(productId: string): void {
-//     this.router.navigate(['/product', productId]);
-//   }
-
-//   checkWishlistStatus(): void {
-//     this.wishlistService.getWishlist().subscribe({
-//       next: (response) => {
-//         response.wishlist.forEach((item: any) => {
-//           this.addedToWishlist[item.product._id] = true;
-//         });
-//       },
-//       error: (error) => {
-//         console.error('Error fetching wishlist:', error);
-//       }
-//     });
-//   }
-
-//   addToWishlist(productId: string): void {
-//     this.wishlistService.addToWishlist(productId).subscribe({
-//       next: () => {
-//         this.addedToWishlist[productId] = true;
-//         alert('Product added to your wishlist!');
-//       },
-//       error: () => {
-//         alert('Failed to add product to wishlist. Please try again.');
-//       },
-//     });
-//   }
-
-//   removeFromWishlist(productId: string): void {
-//     this.wishlistService.removeFromWishlist(productId).subscribe({
-//       next: () => {
-//         this.addedToWishlist[productId] = false;
-//         alert('Product removed from your wishlist!');
-//       },
-//       error: () => {
-//         alert('Failed to remove product from wishlist. Please try again.');
-//       },
-//     });
-//   }
-// }
-
-
-// import { Component, OnInit } from '@angular/core';
-// import { ProductService } from '../../Services/products.service';
-// import { WishlistService } from '../../Services/wishlist.service';
-// import { Product } from '../../Models/product';
-// import { Router } from '@angular/router';
-
-// @Component({
-//   selector: 'app-products',
-//   templateUrl: './products.component.html',
-//   styleUrls: ['./products.component.css']
-// })
-// export class ProductsComponent implements OnInit {
-//   products: Product[] = [];
-//   addedToWishlist: { [key: string]: boolean } = {};
-//   keyword: string = '';
-//   currentPage: number = 1;
-//   totalPages: number = 0;
-//   limit: number = 4; // You can adjust this based on how many products you want per page
-
-//   constructor(
-//     private productService: ProductService, 
-//     private wishlistService: WishlistService, 
-//     private router: Router
-//   ) {}
-
-//   ngOnInit(): void {
-//     this.fetchProducts();
-//     this.checkWishlistStatus();
-//   }
-
-//   fetchProducts(): void {
-//     // Adjusted to use pagination and optionally search
-//     const fetchObservable = this.keyword.trim() ?
-//       this.productService.searchProducts(this.keyword, this.currentPage, this.limit) :
-//       this.productService.getPaginatedProducts(this.currentPage, this.limit);
-
-//     fetchObservable.subscribe({
-//       next: (data) => {
-//         this.products = data.products;
-//         this.totalPages = data.totalPages;
-//         // Adjust image URLs and subscriptions
-//         this.products = this.products.map((product: any) => ({
-//           ...product,
-//           images: product.images.map((image: string) => 'http://localhost:3000/' + image.replace(/\\/g, '/')),
-//           subscriptions: product.subscriptions.length ? product.subscriptions : [{ monthlyPrice: 'N/A', duration: 'N/A' }]
-//         }));
-//       },
-//       error: (error) => console.error('Error fetching products:', error)
-//     });
-//   }
-
-//   onPageChange(page: number): void {
-//     this.currentPage = page;
-//     this.fetchProducts();
-//   }
-
-//   onSearch(): void {
-//     this.currentPage = 1; // Reset to first page for a new search
-//     this.fetchProducts();
-//   }
-
-//   getImageUrl(images: string[]): string {
-//     return images && images.length > 0 ? images[0] : 'path/to/your/default/image.jpg';
-//   }
-
-//   viewProduct(productId: string): void {
-//     this.router.navigate(['/product', productId]);
-//   }
-
-//   checkWishlistStatus(): void {
-//     this.wishlistService.getWishlist().subscribe({
-//       next: (response) => {
-//         response.wishlist.forEach((item: any) => {
-//           this.addedToWishlist[item.product._id] = true;
-//         });
-//       },
-//       error: (error) => {
-//         console.error('Error fetching wishlist:', error);
-//       }
-//     });
-//   }
-
-//   addToWishlist(productId: string): void {
-//     this.wishlistService.addToWishlist(productId).subscribe({
-//       next: () => {
-//         this.addedToWishlist[productId] = true;
-//         alert('Product added to your wishlist!');
-//       },
-//       error: () => {
-//         alert('Failed to add product to wishlist. Please try again.');
-//       },
-//     });
-//   }
-
-//   removeFromWishlist(productId: string): void {
-//     this.wishlistService.removeFromWishlist(productId).subscribe({
-//       next: () => {
-//         this.addedToWishlist[productId] = false;
-//         alert('Product removed from your wishlist!');
-//       },
-//       error: () => {
-//         alert('Failed to remove product from wishlist. Please try again.');
-//       },
-//     });
-//   }
-// }
-
-
-
-
-
-
-
-
-// import { Component, OnInit } from '@angular/core';
-// import { ProductService } from '../../Services/products.service';
-// import { WishlistService } from '../../Services/wishlist.service';
-// import { Product } from '../../Models/product';
-// import { Router } from '@angular/router';
-// import { Subject } from 'rxjs';
-// import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-// import { CategoryService } from '../../Services/category.service';
-
-// @Component({
-//   selector: 'app-products',
-//   templateUrl: './products.component.html',
-//   styleUrls: ['./products.component.css']
-// })
-// export class ProductsComponent implements OnInit {
-//   products: Product[] = [];
-//   categories: any[] = [];
-//   addedToWishlist: { [key: string]: boolean } = {};
-//   baseUrl: string = 'http://localhost:3000/';
-//   keyword: string = '';
-//   totalPages: number = 0;
-//   currentPage: number = 1;
-//   limit: number = 4; 
-//   paginationNumbers: number[] = [];
-//   private searchTerms = new Subject<string>();
-
-//   constructor(private productService: ProductService, 
-//               private wishlistService: WishlistService, 
-//               private categoryService: CategoryService,
-//               private router: Router) { }
-
-//   ngOnInit(): void {
-//     this.fetchProducts();
-//     this.checkWishlistStatus(); 
-//     this.setupSearch();
-//     this.fetchCategories();
-//   }
-
-//   setupSearch(): void {
-//     this.searchTerms.pipe(
-//       debounceTime(500),       
-//       distinctUntilChanged() 
-//     ).subscribe(keyword => {
-//       this.keyword = keyword;
-//       this.onSearch();
-//     });
-//   }
-
-//   search(term: string): void {
-//     this.searchTerms.next(term);
-//   } 
-  
-//   fetchProducts(): void {
-//     const fetchObservable = this.keyword.trim() ?
-//     this.productService.searchProducts(this.keyword, this.currentPage, this.limit) :
-//     this.productService.getPaginatedProducts(this.currentPage, this.limit);
-
-//     fetchObservable.subscribe({
-//       next: (data) => {
-//         this.products = data.products;
-//         this.totalPages = data.totalPages;
-//         this.updatePaginationNumbers();
-//         this.products = this.products.map((product: any) => ({
-//           ...product,
-//           images: product.images.map((image: string) => 'http://localhost:3000/' + image.replace(/\\/g, '/')),
-//           subscriptions: product.subscriptions.length ? product.subscriptions : [{ monthlyPrice: 'N/A', duration: 'N/A' }]
-//         }));
-//       },
-//       error: (error) => console.error('Error fetching products:', error)
-//     });
-//   }
-
-//   fetchCategories(): void {
-//     this.categoryService.getAllCategories().subscribe({
-//       next: (data) => {
-//         this.categories = data.categories;
-//       },
-//       error: (error) => {
-//         console.error('Error fetching categories:', error);
-//       }
-//     });
-//   }
-
-//   updatePaginationNumbers(): void {
-//     this.paginationNumbers = Array.from({ length: this.totalPages }, (_, index) => index + 1);
-//   }
-  
-//   onSearch(): void {
-//     this.currentPage = 1; // Reset to the first page on new search
-//     this.fetchProducts();
-//   }
-
-//   changePage(page: number): void {
-//     if (page < 1 || page > this.totalPages) {
-//       return; // Out of range
-//     }
-//     this.currentPage = page;
-//     this.fetchProducts();
-//   }
-
-//   getImageUrl(images: string[]): string {
-//     return images && images.length > 0 ? images[0] : 'path/to/your/default/image.jpg';
-//   }
-
-//   getCategoryImageUrl(image: string): string {
-//     if (image) {
-//       const correctedPath = image.replace(/\\/g, '/');
-//       return `${this.baseUrl}${correctedPath}`;
-//     }
-//     return 'https://via.placeholder.com/150';
-//   }
-
-//   viewProduct(productId: string): void {
-//     this.router.navigate(['/product', productId]);
-//   }
-
-//   checkWishlistStatus(): void {
-//     this.wishlistService.getWishlist().subscribe({
-//       next: (response) => {
-//         response.wishlist.forEach((item: any) => {
-//           this.addedToWishlist[item.product._id] = true;
-//         });
-//       },
-//       error: (error) => {
-//         console.error('Error fetching wishlist:', error);
-//       }
-//     });
-//   }
-
-//   addToWishlist(productId: string): void {
-//     this.wishlistService.addToWishlist(productId).subscribe({
-//       next: () => {
-//         this.addedToWishlist[productId] = true;
-//         alert('Product added to your wishlist!');
-//       },
-//       error: () => {
-//         alert('Failed to add product to wishlist. Please try again.');
-//       },
-//     });
-//   }
-
-//   removeFromWishlist(productId: string): void {
-//     this.wishlistService.removeFromWishlist(productId).subscribe({
-//       next: () => {
-//         this.addedToWishlist[productId] = false;
-//         alert('Product removed from your wishlist!');
-//       },
-//       error: () => {
-//         alert('Failed to remove product from wishlist. Please try again.');
-//       },
-//     });
-//   }
-// }
-
-
-
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../Services/products.service';
 import { WishlistService } from '../../Services/wishlist.service';
@@ -471,6 +7,7 @@ import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { CategoryService } from '../../Services/category.service';
 import { initFlowbite } from 'flowbite';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-products',
@@ -493,7 +30,8 @@ export class ProductsComponent implements OnInit {
   constructor(private productService: ProductService, 
               private wishlistService: WishlistService, 
               private categoryService: CategoryService,
-              private router: Router) { }
+              private router: Router,
+              private toast: NgToastService) { }
 
   ngOnInit(): void { 
     initFlowbite();
@@ -516,26 +54,6 @@ export class ProductsComponent implements OnInit {
   search(term: string): void {
     this.searchTerms.next(term);
   } 
-  
-  // fetchProducts(): void {
-  //   const fetchObservable = this.keyword.trim() ?
-  //   this.productService.searchProducts(this.keyword, this.currentPage, this.limit, this.selectedCategory) :
-  //   this.productService.getPaginatedProducts(this.currentPage, this.limit);
-
-  //   fetchObservable.subscribe({
-  //     next: (data) => {
-  //       this.products = data.products;
-  //       this.totalPages = data.totalPages;
-  //       this.updatePaginationNumbers();
-  //       this.products = this.products.map((product: any) => ({
-  //         ...product,
-  //         images: product.images.map((image: string) => 'http://localhost:3000/' + image.replace(/\\/g, '/')),
-  //         subscriptions: product.subscriptions.length ? product.subscriptions : [{ monthlyPrice: 'N/A', duration: 'N/A' }]
-  //       }));
-  //     },
-  //     error: (error) => console.error('Error fetching products:', error)
-  //   });
-  // }
 
   fetchProducts(): void {
     let fetchObservable: Observable<any>;
@@ -580,6 +98,7 @@ export class ProductsComponent implements OnInit {
   
   onSearch(): void {
     this.currentPage = 1; 
+    this.selectedCategory = '';
     this.fetchProducts();
   }
 
@@ -624,10 +143,10 @@ export class ProductsComponent implements OnInit {
     this.wishlistService.addToWishlist(productId).subscribe({
       next: () => {
         this.addedToWishlist[productId] = true;
-        alert('Product added to your wishlist!');
+        this.toast.success({detail:"SUCCESS", summary:'Product added to your wishlist!', duration:3000, position:'topRight'});
       },
       error: () => {
-        alert('Failed to add product to wishlist. Please try again.');
+        this.toast.error({detail:"ERROR", summary:'Failed to add product to wishlist. Please try again.', duration:3000, position:'topRight'});
       },
     });
   }
@@ -636,21 +155,24 @@ export class ProductsComponent implements OnInit {
     this.wishlistService.removeFromWishlist(productId).subscribe({
       next: () => {
         this.addedToWishlist[productId] = false;
-        alert('Product removed from your wishlist!');
+        this.toast.success({detail:"SUCCESS", summary:'Product removed from your wishlist!', duration:3000, position:'topRight'});
       },
       error: () => {
-        alert('Failed to remove product from wishlist. Please try again.');
+        this.toast.error({detail:"ERROR", summary:'Failed to remove product from wishlist. Please try again.', duration:3000, position:'topRight'});
       },
     });
   }
 
-   // Method to filter products by category
-  //  filterByCategory(categoryName: string): void {
-  //   this.selectedCategory = categoryName;
-  //   this.fetchProducts();
-  // }
+  toggleWishlist(productId: string, event: Event): void {
+    event.stopPropagation(); 
+  
+    if (this.addedToWishlist[productId]) {
+      this.removeFromWishlist(productId);
+    } else {
+      this.addToWishlist(productId);
+    }
+  }
 
-  // Method to filter products by category
   filterByCategory(categoryName: string): void {
     this.selectedCategory = categoryName;
     this.fetchProducts();

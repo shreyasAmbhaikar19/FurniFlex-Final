@@ -10,6 +10,7 @@
           <input
             type="text"
             formControlName="firstName"
+            [class]="registerForm.controls['firstName'].touched && registerForm.controls['firstName'].invalid ? 'border-red-500' : 'border-gray-300'"
             class="peer block w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
             placeholder="First Name"
           />
@@ -40,6 +41,7 @@
           <input
             type="text"
             formControlName="lastName"
+            [class]="registerForm.controls['lastName'].touched && registerForm.controls['lastName'].invalid ? 'border-red-500' : 'border-gray-300'"
             class="peer block w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
             placeholder="Last Name"
           />
@@ -68,6 +70,7 @@
           <input
             type="email"
             formControlName="email"
+            [class]="registerForm.controls['email'].touched && registerForm.controls['email'].invalid ? 'border-red-500' : 'border-gray-300'"
             class="peer block w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
             placeholder="Email"
           />
@@ -99,6 +102,7 @@
           <input
             type="text"
             formControlName="phoneNumber"
+            [class]="registerForm.controls['phoneNumber'].touched && registerForm.controls['phoneNumber'].invalid ? 'border-red-500' : 'border-gray-300'"
             class="peer block w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
             placeholder="Phone No"
           />
@@ -134,8 +138,9 @@
           <input
             type="password"
             formControlName="password"
+            [class]="registerForm.controls['password'].touched && registerForm.controls['password'].invalid ? 'border-red-500' : 'border-gray-300'"
             class="peer block w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0"
-            placeholder="Password"
+            placeholder="Password  (minimum 8 characters)"
           />
           <label
             class="absolute top-2 left-1 z-10 origin-[0] -translate-y-4 scale-75 transform cursor-text select-none bg-white px-2 text-sm text-gray-500 duration-300 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600"
@@ -163,7 +168,7 @@
           </div>
         </div>
         <input
-          class="mt-4 w-full cursor-pointer rounded-lg bg-blue-600 pt-3 pb-3 text-white shadow-lg hover:bg-blue-400"
+        class="mt-4 w-full cursor-pointer rounded-lg bg-gradient-to-r from-lime-400 to-sky-400 pt-3 pb-3 text-white shadow-lg shadow-sky-300 outline-none transition duration-200 hover:scale-110 hover:bg-sky-500 focus:ring"
           type="submit"
           value="Create account"
         />

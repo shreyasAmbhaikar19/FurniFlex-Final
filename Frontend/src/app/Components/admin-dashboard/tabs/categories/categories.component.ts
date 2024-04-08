@@ -216,6 +216,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from '../../../../Services/category.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-categories',
@@ -233,7 +235,8 @@ export class CategoriesComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -243,8 +246,25 @@ export class CategoriesComponent implements OnInit {
   
   initForm(): void {
     this.categoryForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
       image: [null, Validators.required] 
+    });
+  }
+
+  openDeleteDialog(categoryName: string, categoryId: string): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: 'Deleting Category',
+        message: `Are you sure you want to delete the category "${categoryName}"?`,
+        confirmText: 'Yes, delete',
+        cancelText: 'No, cancel'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteCategory(categoryId);
+      }
     });
   }
   
@@ -303,17 +323,15 @@ export class CategoriesComponent implements OnInit {
     this.categoryForm.reset();
   }
 
-  onDelete(categoryId: string): void {
-    if (confirm('Are you sure you want to delete this category?')) {
-      this.categoryService.deleteCategory(categoryId).subscribe({
-        next: () => {
-          this.fetchCategories();
-        },
-        error: (error) => {
-          console.error('Error deleting the category:', error);
-        }
-      });
-    }
+  private deleteCategory(categoryId: string): void {
+    this.categoryService.deleteCategory(categoryId).subscribe({
+      next: () => {
+        this.fetchCategories();
+      },
+      error: (error) => {
+        console.error('Error deleting the category:', error);
+      }
+    });
   }
 
   getImageUrl(image: string): string {

@@ -299,7 +299,7 @@
 // }
 
 
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CartService } from '../../Services/cart.service';
 import { AuthService } from '../../Services/auth.service';
 import { UserService } from '../../Services/user.service';
@@ -307,6 +307,11 @@ import { OrderService } from '../../Services/order.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../admin-dashboard/tabs/delete-dialog/delete-dialog.component';
+import { NgToastService } from 'ng-angular-popup';
+
 
 
 declare let Razorpay: any;
@@ -333,7 +338,10 @@ export class CartComponent implements OnInit {
     private userService: UserService,
     private orderService: OrderService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog, 
+    private toast: NgToastService
   ) {
     this.addressForm = this.fb.group({
       address: ['', Validators.required]
@@ -403,24 +411,48 @@ export class CartComponent implements OnInit {
               totalPrice: response.updatedCartItem.totalPrice
             };
             this.calculateTotalCartPrice();
-          }
+          }   
         }
       },
       error: (error) => {
         console.error('Error updating cart item quantity:', error);
-        alert('Error updating cart item. Please try again.');
+        this.toast.error({detail:"ERROR", summary:'Error updating cart item. Please try again.', duration:3000, position:'topRight'});
       }
     });
   }
 
+  // removeCartItem(cartId: string): void {
+  //   this.cartService.removeCartItem(cartId).subscribe({
+  //     next: () => {
+  //       this.cartItems = this.cartItems.filter(item => item._id !== cartId);
+  //       this.calculateTotalCartPrice();
+  //       alert('Product removed from cart successfully');
+  //     },
+  //     error: (error) => console.error('Error removing cart item:', error)
+  //   });
+  // }
+
   removeCartItem(cartId: string): void {
-    this.cartService.removeCartItem(cartId).subscribe({
-      next: () => {
-        this.cartItems = this.cartItems.filter(item => item._id !== cartId);
-        this.calculateTotalCartPrice();
-        alert('Product removed from cart successfully');
-      },
-      error: (error) => console.error('Error removing cart item:', error)
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: 'Confirm Delete',
+        message: 'Are you sure you want to remove this item from the cart?',
+        confirmText: 'Delete',
+        cancelText: 'Cancel'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.cartService.removeCartItem(cartId).subscribe({
+          next: () => {
+            this.cartItems = this.cartItems.filter(item => item._id !== cartId);
+            this.calculateTotalCartPrice();
+            this.toast.success({detail:"SUCCESS", summary:'Product removed from cart successfully!', duration:3000, position:'topRight'});
+          },
+          error: (error) => console.error('Error removing cart item:', error)
+        });
+      }
     });
   }
 
@@ -468,7 +500,7 @@ export class CartComponent implements OnInit {
 
   handlePaymentSuccess(response: any): void {
     if (!this.userAddress) {
-      alert('Shipping address is required.');
+      this.toast.error({detail:"ERROR", summary:'Shipping address is required', duration:3000, position:'topRight'});
       return;
     }
 
@@ -492,12 +524,26 @@ export class CartComponent implements OnInit {
     this.orderService.createOrder(orderDetails).subscribe({
       next: (data) => {
         console.log('Order created successfully', data);
-        alert('Order placed successfully!');
+        this.toast.success({detail:"SUCCESS", summary:'Order placed successfully!', duration:3000, position:'topRight'});
+        this.clearCartItems();
+        this.router.navigate(['/settings/order-history']);
       },
       error: (error) => {
         console.error('Error creating order:', error);
-        alert('There was an issue while placing the order. Please try again.');
+        this.toast.error({detail:"ERROR", summary:'There was an issue while placing the order. Please try again.', duration:3000, position:'topRight'});
       }
+    });
+  }
+
+  clearCartItems(): void {
+    this.cartService.clearCart().subscribe({
+      next: () => {
+        this.cartItems = [];
+        this.calculateTotalCartPrice();
+        console.log('Cart cleared successfully');
+        this.cdr.detectChanges();
+      },
+      error: (error) => console.error('Error clearing cart:', error)
     });
   }
 }

@@ -92,6 +92,10 @@ import { UserService } from '../../../../Services/user.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+
+
 @Component({  
   selector: 'app-users',
   templateUrl: './users.component.html',
@@ -112,7 +116,7 @@ export class UsersComponent implements OnInit {
 
   private searchTerms = new Subject<string>();
 
-  constructor(private userService: UserService, private fb: FormBuilder) {}
+  constructor(private userService: UserService, private fb: FormBuilder, private dialog: MatDialog ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -130,6 +134,23 @@ export class UsersComponent implements OnInit {
   initForm(): void {
     this.userForm = this.fb.group({
       role: ['', Validators.required]
+    });
+  }
+
+  openDeleteDialog(userName: string, userId: string): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: 'Deleting User',
+        message: `Are you sure you want to delete ${userName}?`,
+        confirmText: 'Yes, delete',
+        cancelText: 'No, cancel'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteUser(userId);
+      }
     });
   }
 
@@ -201,17 +222,13 @@ export class UsersComponent implements OnInit {
     this.currentUser = null;
   }
 
-  deleteUser(userId: string): void {
-    if (confirm('Are you sure you want to delete this user?')) {
-      this.userService.deleteUser(userId).subscribe({
-        next: () => {
-          this.fetchUsers();
-        },
-        error: (error) => {
-          console.error('Error deleting the user:', error);
-        }
-      });
-    }
+  private deleteUser(userId: string): void {
+    this.userService.deleteUser(userId).subscribe({
+      next: () => {
+        this.fetchUsers();
+      },
+      error: (error) => console.error('Failed to delete user:', error)
+    });
   }
 }
 

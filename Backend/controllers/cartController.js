@@ -89,3 +89,14 @@ exports.updateCartItem = asyncErrorHandler(async (req, res, next) => {
         updatedCartItem: cartItem // Send back the updated cart item
     });
 });
+
+exports.clearUserCart = asyncErrorHandler(async (req, res, next) => {
+    const userId = req.user._id;
+
+    await Cart.deleteMany({ user: userId });
+
+    res.status(200).json({
+        success: true,
+        message: 'Cart cleared successfully'
+    });
+});

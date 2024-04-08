@@ -21,9 +21,14 @@ import { CartComponent } from './Components/cart/cart.component';
 import { WishlistComponent } from './Components/wishlist/wishlist.component';
 import { FeedbackComponent } from './Components/feedback/feedback.component';
 import { NotFoundComponent } from './Components/not-found/not-found.component';
-import { ProfileComponent } from './Components/profile/profile.component';
+import { ProfileComponent } from './Components/user-settings/profile/profile.component';
 import { NumberToArrayPipe } from './Pipes/number-to-array.pipe';
 import { CarouselComponent } from './Components/carousel/carousel.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { OrderHistoryComponent } from './Components/user-settings/order-history/order-history.component';
+
+import { NgToastModule } from 'ng-angular-popup';
+import { UserSettingsComponent } from './Components/user-settings/user-settings.component'
 
 @NgModule({
   declarations: [
@@ -42,6 +47,8 @@ import { CarouselComponent } from './Components/carousel/carousel.component';
     ProfileComponent,
     NumberToArrayPipe,
     CarouselComponent,
+    OrderHistoryComponent,
+    UserSettingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,9 +57,11 @@ import { CarouselComponent } from './Components/carousel/carousel.component';
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
+    NgToastModule
   ],
   providers: [
     CookieService,
+    provideAnimationsAsync(),
   ],
   bootstrap: [AppComponent]
 })

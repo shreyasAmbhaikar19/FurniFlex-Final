@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../Services/auth.service';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router 
+    private router: Router,
+    private toast: NgToastService
   ) {}
 
   ngOnInit(): void {
@@ -29,10 +31,11 @@ export class LoginComponent implements OnInit {
       this.authService.login(this.loginForm.value.email, this.loginForm.value.password)
         .subscribe({
           next: (response: any) => {
-            console.log(response);
             this.authService.saveToken(response.token);
             this.authService.saveUserRole(response.user.role);
             
+            this.toast.success({detail:"SUCCESS", summary:'Login Successful!', duration:3000, position:'topRight'});
+
             if (response.user.role === 'admin') {
               this.router.navigate(['/admin']);
             } else {
@@ -40,6 +43,7 @@ export class LoginComponent implements OnInit {
             }
           },
           error: (err) => {
+            this.toast.error({detail:"ERROR", summary:'Login Failed. Please check your credentials.', duration:3000, position:'topRight'});
           }
         });
     }

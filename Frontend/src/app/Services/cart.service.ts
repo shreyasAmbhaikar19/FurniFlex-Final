@@ -27,15 +27,10 @@ export class CartService {
   updateCartItem(cartId: string, updateData: { quantity: number }): Observable<any> {
     return this.http.patch(`${this.baseUrl}/cart/${cartId}`, updateData, { withCredentials: true });
   }
-
-  // createRazorpayOrder(amount: number): Observable<any> {
-  //   return this.http.post(`${this.baseUrl}/create-razorpay-order`, { totalPrice: amount }, { withCredentials: true });
-  // }
-
-  // verifyRazorpayPayment(data: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }): Observable<any> {
-  //   return this.http.post(`${this.baseUrl}/verify-payment`, data, { withCredentials: true });
-  // }
-
+  
+  clearCart(): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/carts/clear`, { withCredentials: true });
+  }
 }
 
  

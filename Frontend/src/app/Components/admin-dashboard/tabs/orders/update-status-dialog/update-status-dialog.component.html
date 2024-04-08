@@ -1,0 +1,41 @@
+<!-- <h2 mat-dialog-title>Update Order Status</h2>
+<div mat-dialog-content>
+  <form [formGroup]="updateOrderForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Order Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="Pending">Pending</mat-option>
+        <mat-option value="Shipped">Shipped</mat-option>
+        <mat-option value="Delivered">Delivered</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" [disabled]="!updateOrderForm.valid" (click)="onUpdate()">Update Status</button>
+</div> -->
+
+
+<div class="relative m-10 max-w-lg rounded-md border text-gray-800 shadow-lg">
+    <h2 class="mt-4 pl-4 text-xl font-bold">Update Order Status</h2>
+    <svg xmlns="http://www.w3.org/2000/svg" (click)="onCancel()" class="absolute right-0 top-0 m-3 h-6 w-6 cursor-pointer text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+    <form [formGroup]="updateOrderForm" class="flex flex-col items-center px-8 py-10">
+      <label class="block w-full">
+        <p class="mb-1 text-sm text-gray-600">Order Status</p>
+        <select formControlName="status" class="w-full rounded-md border bg-white py-2 px-2 outline-none ring-blue-600 focus:ring-1">
+          <option value="Pending">Pending</option>
+          <option value="Shipped">Shipped</option>
+          <option value="Delivered">Delivered</option>
+        </select>
+      </label>
+  
+      <div class="mt-8 flex w-full justify-center space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0">
+        <button type="button" (click)="onUpdate()" class="whitespace-nowrap w-full rounded-md bg-blue-500 px-4 py-3 font-medium text-white" [disabled]="!updateOrderForm.valid">Update Status</button>
+        <button type="button" (click)="onCancel()" class="whitespace-nowrap w-full rounded-md bg-gray-200 px-4 py-3 font-medium">Cancel</button>
+      </div>
+    </form>
+  </div>
+  

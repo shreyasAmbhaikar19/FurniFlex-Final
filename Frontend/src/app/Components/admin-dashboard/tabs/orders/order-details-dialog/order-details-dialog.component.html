@@ -1,0 +1,66 @@
+<!-- <h2 mat-dialog-title>Order ID: {{ data.order._id }}</h2>
+<div mat-dialog-content class="overflow-x-auto">
+  <table class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data.order.orderItems">
+        <img [src]="getImageUrl(item.image)" alt="{{item.name}}" class="h-10 w-10 object-cover rounded-full">
+        <td>{{ item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</div> -->
+
+
+<!-- <h2 class="px-6 py-4 text-xl font-bold text-gray-900 border-b">Order ID: {{ data.order._id }}</h2>
+
+<div mat-dialog-content class="p-6">
+  <div *ngFor="let item of data.order.orderItems" class="mb-6 rounded-lg bg-white p-6 shadow-md">
+    <div class="flex justify-start">
+      <img [src]="getImageUrl(item.image)" alt="{{item.name}}" class="w-40 h-40 object-cover rounded-lg" />
+      <div class="ml-4">
+        <h3 class="text-lg font-bold text-gray-900">{{ item.name }}</h3>
+        <p class="mt-1 text-sm text-gray-700">Quantity: {{ item.quantity }}</p>
+        <p class="mt-1 text-sm text-gray-700">Price: {{ item.price }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mat-dialog-actions class="justify-end p-6 border-t">
+  <button mat-button mat-dialog-close class="bg-gray-200 text-gray-900 rounded-md px-4 py-2 hover:bg-gray-300">Close</button>
+</div> -->
+
+
+<h2 mat-dialog-title class="bg-gray-100 py-4 px-6">Order ID: {{ data.order._id }}</h2>
+<div mat-dialog-content class="overflow-x-auto px-6 py-4">
+  <div class="space-y-4">
+    <ng-container *ngFor="let item of data.order.orderItems">
+      <div class="flex flex-col rounded-lg border bg-white shadow sm:flex-row">
+        <img [src]="getImageUrl(item.image)" alt="{{item.name}}" class="m-2 h-24 w-28 rounded-md border object-cover" />
+        <div class="flex w-full flex-col px-4 py-4">
+          <span class="font-semibold">{{ item.name }}</span>
+          <span class="mt-2 text-gray-400">Quantity: {{ item.quantity }}</span>
+          <p class="mt-2 text-lg font-bold">₹{{ item.price }}</p>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<div mat-dialog-actions class="justify-end bg-gray-100 px-6 py-4">
+  <button mat-button mat-dialog-close class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+    Close
+  </button>
+</div>

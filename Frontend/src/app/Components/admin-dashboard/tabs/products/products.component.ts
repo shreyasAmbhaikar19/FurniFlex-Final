@@ -344,6 +344,10 @@ import { Product } from '../../../../Models/product';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+
+
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
@@ -370,7 +374,7 @@ export class ProductsTabComponent implements OnInit {
   private searchTerms = new Subject<string>();
 
 
-  constructor(private productService: ProductService, private fb: FormBuilder) {}
+  constructor(private productService: ProductService, private fb: FormBuilder, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -385,6 +389,23 @@ export class ProductsTabComponent implements OnInit {
   
   search(keyword: string): void {
     this.searchTerms.next(keyword);
+  }
+
+  openDeleteDialog(productName: string, productId: string): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {
+        title: 'Deleting Product',
+        message: `Are you sure you want to delete the product ${productName}?`,
+        confirmText: 'Yes, delete the product',
+        cancelText: 'Cancel, keep the product'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteProduct(productId);
+      }
+    });
   }
   
   loadProducts(isSearchOperation: boolean = false): void {
@@ -423,13 +444,19 @@ export class ProductsTabComponent implements OnInit {
   }
 
   initializeForm(product: Product = {} as Product): void {
+    const textOnlyRegex = /^[a-zA-Z\s,.'-]+$/;
+
     this.editForm = this.fb.group({
-      name: [product.name || '', Validators.required],
-      description: [product.description || '', Validators.required],
-      brand: [product.brand || '', Validators.required],
-      category: [product.category || '', Validators.required],
-      stock: [product.stock || 1, [Validators.required, Validators.min(1)]],
-      subscriptions: this.fb.array(product.subscriptions ? product.subscriptions.map((subscription:any) => this.createSubscriptionGroup(subscription)) : [])
+      name: [product.name || '', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]], 
+      description: [product.description || '', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
+      brand: [product.brand ?? '', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]], 
+      category: [product.category ?? '', [Validators.required, Validators.minLength(2), Validators.maxLength(15), Validators.pattern(textOnlyRegex)]], 
+      stock: [product.stock || 1, [Validators.required, Validators.min(1), Validators.max(10000)]], 
+      subscriptions: this.fb.array(
+        product.subscriptions
+          ? product.subscriptions.map((subscription: any) => this.createSubscriptionGroup(subscription))
+          : []
+      ),
     });
     this.existingImages = product.images || [];
     this.imagePreviews = this.existingImages.map(image => `${this.baseUrl}${image}`);
@@ -437,8 +464,8 @@ export class ProductsTabComponent implements OnInit {
 
   createSubscriptionGroup(subscription: any = { duration: '', monthlyPrice: '' }): FormGroup {
     return this.fb.group({
-      duration: [subscription.duration, Validators.required],
-      monthlyPrice: [subscription.monthlyPrice, Validators.required]
+      duration: [subscription.duration, [Validators.required, Validators.min(1), Validators.max(36)]],
+      monthlyPrice: [subscription.monthlyPrice, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]], 
     });
   }
 
@@ -526,7 +553,7 @@ export class ProductsTabComponent implements OnInit {
     this.existingImages = [];
   }
 
-  deleteProduct(productId: string): void {
+  private deleteProduct(productId: string): void {
     this.productService.deleteProduct(productId).subscribe({
       next: () => {
         this.loadProducts();
@@ -544,15 +571,10 @@ export class ProductsTabComponent implements OnInit {
   }
 
   removeImage(index: number): void {
-        // Remove from imagePreviews
     this.imagePreviews.splice(index, 1);
-
-    // Check if the index is within the range of existing images
     if (index < this.existingImages.length) {
-      // If the image is an existing one, remove it from existingImages
       this.existingImages.splice(index, 1);
     } else {
-      // If the image is a new upload, calculate its index in selectedFiles and remove it
       const fileIndex = index - this.existingImages.length;
       this.selectedFiles.splice(fileIndex, 1);
     }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../Services/user.service'; 
+import { UserService } from '../../../Services/user.service'; 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +13,7 @@ export class ProfileComponent implements OnInit {
   passwordForm!: FormGroup;
   user: any;
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder,) { }
+  constructor(private userService: UserService, private formBuilder: FormBuilder, private toast: NgToastService) { }
 
   ngOnInit(): void {
     this.initProfileForm();
@@ -61,11 +62,12 @@ export class ProfileComponent implements OnInit {
       this.userService.updateUserDetails(updatedUserDetails).subscribe({
         next: (response) => {
           console.log('User details updated successfully:', response);
-          // Fetch updated user details
+          this.toast.success({detail:"SUCCESS", summary:'User details updated successfully!', duration:3000, position:'topRight'});
           this.getUserDetails();
         },
         error: (error) => {
           console.error('Error updating user details:', error);
+          this.toast.error({detail:"ERROR", summary:'Error updating user details!', duration:3000, position:'topRight'});
         }
       });
     }

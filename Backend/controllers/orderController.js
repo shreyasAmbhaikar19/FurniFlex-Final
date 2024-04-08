@@ -3,7 +3,7 @@ const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
 const ErrorHandler = require('../utils/errorHandler');
 const sendEmail = require('../utils/sendEmail');
-const crypto = require('crypto');
+const SearchFeatures = require('../utils/searchFeatures');
 require('dotenv').config({ path: './config/.env' });
 
 const Razorpay = require('razorpay');
@@ -12,49 +12,6 @@ const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY,
     key_secret: process.env.RAZORPAY_SECRET
 });
-  
-// Create New Order
-// exports.newOrder = asyncErrorHandler(async (req, res, next) => {
-
-//     const {
-//         shippingInfo,
-//         orderItems,
-//         paymentInfo,
-//         totalPrice,
-//     } = req.body;
-
-//     const orderExist = await Order.findOne({ paymentInfo });
-
-//     if (orderExist) {   
-//         return next(new ErrorHandler("Order Already Placed", 400));
-//     }
-
-//     const order = await Order.create({
-//         shippingInfo,
-//         orderItems,
-//         paymentInfo,
-//         totalPrice,
-//         paidAt: Date.now(),
-//         user: req.user._id,
-//     });
-
-//     await sendEmail({
-//         email: req.user.email,
-//         templateId: process.env.SENDGRID_ORDER_TEMPLATEID,
-//         data: {
-//             name: req.user.name,
-//             shippingInfo,
-//             orderItems,
-//             totalPrice,
-//             oid: order._id,
-//         }
-//     });
-
-//     res.status(201).json({
-//         success: true,
-//         order,
-//     });
-// });
 
 exports.createPaymentOrder = asyncErrorHandler(async (req, res, next) => {
     const { totalPrice } = req.body; 
@@ -89,7 +46,7 @@ exports.createNewOrder = asyncErrorHandler(async (req, res, next) => {
       paymentInfo,
       totalPrice,
       paidAt: Date.now(),
-      orderStatus: "Processing"
+      orderStatus: "Pending"
     });
   
     res.status(201).json({
@@ -117,7 +74,7 @@ exports.getSingleOrderDetails = asyncErrorHandler(async (req, res, next) => {
 // Get Logged In User Orders
 exports.myOrders = asyncErrorHandler(async (req, res, next) => {
 
-    const orders = await Order.find({ user: req.user._id });
+    const orders = await Order.find({ user: req.user._id }).populate("user", "name");
 
     if (!orders) {
         return next(new ErrorHandler("Order Not Found", 404));
@@ -133,7 +90,7 @@ exports.myOrders = asyncErrorHandler(async (req, res, next) => {
 // Get All Orders ---ADMIN
 exports.getAllOrders = asyncErrorHandler(async (req, res, next) => {
 
-    const orders = await Order.find();
+    const orders = await Order.find().populate("user", "firstName lastName");
 
     if (!orders) {
         return next(new ErrorHandler("Order Not Found", 404));
@@ -150,6 +107,97 @@ exports.getAllOrders = asyncErrorHandler(async (req, res, next) => {
         totalAmount,
     });
 });
+
+// exports.getPaginatedFilteredOrders = asyncErrorHandler(async (req, res, next) => {
+//     const resultPerPage = Number(req.query.limit) || 4;
+//     const currentPage = Number(req.query.page) || 1;
+    
+//     const keyword = req.query.keyword
+//         ? {
+//             $or: [
+//                 { 'orderItems.name': { $regex: req.query.keyword, $options: 'i' } },
+//                 { 'user.firstName': { $regex: req.query.keyword, $options: 'i' } },
+//                 { 'user.lastName': { $regex: req.query.keyword, $options: 'i' } },
+//             ]
+//         }
+//         : {};
+    
+//     const ordersCount = await Order.countDocuments({ ...keyword });
+//     const searchFeature = new SearchFeatures(Order.find(keyword).populate('user'), req.query)
+//         .pagination(resultPerPage);
+    
+//     let orders = await searchFeature.query;
+//     let filteredOrdersCount = orders.length;
+
+//     res.status(200).json({
+//         success: true,
+//         orders,
+//         ordersCount,
+//         resultPerPage,
+//         currentPage,
+//         filteredOrdersCount,
+//         totalPages: Math.ceil(ordersCount / resultPerPage),
+//     });
+// });
+
+exports.getPaginatedFilteredOrders = asyncErrorHandler(async (req, res, next) => {
+    const resultPerPage = Number(req.query.limit) || 4;
+    const currentPage = Number(req.query.page) || 1;
+    
+    let aggregationPipeline = [
+        {
+            $lookup: {
+                from: 'users', // This should match the collection name of User in MongoDB
+                localField: 'user',
+                foreignField: '_id',
+                as: 'user'
+            }
+        },
+        {
+            $unwind: '$user' // Flatten the user array to make it easier to query against
+        },
+    ];
+
+    if (req.query.keyword) {
+        aggregationPipeline.push({
+            $match: {
+                $or: [
+                    { 'orderItems.name': { $regex: req.query.keyword, $options: 'i' } },
+                    { 'user.firstName': { $regex: req.query.keyword, $options: 'i' } },
+                    { 'user.lastName': { $regex: req.query.keyword, $options: 'i' } },
+                    { 'createdAt': { $regex: req.query.keyword, $options: 'i' } },
+                    { 'orderStatus': { $regex: req.query.keyword, $options: 'i' } },
+                ]
+            }
+        });
+    }
+
+    aggregationPipeline.push(
+        { $sort: { createdAt: -1 } }
+    );
+
+    const ordersCount = await Order.aggregate([...aggregationPipeline, { $count: "totalOrders" }]);
+    const totalOrders = ordersCount.length > 0 ? ordersCount[0].totalOrders : 0;
+
+    // Add pagination to aggregation
+    aggregationPipeline.push(
+        { $skip: (currentPage - 1) * resultPerPage },
+        { $limit: resultPerPage }
+    );
+
+    let orders = await Order.aggregate(aggregationPipeline);
+
+    res.status(200).json({
+        success: true,
+        orders,
+        ordersCount: totalOrders,
+        resultPerPage,
+        currentPage,
+        filteredOrdersCount: orders.length,
+        totalPages: Math.ceil(totalOrders / resultPerPage),
+    });
+});
+
 
 // Update Order Status ---ADMIN
 exports.updateOrder = asyncErrorHandler(async (req, res, next) => {

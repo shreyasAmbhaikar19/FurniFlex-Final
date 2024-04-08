@@ -36,6 +36,7 @@ const userSchema = new mongoose.Schema({
     },
     address: {
         type: String, 
+        default: "N/A",
     },
     role: {
         type: String,

@@ -600,7 +600,6 @@
       </div>
     </div>
   </ng-container> -->
-
 <div *ngIf="isLoading">Loading products...</div>
 <div *ngIf="!isLoading">
   <ng-container *ngIf="!isEditing && !isAddMode; else editOrAddProductForm">
@@ -667,7 +666,7 @@
                     <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                     <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
                   </svg></button>
-                  <button (click)="deleteProduct(product._id)" class="text-red-600 hover:text-red-900 ml-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                  <button  (click)="openDeleteDialog(product.name, product._id)" class="text-red-600 hover:text-red-900 ml-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
                     <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
                   </svg></button>
                 </td>
@@ -719,22 +718,43 @@
         <form [formGroup]="editForm" (ngSubmit)="submitForm()">
           <div class="mb-5">
             <label for="name" class="mb-3 block text-base font-medium text-[#07074D]">Name</label>
-            <input id="name" formControlName="name" type="text" placeholder="Name" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+            <input id="name" formControlName="name" type="text" placeholder="Name"  [class]="editForm.get('name')?.touched && editForm.get('name')?.invalid ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500 focus:border-red-500 block w-full py-3 px-6' : 'w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'" />
+            <div *ngIf="editForm.get('name')?.touched && editForm.get('name')?.errors" class="text-red-500 text-sm mt-1">
+              <div *ngIf="editForm.get('name')?.errors?.['required']">Name is required.</div>
+              <div *ngIf="editForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters long.</div>
+              <div *ngIf="editForm.get('name')?.errors?.['maxlength']">Name cannot be more than 50 characters long.</div>
+            </div>
           </div>
 
           <div class="mb-5">
             <label for="description" class="mb-3 block text-base font-medium text-[#07074D]">Description</label>
-            <textarea id="description" formControlName="description" rows="4" placeholder="Description" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"></textarea>
+            <textarea id="description" formControlName="description" rows="4" placeholder="Description" [class]="editForm.get('description')?.touched && editForm.get('description')?.invalid ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500 focus:border-red-500 block w-full py-3 px-6' : 'w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'"></textarea>
+            <div *ngIf="editForm.get('description')?.touched && editForm.get('description')?.errors" class="text-red-500 text-sm mt-1">
+              <div *ngIf="editForm.get('description')?.errors?.['required']">Description is required.</div>
+              <div *ngIf="editForm.get('description')?.errors?.['minlength']">Description must be at least 10 characters long.</div>
+            <div *ngIf="editForm.get('description')?.errors?.['maxlength']">Description cannot be more than 500 characters long.</div>
+            </div>
           </div>
 
           <div class="mb-5">
             <label for="brand" class="mb-3 block text-base font-medium text-[#07074D]">Brand</label>
-            <input id="brand" formControlName="brand" type="text" placeholder="Brand" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+            <input id="brand" formControlName="brand" type="text" placeholder="Brand" [class]="editForm.get('brand')?.touched && editForm.get('brand')?.invalid ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500 focus:border-red-500 block w-full py-3 px-6' : 'w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'" />
+            <div *ngIf="editForm.get('brand')?.touched && editForm.get('brand')?.errors" class="text-red-500 text-sm mt-1">
+              <div *ngIf="editForm.get('brand')?.errors?.['required']">Brand is required.</div>
+              <div *ngIf="editForm.get('brand')?.errors?.['minlength']">Brand must be at least 2 characters long.</div>
+              <div *ngIf="editForm.get('brand')?.errors?.['maxlength']">Brand cannot be more than 20 characters long.</div>
+            </div>
           </div>
 
           <div class="mb-5">
             <label for="category" class="mb-3 block text-base font-medium text-[#07074D]">Category</label>
-            <input id="category" formControlName="category" type="text" placeholder="Category" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+            <input id="category" formControlName="category" type="text" placeholder="Category" [class]="editForm.get('category')?.touched && editForm.get('category')?.invalid ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500 focus:border-red-500 block w-full py-3 px-6' : 'w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'" />
+            <div *ngIf="editForm.get('category')?.touched && editForm.get('category')?.errors" class="text-red-500 text-sm mt-1">
+              <div *ngIf="editForm.get('category')?.errors?.['required']">Category is required.</div>
+              <div *ngIf="editForm.get('category')?.errors?.['minlength']">Category must be at least 2 characters long.</div>
+              <div *ngIf="editForm.get('category')?.errors?.['maxlength']">Category cannot be more than 15 characters long.</div>
+              <div *ngIf="editForm.get('category')?.errors?.['pattern']">Name must contain only letters and certain punctuation (.,'-).</div>
+            </div>
           </div>
 
           <div class="mb-5">
@@ -755,10 +775,20 @@
           <div formArrayName="subscriptions" class="mb-5">
             <div *ngFor="let subscription of subscriptionsFormArray.controls; let i=index" [formGroupName]="i">
               <label class="block text-base font-medium text-[#07074D]">Subscription {{ i + 1 }}</label>
-              <input formControlName="duration" type="text" placeholder="Duration in months"
-                class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-              <input formControlName="monthlyPrice" type="text" placeholder="Monthly Price"
-                class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 my-2 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+                <input formControlName="duration" type="text" placeholder="Duration in months"
+                [class]="editForm.get('duration')?.touched && editForm.get('duration')?.invalid ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500 focus:border-red-500 block w-full py-3 px-6' : 'w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'" />
+                <div *ngIf="subscription.get('duration')?.touched && subscription.get('duration')?.errors" class="text-red-500 text-sm">
+                  <div *ngIf="subscription.get('duration')?.errors?.['required']">Duration is required.</div>
+                  <div *ngIf="subscription.get('duration')?.errors?.['min']">Duration must be at least 1 month.</div>
+                  <div *ngIf="subscription.get('duration')?.errors?.['max']">Duration cannot exceed 36 months.</div>
+                </div>
+
+                <input formControlName="monthlyPrice" type="text" placeholder="Monthly Price"
+                [class]="editForm.get('monthlyPrice')?.touched && editForm.get('monthlyPrice')?.invalid ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500 focus:border-red-500 block w-full py-3 px-6' : 'w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'" />
+                <div *ngIf="subscription.get('monthlyPrice')?.touched && subscription.get('monthlyPrice')?.errors" class="text-red-500 text-sm">
+                  <div *ngIf="subscription.get('monthlyPrice')?.errors?.['required']">Monthly price is required.</div>
+                  <div *ngIf="subscription.get('monthlyPrice')?.errors?.['pattern']">Please enter a valid price.</div>
+                </div>
               <button type="button" (click)="removeSubscription(i)" class="mt-2 mb-4 text-red-500">Remove Subscription</button>
             </div>
             <button type="button" (click)="addSubscription()" class="py-2 px-4 bg-blue-500 text-white rounded">Add Subscription</button>
@@ -766,7 +796,12 @@
 
           <div class="mb-5">
             <label for="stock" class="mb-3 block text-base font-medium text-[#07074D]">Stock</label>
-            <input id="stock" formControlName="stock" type="number" placeholder="Stock" class="w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
+            <input id="stock" formControlName="stock" type="number" placeholder="Stock" [class]="editForm.get('stock')?.touched && editForm.get('stock')?.invalid ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500 focus:border-red-500 block w-full py-3 px-6' : 'w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'" />
+            <div *ngIf="editForm.get('stock')?.touched && editForm.get('stock')?.errors" class="text-red-500 text-sm mt-1">
+              <div *ngIf="editForm.get('stock')?.errors?.['required']">Stock is required.</div>
+              <div *ngIf="editForm.get('stock')?.errors?.['min']">Stock must be at least 1.</div>
+              <div *ngIf="editForm.get('stock')?.errors?.['max']">Stock cannot exceed 10000 units.</div>
+            </div>
           </div>
 
           <div class="flex justify-between">

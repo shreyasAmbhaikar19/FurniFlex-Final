@@ -28,15 +28,6 @@ export class ProductService {
     return this.http.get(`${this.baseUrl}product/${id}`);
   }
 
-  // // Update the methods to include page and limit parameters
-  // searchProducts(keyword: string, page: number, limit: number): Observable<any> {
-  //   let query = `products?page=${page}&limit=${limit}`;
-  //   if (keyword) {
-  //     query += `&keyword=${keyword}`;
-  //   }
-  //   return this.http.get(`${this.baseUrl}${query}`);
-  // }
-
   searchProducts(keyword: string, page: number, limit: number): Observable<any> {
     let query = `products?page=${page}&limit=${limit}`;
     if (keyword) {

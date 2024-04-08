@@ -115,6 +115,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../Services/products.service';
 import { CartService } from '../../Services/cart.service';
 import { AuthService } from '../../Services/auth.service';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-single-product',
@@ -135,7 +136,8 @@ export class SingleProductComponent implements OnInit {
     private cartService: CartService,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
+    private authService: AuthService, 
+    private toast: NgToastService
   ) { }
 
   ngOnInit(): void {
@@ -148,12 +150,9 @@ export class SingleProductComponent implements OnInit {
             this.mainImageUrl = this.getImageUrl(this.product.images[0]);
             if (this.product.subscriptions && this.product.subscriptions.length > 0) {
               this.selectedSubscriptionId = this.product.subscriptions[0]._id;
-              // Assuming the subscription model includes monthlyPrice, update accordingly if different
               this.selectedSubscriptionMonthlyPrice = this.product.subscriptions[0].monthlyPrice;
-              // Direct assignment of the first subscription object as the selected one
               this.selectedSubscription1 = this.product.subscriptions[0];
             }else {
-            // If no subscriptions are present, you can set defaults or handle the lack of subscriptions
             console.warn("No subscriptions available for this product.");
           }
         } else {
@@ -200,13 +199,13 @@ export class SingleProductComponent implements OnInit {
     const userId = this.authService.getUserId();
 
     if (!userId) {
-      alert('Please log in to add items to the cart.');
+      this.toast.warning({detail:"WARNING", summary:'Please log in to add items to the cart.', duration:3000, position:'topRight'});
       return;
     }
     const selectedSubscription = this.product.subscriptions.find((sub:any) => sub._id === this.selectedSubscriptionId);
 
     if (!selectedSubscription) {
-      alert('Please select a subscription.');
+      this.toast.warning({detail:"WARNING", summary:'Please select a subscription.', duration:3000, position:'topRight'});
       return;
     }
 

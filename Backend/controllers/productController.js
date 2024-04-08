@@ -177,41 +177,6 @@ exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
     });
 });
 
-// // Create Product ---ADMIN  
-// exports.createProduct = asyncErrorHandler(async (req, res, next) => {
-//     console.log(req.files);
-//     const imagePaths = req.files.map(file => file.path);
-
-//     // Parse subscriptions if it's a string to an array of objects
-//     let subscriptions = [];
-//     if (typeof req.body.subscriptions === 'string') {
-//         try {
-//             subscriptions = JSON.parse(req.body.subscriptions);
-//         } catch (error) {
-//             return next(new ErrorHandler("Invalid 'subscriptions' format", 404));
-//         }
-//     } else {
-//         subscriptions = req.body.subscriptions;
-//     }
-
-//     const productData = {
-//         ...req.body,
-//         user: req.user.id,
-//         images: imagePaths,
-//         subscriptions // Add the parsed subscriptions here
-//     };
-
-//     // Delete the subscriptions string from productData to avoid conflicts
-//     delete productData.subscriptionsString;
-
-//     const product = await Product.create(productData);
-
-//     res.status(201).json({
-//         success: true,
-//         product
-//     });
-// });
-
 
 // Get All Products ---ADMIN
 exports.getAdminProducts = asyncErrorHandler(async (req, res, next) => {
