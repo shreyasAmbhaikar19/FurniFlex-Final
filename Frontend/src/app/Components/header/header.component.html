@@ -1,11 +1,12 @@
 
   <style>
     .active-link a {
-      border-bottom: 2px solid blue;
+      border-bottom: 2px solid #4F46E5;
+      color: #EEF2FF;
     }
   </style> 
 
-    <nav class="fixed top-0 left-0 z-50 w-full border-b border-gray-200 bg-white py-3 px-6 sm:px-4 ">
+    <!-- <nav class="fixed top-0 left-0 z-50 w-full border-b border-gray-200 bg-white py-3 px-6 sm:px-4 ">
       <div class="container mx-auto flex max-w-6xl flex-wrap items-center justify-between">
         <a routerLink="/home" class="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-6 text-blue-500 sm:h-9">
@@ -46,7 +47,94 @@
           <svg class="h-6 w-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
         </button>
       </div>
-    </nav>
+    </nav> -->
 
     
-    
+    <nav
+      class="border-b-default border-solid border-gray-200 shadow-md z-50 w-full bg-inherit lg:fixed"
+      id="topnav"
+    >
+      <div class="w-full bg-gray-900 lg:px-8">
+        <div class="w-full flex flex-col lg:flex-row">
+          <div class="flex justify-between lg:hidden px-4">
+            <a routerLink="/home" class="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mr-3 h-8 text-blue-500 sm:h-9">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+              </svg>
+              <span class="text-white self-center whitespace-nowrap text-xl font-semibold">FurniFlex</span>
+            </a>
+            <button
+              data-collapse-toggle="navbar"
+              type="button"
+              class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              aria-controls="navbar-default"
+              aria-expanded="false"
+            >
+              <span class="sr-only">Open main menu</span>
+              <svg
+                class="w-6 h-6"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div class="hidden w-full px-20 lg:flex justify-between max-lg:bg-gray-900 py-5 max-lg:mt-1 max-lg:px-4 max-lg:shadow-lg max-lg:shadow-gray-200 max-lg:h-auto max-lg:overflow-auto transition-all duration-500 delay-200 " id="navbar">
+            <ul
+              class="flex lg:items-center max-lg:gap-4 max-lg:mb-4 flex-col mt-4 lg:flex-1 md:mt-0 lg:flex-row"
+            >
+              <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+                <a
+                  routerLink="/home"
+                  class="text-indigo-50 text-sm font-semibold hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-indigo-50"
+                  >Home</a
+                >
+              </li>
+              <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+                <a
+                  routerLink="/products"
+                  class="text-indigo-50 text-sm font-semibold hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-indigo-50"
+                  >Rent</a
+                >
+              </li>
+              <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+                <a
+                 routerLink="/wishlist"
+                  class="text-indigo-50 text-sm font-semibold hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-indigo-50"
+                  >Wishlist</a
+                >
+              </li>
+              <li  routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+                <a
+                  routerLink="/carts"
+                  class="text-indigo-50 text-sm font-semibold hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-indigo-50"
+                  >Cart</a
+                >
+              </li>
+            </ul>
+            <a routerLink="/home" class="hidden lg:flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mr-3 h-7 text-blue-500 sm:h-9">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+              </svg>
+              <span class=" text-white self-center whitespace-nowrap text-3xl font-semibold">FurniFlex</span>
+            </a>
+            <div class="flex lg:items-center justify-start flex-col lg:flex-row max-lg:gap-4 lg:flex-1 lg:justify-end">
+              <div *ngIf="!isLoggedIn()" class="flex">
+                <a routerLink="/login" class="bg-indigo-50 text-indigo-600 rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm hover:bg-indigo-100 mr-4 lg:mr-5">Login</a>
+                <a routerLink="/register" class="bg-indigo-600 text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm hover:bg-indigo-700">Sign up</a>
+              </div>
+              <div *ngIf="isLoggedIn()" class="flex">
+                <a (click)="logout()" class="bg-blue-600 text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm hover:bg-blue-700">Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>

@@ -18,9 +18,6 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please enter product category"]
     },
-    rentDuration: {
-        type: Number,
-    },
     subscriptions: [
         {
             duration: {
@@ -33,6 +30,10 @@ const productSchema = new mongoose.Schema({
             }
       }
     ],
+    discount: {
+        type: Number,
+        required: [true, "Please enter discount percentage"]
+    },
     images: [{ 
         type: String
     }],

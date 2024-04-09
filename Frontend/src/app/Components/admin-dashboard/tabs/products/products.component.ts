@@ -354,6 +354,7 @@ import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component'
   styleUrls: ['./products.component.css'], 
 })
 export class ProductsTabComponent implements OnInit {
+  
   isLoading: boolean = true;
   products: Product[] = [];
   editForm!: FormGroup;
@@ -447,16 +448,17 @@ export class ProductsTabComponent implements OnInit {
     const textOnlyRegex = /^[a-zA-Z\s,.'-]+$/;
 
     this.editForm = this.fb.group({
-      name: [product.name || '', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]], 
+      name: [product.name || '', [Validators.required, Validators.minLength(3), Validators.maxLength(80)]], 
       description: [product.description || '', [Validators.required, Validators.minLength(10), Validators.maxLength(500)]],
       brand: [product.brand ?? '', [Validators.required, Validators.minLength(2), Validators.maxLength(20)]], 
-      category: [product.category ?? '', [Validators.required, Validators.minLength(2), Validators.maxLength(15), Validators.pattern(textOnlyRegex)]], 
+      category: [product.category ?? '', [Validators.required, Validators.minLength(2), Validators.maxLength(15), Validators.pattern(textOnlyRegex)]],
       stock: [product.stock || 1, [Validators.required, Validators.min(1), Validators.max(10000)]], 
       subscriptions: this.fb.array(
         product.subscriptions
-          ? product.subscriptions.map((subscription: any) => this.createSubscriptionGroup(subscription))
-          : []
-      ),
+        ? product.subscriptions.map((subscription: any) => this.createSubscriptionGroup(subscription))
+        : []
+        ),
+      discount: [product.discount || 0, [Validators.required, Validators.min(0), Validators.max(100)]], 
     });
     this.existingImages = product.images || [];
     this.imagePreviews = this.existingImages.map(image => `${this.baseUrl}${image}`);
@@ -504,6 +506,7 @@ export class ProductsTabComponent implements OnInit {
     formData.append('category', this.editForm.value.category);
     formData.append('stock', this.editForm.value.stock.toString());
     formData.append('subscriptions', JSON.stringify(this.subscriptionsFormArray.value));
+    formData.append('discount', this.editForm.value.discount.toString());
 
     this.selectedFiles.forEach((file, index) => {
       formData.append('images', file, file.name);

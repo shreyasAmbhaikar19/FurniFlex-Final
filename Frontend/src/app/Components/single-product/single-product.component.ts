@@ -156,7 +156,6 @@ export class SingleProductComponent implements OnInit {
             console.warn("No subscriptions available for this product.");
           }
         } else {
-          // Navigate or display a message when the product is not found or an error occurs
           console.error("Product not found or an error occurred.");
         }
       },
@@ -224,7 +223,7 @@ export class SingleProductComponent implements OnInit {
     this.cartService.addToCart(cartItem).subscribe({
       next: (response) => {
         console.log('Added to cart', response);
-        this.router.navigate(['/carts']); // Navigate to the cart component page
+        this.router.navigate(['/carts']); 
       },
       error: (error) => {
         console.error('Error adding to cart', error);

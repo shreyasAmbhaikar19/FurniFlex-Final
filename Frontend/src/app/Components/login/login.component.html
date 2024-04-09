@@ -20,6 +20,7 @@
               <div *ngIf="loginForm.controls['password'].errors?.['required']">Password is required.</div>
               <div *ngIf="loginForm.controls['password'].errors?.['pattern']">Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.</div>
             </div>
+            <p class="text-sm mt-2"><a routerLink="/register" class="font-semibold text-blue-600 no-underline hover:text-blue-400">Forgot Password?</a></p>
           </div>
           <input class="mt-4 w-full cursor-pointer rounded-lg bg-gradient-to-r from-lime-400 to-sky-400 pt-3 pb-3 text-white shadow-lg shadow-sky-300 outline-none transition duration-200 hover:scale-110 hover:bg-sky-500 focus:ring" type="submit" value="Log in" />
         </form>

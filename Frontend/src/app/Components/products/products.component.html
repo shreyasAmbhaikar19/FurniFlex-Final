@@ -221,7 +221,7 @@
           </svg>
         </ng-template>
         <img [src]="getImageUrl(product.images)" alt="{{product.name}}" class="w-full object-cover"/>
-        <span class="absolute top-0 left-0 m-2 rounded-full bg-black px-3 py-1 text-xs font-medium text-white">39% OFF</span>
+        <span *ngIf="product.discount > 0" class="absolute top-0 left-0 m-2 rounded-full bg-black px-3 py-1 text-xs font-medium text-white">{{product.discount}}% OFF</span>
       </div>
       <div class="mt-2 px-5 pb-5">
         <h5 class="text-md font-semibold tracking-tight text-slate-800">{{product.name}}</h5>

@@ -1,5 +1,5 @@
 const express = require('express');
-const { createNewOrder, getSingleOrderDetails, myOrders, getAllOrders, updateOrder, deleteOrder, createPaymentOrder, getPaginatedFilteredOrders } = require('../controllers/orderController');
+const { createNewOrder, getSingleOrderDetails, myOrders, updateOrder, deleteOrder, createPaymentOrder, getPaginatedFilteredOrders, getTotalRevenue, getWeeklyOrderSummary } = require('../controllers/orderController');
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
 
 const router = express.Router();
@@ -15,6 +15,9 @@ router.route('/admin/orders').get(isAuthenticatedUser, authorizeRoles('admin'), 
 router.route('/admin/order/:id')
     .put(isAuthenticatedUser, authorizeRoles("admin"), updateOrder)
     .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteOrder);
+
+router.get('/admin/orders/revenue', isAuthenticatedUser, authorizeRoles('admin'), getTotalRevenue);
+router.get('/admin/orders/weekly-summary', isAuthenticatedUser, authorizeRoles('admin'), getWeeklyOrderSummary);
 
 module.exports = router;
 

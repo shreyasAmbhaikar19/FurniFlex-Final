@@ -13,7 +13,7 @@
 
 
 const express = require('express');
-const { getAllCategories, deleteCategory, addNewCategory } = require('../controllers/categoryController');
+const { getAllCategories, deleteCategory, addNewCategory, getCategoryProductCounts } = require('../controllers/categoryController');
 const { isAuthenticatedUser, authorizeRoles } = require('../middlewares/auth');
 const upload = require('../utils/multer');
 
@@ -22,6 +22,7 @@ const router = express.Router();
 router.get('/categories', getAllCategories);
 router.post('/admin/category/new', isAuthenticatedUser, authorizeRoles("admin"), upload.single('image'), addNewCategory);
 router.delete('/admin/category/:id', isAuthenticatedUser, authorizeRoles("admin"), deleteCategory);
+router.get('/categories/product-counts', getCategoryProductCounts);
 
 module.exports = router;
 

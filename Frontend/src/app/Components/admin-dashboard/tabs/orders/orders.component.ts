@@ -42,7 +42,7 @@ export class OrdersComponent implements OnInit {
 
   openDeleteDialog(order: any): void {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      width: '500px',
+      width: '400px',
       data: {
         title: 'Delete Order',
         message: `Are you sure you want to delete the order with ID: ${order._id}?`,
@@ -60,7 +60,7 @@ export class OrdersComponent implements OnInit {
 
   updateOrder(order: any): void {
     const dialogRef = this.dialog.open(UpdateStatusDialogComponent, {
-      width: '400px',
+      width: '350px',
       data: { order: order }
     });
   

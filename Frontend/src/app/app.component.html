@@ -1,8 +1,13 @@
-<div class="flex flex-col justify-between min-h-screen bg-gray-50">
+<div class="flex flex-col justify-between min-h-screen bg-gray-50 ">
   <app-header></app-header>
-
-  <router-outlet></router-outlet>
-  <ng-toast></ng-toast> 
+  
+  <div class="flex-grow ">
+    <div class="pt-20">
+    <router-outlet></router-outlet>
+  </div>
+    <ng-toast></ng-toast>
+  </div>
+   
   <div *ngIf="showLoader" class="loading-spinner-overlay">
     <div class="flex flex-col h-screen justify-center items-center bg-white">
       <div class="flex flex-col items-center">
@@ -10,6 +15,10 @@
       </div>
     </div>
   </div>
+
+  <!-- <div *ngIf="showLoader" class="fixed inset-0 bg-white flex justify-center items-center z-50">
+    <img [src]="loaderGifUrl" alt="Loading...">
+  </div> -->
   
   <app-footer></app-footer>
 </div>

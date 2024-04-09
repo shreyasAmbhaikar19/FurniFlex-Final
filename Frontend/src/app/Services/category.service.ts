@@ -22,4 +22,8 @@ export class CategoryService {
   deleteCategory(categoryId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/admin/category/${categoryId}`, { withCredentials: true });
   }
+
+  getCategoryProductCounts(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/categories/product-counts`, { withCredentials: true });
+  }
 }

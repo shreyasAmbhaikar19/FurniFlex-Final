@@ -41,4 +41,12 @@ export class OrderService {
   deleteOrder(orderId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/admin/order/${orderId}`, { withCredentials: true });
   }
+
+  getTotalRevenue(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/admin/orders/revenue`, { withCredentials: true });
+  }
+
+  getWeeklyOrderSummary(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/admin/orders/weekly-summary`, { withCredentials: true });
+  }
 }

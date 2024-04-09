@@ -621,6 +621,7 @@
           Add Product
         </button>
       </div>
+     
       <div class="overflow-y-hidden rounded-xl shadow">
         <div class="overflow-x-auto">
           <table class="w-full">
@@ -631,6 +632,7 @@
                 <th class="px-5 py-3">Brand</th>
                 <th class="px-5 py-3">Category</th>
                 <th class="px-5 py-3">Subscriptions</th>
+                <th class="px-5 py-3">Discount</th> 
                 <th class="px-5 py-3">Stock</th>
                 <th class="px-5 py-3">Created At</th>
                 <th class="px-5 py-3">Actions</th>
@@ -655,13 +657,14 @@
                     <li *ngFor="let subscription of product.subscriptions">{{subscription.duration}} months: ₹{{subscription.monthlyPrice}}</li>
                   </ul>
                 </td>
+                <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">{{ product.discount }}%</td>
                 <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
                   {{ product.stock }}
                 </td>
                 <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
                   {{ product.createdAt | date:'medium' }}
                 </td>
-                <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">
+                <td class="border-b border-gray-200 bg-white ml-1 px-4 py-5 text-sm">
                   <button (click)="editProduct(product)" class="text-indigo-600 hover:text-indigo-900"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
                     <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                     <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
@@ -722,7 +725,7 @@
             <div *ngIf="editForm.get('name')?.touched && editForm.get('name')?.errors" class="text-red-500 text-sm mt-1">
               <div *ngIf="editForm.get('name')?.errors?.['required']">Name is required.</div>
               <div *ngIf="editForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters long.</div>
-              <div *ngIf="editForm.get('name')?.errors?.['maxlength']">Name cannot be more than 50 characters long.</div>
+              <div *ngIf="editForm.get('name')?.errors?.['maxlength']">Name cannot be more than 80 characters long.</div>
             </div>
           </div>
 
@@ -795,6 +798,16 @@
           </div>
 
           <div class="mb-5">
+            <label for="discount" class="mb-3 block text-base font-medium text-[#07074D]">Discount (%)</label>
+            <input id="discount" formControlName="discount" type="number" placeholder="Discount in %" [class]="editForm.get('discount')?.touched && editForm.get('discount')?.invalid ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500 focus:border-red-500 block w-full py-3 px-6' : 'w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'" />
+            <div *ngIf="editForm.get('discount')?.touched && editForm.get('discount')?.errors" class="text-red-500 text-sm mt-1">
+              <div *ngIf="editForm.get('discount')?.errors?.['required']">Discount is required.</div>
+              <div *ngIf="editForm.get('discount')?.errors?.['min']">Discount cannot be less than 0%.</div>
+              <div *ngIf="editForm.get('discount')?.errors?.['max']">Discount cannot be more than 100%.</div>
+            </div>
+          </div>
+
+          <div class="mb-5">
             <label for="stock" class="mb-3 block text-base font-medium text-[#07074D]">Stock</label>
             <input id="stock" formControlName="stock" type="number" placeholder="Stock" [class]="editForm.get('stock')?.touched && editForm.get('stock')?.invalid ? 'bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-base rounded-lg focus:ring-red-500 focus:border-red-500 block w-full py-3 px-6' : 'w-full rounded-md border border-[#e0e0e0] py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md'" />
             <div *ngIf="editForm.get('stock')?.touched && editForm.get('stock')?.errors" class="text-red-500 text-sm mt-1">
@@ -817,4 +830,3 @@
     </div>
   </ng-template>  
 </div>
-

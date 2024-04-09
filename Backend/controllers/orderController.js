@@ -252,3 +252,59 @@ exports.deleteOrder = asyncErrorHandler(async (req, res, next) => {
         success: true,
     });
 });
+
+
+exports.getTotalRevenue = asyncErrorHandler(async (req, res, next) => {
+    const aggregationPipeline = [
+        {
+            $match: {
+                orderStatus: "Delivered" // Match only delivered orders
+            }
+        },
+        {
+            $group: {
+                _id: null, // Group all matching documents together (since we want total revenue)
+                totalRevenue: { $sum: "$totalPrice" } // Sum up the totalPrice of all matched documents
+            }
+        }
+    ];
+
+    const result = await Order.aggregate(aggregationPipeline);
+
+    const totalRevenue = result.length > 0 ? result[0].totalRevenue : 0;
+
+    res.status(200).json({
+        success: true,
+        totalRevenue
+    });
+});
+
+exports.getWeeklyOrderSummary = asyncErrorHandler(async (req, res, next) => {
+    const today = new Date();
+    const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+
+    const aggregationPipeline = [
+        {
+            $match: {
+                createdAt: { $gte: lastWeek },
+                orderStatus: { $in: ["Pending", "Shipped", "Delivered"] }
+            }
+        },
+        {
+            $group: {
+                _id: { $dayOfWeek: "$createdAt" },
+                numberOfOrders: { $sum: 1 },
+                totalRevenue: { $sum: "$totalPrice" }
+            }
+        },
+        {
+            $sort: { "_id": 1 }
+        }
+    ];
+
+    const result = await Order.aggregate(aggregationPipeline);
+    res.status(200).json({
+        success: true,
+        data: result
+    });
+});

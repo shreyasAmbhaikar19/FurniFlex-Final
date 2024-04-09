@@ -316,7 +316,7 @@
           <tbody class="text-gray-500">
             <tr *ngFor="let order of orders">
               <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">{{ order.paidAt | date:'dd MMMM, y' }}</td>
-              <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm"><a (click)="openOrderDetails(order)" class="text-blue-500 hover:text-blue-700 cursor-pointer">{{ order._id }}</a></td>
+              <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm"><a (click)="openOrderDetails(order)" class="text-blue-500 hover:text-blue-700 cursor-pointer">#{{ order._id }}</a></td>
               <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">{{ order.user.firstName }} {{ order.user.lastName }}</td>
               <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">{{ order.paymentInfo.status }}</td>
               <td class="border-b border-gray-200 bg-white px-5 py-5 text-sm">₹{{ order.totalPrice }}</td>

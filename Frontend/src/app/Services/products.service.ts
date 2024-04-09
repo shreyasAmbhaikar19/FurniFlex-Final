@@ -55,3 +55,5 @@ export class ProductService {
     return this.http.delete(`${this.baseUrl}admin/product/${productId}`, { withCredentials: true });
   }
 }
+
+export { Product };

@@ -1,4 +1,5 @@
 export interface Product {
+  discount: number;
 monthlyPrice: any;
 createdAt: string|number|Date;
 subscriptions: any;

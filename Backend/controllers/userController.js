@@ -208,6 +208,15 @@ exports.getPaginatedFilteredUsers = asyncErrorHandler(async (req, res, next) => 
     });
 });
 
+exports.getTotalUsersCount = asyncErrorHandler(async (req, res, next) => {
+    const totalUsers = await User.countDocuments({});
+
+    res.status(200).json({
+        success: true,
+        totalUsers
+    });
+});
+
 // Get Single User Details --ADMIN
 exports.getSingleUser = asyncErrorHandler(async (req, res, next) => {
 

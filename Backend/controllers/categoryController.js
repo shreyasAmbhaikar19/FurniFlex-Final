@@ -1,4 +1,5 @@
 const Category = require('../models/categoryModel');
+const Product = require('../models/productModel');
 const asyncErrorHandler = require('../middlewares/asyncErrorHandler');
 const ErrorHandler = require('../utils/errorHandler');
 
@@ -56,5 +57,54 @@ exports.getAllCategories = asyncErrorHandler(async (req, res, next) => {
     res.status(200).json({
         success: true,
         categories
+    });
+});
+
+
+// exports.getCategoryProductCounts = asyncErrorHandler(async (req, res, next) => {
+//     const categoriesWithProductCounts = await Category.aggregate([
+//         {
+//             $lookup: {
+//                 from: 'products', // the collection to join
+//                 localField: '_id', // field from the categories collection
+//                 foreignField: 'category', // field from the products collection matching 'category' field in categories
+//                 as: 'products' // array field in the aggregated result
+//             }
+//         },
+//         {
+//             $project: {
+//                 name: 1,
+//                 image: 1,
+//                 productCount: { $size: "$products" } // Count the number of products in each category
+//             }
+//         }
+//     ]);
+
+//     res.status(200).json({
+//         success: true,
+//         data: categoriesWithProductCounts
+//     });
+// });
+
+exports.getCategoryProductCounts = asyncErrorHandler(async (req, res, next) => {
+    // Fetch all categories
+    const categories = await Category.find();
+    // Fetch all products
+    const products = await Product.find();
+
+    // Map through each category and count products
+    const categoriesWithProductCounts = categories.map(category => {
+        const productCount = products.filter(product => product.category === category.name).length;
+        return {
+            _id: category._id,
+            name: category.name,
+            image: category.image,
+            productCount: productCount // The count of products for the category
+        };
+    });
+
+    res.status(200).json({
+        success: true,
+        data: categoriesWithProductCounts
     });
 });

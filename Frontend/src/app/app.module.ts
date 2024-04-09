@@ -28,7 +28,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { OrderHistoryComponent } from './Components/user-settings/order-history/order-history.component';
 
 import { NgToastModule } from 'ng-angular-popup';
-import { UserSettingsComponent } from './Components/user-settings/user-settings.component'
+import { UserSettingsComponent } from './Components/user-settings/user-settings.component';
 
 @NgModule({
   declarations: [

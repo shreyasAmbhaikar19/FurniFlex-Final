@@ -15,6 +15,8 @@ import { CategoriesComponent } from './tabs/categories/categories.component';
 import { DeleteDialogComponent } from './tabs/delete-dialog/delete-dialog.component';
 import { UpdateStatusDialogComponent } from './tabs/orders/update-status-dialog/update-status-dialog.component';
 import { OrderDetailsDialogComponent } from './tabs/orders/order-details-dialog/order-details-dialog.component';
+import { ProductFormDialogComponent } from './tabs/products/product-form-dialog/product-form-dialog.component';
+import { DashboardComponent } from './tabs/dashboard/dashboard.component';
 
 
 @NgModule({
@@ -27,6 +29,8 @@ import { OrderDetailsDialogComponent } from './tabs/orders/order-details-dialog/
     DeleteDialogComponent,
     UpdateStatusDialogComponent,
     OrderDetailsDialogComponent,
+    ProductFormDialogComponent,
+    DashboardComponent,
   ],
   imports: [
     CommonModule,

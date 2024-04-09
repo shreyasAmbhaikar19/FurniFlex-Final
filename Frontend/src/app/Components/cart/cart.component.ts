@@ -434,6 +434,7 @@ export class CartComponent implements OnInit {
 
   removeCartItem(cartId: string): void {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '450px',
       data: {
         title: 'Confirm Delete',
         message: 'Are you sure you want to remove this item from the cart?',

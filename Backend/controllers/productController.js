@@ -93,9 +93,11 @@ exports.getSearchPaginatedFilteredProducts = asyncErrorHandler(async (req, res, 
 
     const productCount = await Product.countDocuments({ ...keyword, ...category });
 
-    const searchFeature = new SearchFeatures(Product.find({ ...keyword, ...category }), req.query)
+    const searchFeature = new SearchFeatures(Product.find({ ...keyword, ...category })
+    .sort({ createdAt: -1 }), req.query)
     .filter()
     .pagination(resultPerPage);
+
 
     const products = await searchFeature.query;
     let filteredProductsCount = products.length;
@@ -323,3 +325,4 @@ exports.deleteReview = asyncErrorHandler(async (req, res, next) => {
         success: true,
     });
 });
+
