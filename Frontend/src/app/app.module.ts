@@ -29,6 +29,7 @@ import { OrderHistoryComponent } from './Components/user-settings/order-history/
 
 import { NgToastModule } from 'ng-angular-popup';
 import { UserSettingsComponent } from './Components/user-settings/user-settings.component';
+import { ReviewDialogComponent } from './Components/single-product/review-dialog/review-dialog.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { UserSettingsComponent } from './Components/user-settings/user-settings.
     CarouselComponent,
     OrderHistoryComponent,
     UserSettingsComponent,
+    ReviewDialogComponent,
   ],
   imports: [
     BrowserModule,

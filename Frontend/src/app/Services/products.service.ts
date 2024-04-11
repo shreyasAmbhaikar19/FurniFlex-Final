@@ -54,6 +54,14 @@ export class ProductService {
   deleteProduct(productId: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}admin/product/${productId}`, { withCredentials: true });
   }
+
+  createProductReview(reviewData: { rating: number, comment: string, productId: string }) {
+    return this.http.put(`${this.baseUrl}review`, reviewData, { withCredentials: true });
+  }
+
+  getProductReviews(id: string) {
+    return this.http.get<{success: boolean, reviews: any[]}>(`${this.baseUrl}product/${id}/reviews`);
+  }
 }
 
 export { Product };

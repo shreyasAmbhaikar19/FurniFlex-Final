@@ -118,6 +118,13 @@
                   >Cart</a
                 >
               </li>
+              <li  routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+                <a
+                  routerLink="/settings/profile"
+                  class="text-indigo-50 text-sm font-semibold hover:text-prime-blue-700 transition-all duration-500 mb-2 block lg:mr-6 lg:text-base md:mb-0 md:mr-3 hover:text-indigo-50"
+                  >Profile</a
+                >
+              </li>
             </ul>
             <a routerLink="/home" class="hidden lg:flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mr-3 h-7 text-blue-500 sm:h-9">
@@ -126,11 +133,11 @@
               <span class=" text-white self-center whitespace-nowrap text-3xl font-semibold">FurniFlex</span>
             </a>
             <div class="flex lg:items-center justify-start flex-col lg:flex-row max-lg:gap-4 lg:flex-1 lg:justify-end">
-              <div *ngIf="!isLoggedIn()" class="flex">
+              <div *ngIf="!(isLoggedIn$ | async)" class="flex">
                 <a routerLink="/login" class="bg-indigo-50 text-indigo-600 rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm hover:bg-indigo-100 mr-4 lg:mr-5">Login</a>
                 <a routerLink="/register" class="bg-indigo-600 text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm hover:bg-indigo-700">Sign up</a>
               </div>
-              <div *ngIf="isLoggedIn()" class="flex">
+              <div *ngIf="isLoggedIn$ | async" class="flex">
                 <a (click)="logout()" class="bg-blue-600 text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 py-3 px-6 text-sm hover:bg-blue-700">Logout</a>
               </div>
             </div>

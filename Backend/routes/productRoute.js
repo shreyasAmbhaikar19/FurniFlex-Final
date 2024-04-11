@@ -7,9 +7,10 @@ const router = express.Router();
 
 router.route('/products/all').get(getAllProducts);
 router.route('/products').get(getSearchPaginatedFilteredProducts);
-router.route('/product/:id').get(getSingleProduct);
+router.route('/product/:id').get(getSingleProduct); 
 
-// router.route('/review').put(isAuthenticatedUser, createProductReview);
+router.route('/review').put(isAuthenticatedUser, createProductReview);
+router.route('/product/:id/reviews').get(getProductReviews);
 
 router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles("admin"), upload.array('images', 10), createProduct);
 router.route('/admin/products').get(isAuthenticatedUser, authorizeRoles("admin"), getAdminProducts);

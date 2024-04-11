@@ -72,9 +72,26 @@ exports.getSingleOrderDetails = asyncErrorHandler(async (req, res, next) => {
 
 
 // Get Logged In User Orders
-exports.myOrders = asyncErrorHandler(async (req, res, next) => {
+// exports.myOrders = asyncErrorHandler(async (req, res, next) => {
 
-    const orders = await Order.find({ user: req.user._id }).populate("user", "name");
+//     const orders = await Order.find({ user: req.user._id }).populate("user", "name");
+
+//     if (!orders) {
+//         return next(new ErrorHandler("Order Not Found", 404));
+//     }
+
+//     res.status(200).json({
+//         success: true,
+//         orders,
+//     });
+// });
+
+exports.myOrders = asyncErrorHandler(async (req, res, next) => {
+    // Assuming 'createdAt' is the field that holds the timestamp when the order was created.
+    // Adjust 'createdAt' if your field has a different name.
+    const orders = await Order.find({ user: req.user._id })
+                              .populate("user", "name")
+                              .sort({ createdAt: -1 }); // Sort by createdAt in descending order
 
     if (!orders) {
         return next(new ErrorHandler("Order Not Found", 404));

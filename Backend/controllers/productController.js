@@ -2,6 +2,7 @@ const Product = require('../models/productModel');
 const asyncErrorHandler = require('../middlewares/asyncErrorHandler');
 const SearchFeatures = require('../utils/searchFeatures');
 const ErrorHandler = require('../utils/errorHandler');
+const mongoose = require('mongoose');
 
 // Get All Products
 exports.getAllProducts = asyncErrorHandler(async (req, res, next) => {
@@ -143,6 +144,7 @@ exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
         name: req.user.name,
         rating: Number(rating),
         comment,
+        createdAt: new Date() 
     }
 
     const product = await Product.findById(productId);
@@ -178,7 +180,6 @@ exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
         success: true
     });
 });
-
 
 // Get All Products ---ADMIN
 exports.getAdminProducts = asyncErrorHandler(async (req, res, next) => {
@@ -261,21 +262,47 @@ exports.deleteProduct = asyncErrorHandler(async (req, res, next) => {
 });
 
 // Get All Reviews of Product
-exports.getProductReviews = asyncErrorHandler(async (req, res, next) => {
+exports.getProductReviews = async (req, res, next) => {
+    try {
+        const productId = req.params.id; // Ensure this matches the route param name
 
-    const productId = req.params.productId;
+        if (!mongoose.Types.ObjectId.isValid(productId)) {
+            return next(new ErrorHandler("Invalid Product ID format", 400));
+        }
 
-    const product = await Product.findById(productId);
+        // Fetch the product and populate the reviews with user's firstName and lastName
+        const product = await Product.findById(productId).populate({
+            path: 'reviews.user',
+            select: 'firstName lastName' // Assuming these are the fields in your User model
+        });
 
-    if (!product) {
-        return next(new ErrorHandler("Product Not Found", 404));
+        if (!product) {
+            return next(new ErrorHandler("Product Not Found", 404));
+        }
+
+        // Map through the reviews to construct the desired response
+        const reviewsWithUserDetails = product.reviews.map(review => ({
+            ...review._doc,
+            user: {
+                _id: review.user._id,
+                firstName: review.user.firstName,
+                lastName: review.user.lastName
+            }
+        }));
+
+        res.status(200).json({
+            success: true,
+            reviews: reviewsWithUserDetails
+        });
+    } catch (error) {
+        console.error("Error in getProductReviews:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error.message || "Unknown error"
+        });
     }
-
-    res.status(200).json({
-        success: true,
-        reviews: product.reviews
-    });
-});
+};
 
 // Delete Reviews
 exports.deleteReview = asyncErrorHandler(async (req, res, next) => {

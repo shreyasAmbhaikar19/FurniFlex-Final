@@ -369,7 +369,7 @@ export class CartComponent implements OnInit {
   }
 
   onUpdateAddress(): void {
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/settings/profile']);
   }
 
 
@@ -468,6 +468,13 @@ export class CartComponent implements OnInit {
   }
 
   initiatePayment(): void {
+    if (!this.userAddress || this.userAddress === 'N/A') {
+      // If address is not available, redirect to the profile settings page
+      this.toast.warning({detail:"WARNING", summary:'Shipping address is required. Please update your address.', duration:3000, position:'topRight'});
+      this.router.navigate(['/settings/profile']);
+      return;
+    }
+
     this.orderService.createPaymentOrder(this.totalWithTax).subscribe({
       next: (order) => {
         let options = {

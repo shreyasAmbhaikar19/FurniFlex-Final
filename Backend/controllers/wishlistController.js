@@ -51,7 +51,7 @@ exports.getWishlist = asyncErrorHandler(async (req, res, next) => {
     const wishlistItems = await Wishlist.find({ user })
         .populate({
             path: 'product',
-            select: 'name subscriptions brand images discount',
+            select: 'name subscriptions brand images discount ratings',
         });
 
     res.status(200).json({

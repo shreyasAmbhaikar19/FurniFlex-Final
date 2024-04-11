@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AuthService } from '../../Services/auth.service'; 
 
 @Component({
@@ -7,13 +8,15 @@ import { AuthService } from '../../Services/auth.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
-  constructor(private authService: AuthService) {}
+  isLoggedIn$: Observable<boolean>;
 
-  isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
+  constructor(private authService: AuthService) {
+    // Subscribe to the isLoggedIn observable to get the login status
+    this.isLoggedIn$ = this.authService.isLoggedIn();
   }
 
   logout() {
+    // Delegate logout action to AuthService and it will update the isLoggedIn$ observable
     this.authService.logout();
   }
 }

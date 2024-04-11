@@ -60,7 +60,7 @@ export class OrdersComponent implements OnInit {
 
   updateOrder(order: any): void {
     const dialogRef = this.dialog.open(UpdateStatusDialogComponent, {
-      width: '350px',
+      width: '400px',
       data: { order: order }
     });
   

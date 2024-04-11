@@ -18,7 +18,7 @@
   </div>
   <router-outlet></router-outlet>
 </div> -->
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,400;1,600&display=swap" rel="stylesheet" />
 <style>
@@ -36,16 +36,27 @@
   <div class="relative flex h-auto w-[18rem] flex-col rounded-xl bg-white p-4 text-gray-700 shadow-xl">
     <div class="p-4 mb-2">
       <h5 class="text-xl font-semibold leading-snug tracking-normal text-blue-gray-900">
-        Sidebar
+        Admin
       </h5>
     </div>
     <nav class="flex flex-col gap-1 p-2 text-base font-normal text-blue-gray-700">
-      <a routerLink="/admin/dashboard" routerLinkActive="active" class="block p-3 leading-tight transition-all rounded-lg text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">Dashboard</a>
-      <a routerLink="/admin/products" routerLinkActive="active" class="block p-3 leading-tight transition-all rounded-lg text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">Products</a>
-      <a routerLink="/admin/users" routerLinkActive="active" class="block p-3 leading-tight transition-all rounded-lg text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">Users</a>
-      <a routerLink="/admin/categories" routerLinkActive="active" class="block p-3 leading-tight transition-all rounded-lg text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">Category</a>
-      <a routerLink="/admin/orders" routerLinkActive="active" class="block p-3 leading-tight transition-all rounded-lg text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">Orders</a>
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="flex items-center gap-2 block p-3 leading-tight transition-all rounded-lg text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
+        <i class="fas fa-tachometer-alt text-blue-500"></i> Dashboard
+      </a>
+      <a routerLink="/admin/products" routerLinkActive="active" class="flex items-center gap-2 block p-3 leading-tight transition-all rounded-lg text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
+        <i class="fas fa-box-open text-green-500"></i> Products
+      </a>
+      <a routerLink="/admin/users" routerLinkActive="active" class="flex items-center gap-2 block p-3 leading-tight transition-all rounded-lg text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
+        <i class="fas fa-users text-red-500"></i> Users
+      </a>
+      <a routerLink="/admin/categories" routerLinkActive="active" class="flex items-center gap-2 block p-3 leading-tight transition-all rounded-lg text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
+        <i class="fas fa-tags text-yellow-500"></i> Categories
+      </a>
+      <a routerLink="/admin/orders" routerLinkActive="active" class="flex items-center gap-2 block p-3 leading-tight transition-all rounded-lg text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
+        <i class="fas fa-shopping-cart text-purple-500"></i> Orders
+      </a>
     </nav>
+    
   </div>
 
   <!-- Router Outlet / Main Content -->

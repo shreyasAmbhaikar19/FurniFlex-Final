@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
     this.loadTotalProductsCount();
     this.loadTotalOrdersCount();
     this.loadTotalRevenue();
-    this.renderAreaChart();
+    // this.renderAreaChart();
     this.loadCategoryProductCounts();
     this.fetchWeeklyOrderSummary();
   }

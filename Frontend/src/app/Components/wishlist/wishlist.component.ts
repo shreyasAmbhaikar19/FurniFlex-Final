@@ -65,6 +65,7 @@ import { Component, OnInit } from '@angular/core';
 import { WishlistService } from '../../Services/wishlist.service'; 
 import { Product } from '../../Models/product';
 import { Router } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 
 interface Subscription {
   duration: string;
@@ -86,7 +87,7 @@ export class WishlistComponent implements OnInit {
   wishlistItems: WishlistItem[] = [];
   baseUrl: string = 'http://localhost:3000/';
 
-  constructor(private wishlistService: WishlistService, private router: Router) {}
+  constructor(private wishlistService: WishlistService, private router: Router,   private toast: NgToastService) {}
 
   ngOnInit(): void {
     this.fetchWishlistItems();
@@ -119,7 +120,7 @@ export class WishlistComponent implements OnInit {
     this.wishlistService.removeFromWishlist(productId).subscribe({
       next: () => {
         this.wishlistItems = this.wishlistItems.filter(item => item.product._id !== productId);
-        alert('Product removed from your wishlist!');
+        this.toast.success({detail:"SUCCESS", summary:'Product removed from Wishlist successfully!', duration:3000, position:'topRight'});
       },
       error: () => {
         alert('Failed to remove product from wishlist. Please try again.');
